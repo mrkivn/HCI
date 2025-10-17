@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GINHAWA & After Glow Staff Portal</title>
+    <meta name="description" content="Staff management portal for GINHAWA Hotel and After Glow Restaurant. Manage bookings, reservations, orders, billing, and housekeeping.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-teal: #17a2b8;
+            --primary-teal-dark: #138496;
+            --accent-amber: #f59e0b;
+            --accent-amber-dark: #d97706;
+            
+            --bg-light: #ffffff;
+            --bg-gray: #f8f9fa;
+            --bg-dark: #1a1d23;
+            
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-light: #9ca3af;
+            
+            --border-color: #e5e7eb;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: #3b82f6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-gray);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--primary-teal) 0%, var(--primary-teal-dark) 100%);
+            color: white;
+            padding: 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-brand {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-brand .divider {
+            color: var(--accent-amber);
+        }
+
+        .sidebar-user {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: background 0.2s;
+            font-size: 0.9375rem;
+            position: relative;
+        }
+
+        .nav-item a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item a.active {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+
+        .badge-notification {
+            position: absolute;
+            right: 1rem;
+            background: var(--error);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.125rem 0.5rem;
+            border-radius: 1rem;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-title p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .content {
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary-teal) 0%, var(--primary-teal-dark) 100%);
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-xl);
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h1 {
+            font-size: 1.875rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-teal), var(--accent-amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-header p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--primary-teal);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-teal-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--bg-gray);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 0.9375rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-teal);
+            box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.1);
+        }
+
+        .card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+
+        .stat-info h3 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-info .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            opacity: 0.6;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9375rem;
+        }
+
+        thead {
+            background: var(--bg-gray);
+        }
+
+        th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:hover {
+            background: var(--bg-gray);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+        }
+
+        .badge-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--info);
+        }
+
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .room-card {
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .room-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .room-card.available {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--success);
+        }
+
+        .room-card.occupied {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--error);
+        }
+
+        .room-card.cleaning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--warning);
+        }
+
+        .room-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .room-status {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar input,
+        .filter-bar select {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid var(--error);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+            }
+
+            .filter-bar input,
+            .filter-bar select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Content will be rendered here -->
+    </div>
+
+    <script>
+        // ===== DATA MANAGEMENT =====
+        class StaffDataManager {
+            constructor() {
+                this.initializeData();
+            }
+
+            initializeData() {
+                // Initialize staff accounts
+                if (!localStorage.getItem('staff')) {
+                    const demoStaff = [
+                        { email: 'manager@hotel.com', password: 'admin123', name: 'Admin Manager', department: 'Manager' },
+                        { email: 'frontdesk@hotel.com', password: 'front123', name: 'John Doe', department: 'Front Office' },
+                        { email: 'kitchen@hotel.com', password: 'kitchen123', name: 'Chef Maria', department: 'Kitchen' },
+                        { email: 'bar@hotel.com', password: 'bar123', name: 'Bartender Mike', department: 'Bar' },
+                        { email: 'housekeeping@hotel.com', password: 'clean123', name: 'Sarah Clean', department: 'Housekeeping' },
+                        { email: 'billing@hotel.com', password: 'bill123', name: 'Finance Ana', department: 'Billing' }
+                    ];
+                    localStorage.setItem('staff', JSON.stringify(demoStaff));
+                }
+
+                // Initialize rooms
+                if (!localStorage.getItem('rooms')) {
+                    const rooms = [];
+                    for (let i = 101; i <= 110; i++) {
+                        rooms.push({
+                            number: i,
+                            status: 'Available',
+                            guestName: null,
+                            bookingId: null
+                        });
+                    }
+                    localStorage.setItem('rooms', JSON.stringify(rooms));
+                }
+
+                // Initialize invoices if not exists
+                if (!localStorage.getItem('invoices')) {
+                    localStorage.setItem('invoices', JSON.stringify([]));
+                }
+            }
+
+            getStaff() {
+                return JSON.parse(localStorage.getItem('staff') || '[]');
+            }
+
+            findStaff(email, password) {
+                const staff = this.getStaff();
+                return staff.find(s => s.email === email && s.password === password);
+            }
+
+            getHotelBookings() {
+                return JSON.parse(localStorage.getItem('hotelBookings') || '[]');
+            }
+
+            updateHotelBooking(bookingId, updates) {
+                const bookings = this.getHotelBookings();
+                const index = bookings.findIndex(b => b.id === bookingId);
+                if (index !== -1) {
+                    bookings[index] = { ...bookings[index], ...updates };
+                    localStorage.setItem('hotelBookings', JSON.stringify(bookings));
+                }
+            }
+
+            deleteHotelBooking(bookingId) {
+                const bookings = this.getHotelBookings();
+                const filtered = bookings.filter(b => b.id !== bookingId);
+                localStorage.setItem('hotelBookings', JSON.stringify(filtered));
+            }
+
+            getRestaurantReservations() {
+                return JSON.parse(localStorage.getItem('restaurantReservations') || '[]');
+            }
+
+            updateRestaurantReservation(reservationId, updates) {
+                const reservations = this.getRestaurantReservations();
+                const index = reservations.findIndex(r => r.id === reservationId);
+                if (index !== -1) {
+                    reservations[index] = { ...reservations[index], ...updates };
+                    localStorage.setItem('restaurantReservations', JSON.stringify(reservations));
+                }
+            }
+
+            deleteRestaurantReservation(reservationId) {
+                const reservations = this.getRestaurantReservations();
+                const filtered = reservations.filter(r => r.id !== reservationId);
+                localStorage.setItem('restaurantReservations', JSON.stringify(filtered));
+            }
+
+            getOrders() {
+                return JSON.parse(localStorage.getItem('orders') || '[]');
+            }
+
+            updateOrder(orderId, updates) {
+                const orders = this.getOrders();
+                const index = orders.findIndex(o => o.id === orderId);
+                if (index !== -1) {
+                    orders[index] = { ...orders[index], ...updates };
+                    localStorage.setItem('orders', JSON.stringify(orders));
+                }
+            }
+
+            getHousekeepingRequests() {
+                return JSON.parse(localStorage.getItem('housekeepingRequests') || '[]');
+            }
+
+            updateHousekeepingRequest(requestId, updates) {
+                const requests = this.getHousekeepingRequests();
+                const index = requests.findIndex(r => r.id === requestId);
+                if (index !== -1) {
+                    requests[index] = { ...requests[index], ...updates };
+                    localStorage.setItem('housekeepingRequests', JSON.stringify(requests));
+                }
+            }
+
+            getRooms() {
+                return JSON.parse(localStorage.getItem('rooms') || '[]');
+            }
+
+            updateRoom(roomNumber, updates) {
+                const rooms = this.getRooms();
+                const index = rooms.findIndex(r => r.number === roomNumber);
+                if (index !== -1) {
+                    rooms[index] = { ...rooms[index], ...updates };
+                    localStorage.setItem('rooms', JSON.stringify(rooms));
+                }
+            }
+
+            getInvoices() {
+                return JSON.parse(localStorage.getItem('invoices') || '[]');
+            }
+
+            saveInvoice(invoice) {
+                const invoices = this.getInvoices();
+                invoices.push(invoice);
+                localStorage.setItem('invoices', JSON.stringify(invoices));
+            }
+
+            saveHotelBooking(booking) {
+                const bookings = this.getHotelBookings();
+                bookings.push(booking);
+                localStorage.setItem('hotelBookings', JSON.stringify(bookings));
+            }
+
+            saveRestaurantReservation(reservation) {
+                const reservations = this.getRestaurantReservations();
+                reservations.push(reservation);
+                localStorage.setItem('restaurantReservations', JSON.stringify(reservations));
+            }
+        }
+
+        const staffDataManager = new StaffDataManager();
+
+        // ===== SESSION MANAGEMENT =====
+        function getCurrentStaff() {
+            const staffStr = sessionStorage.getItem('currentStaff');
+            return staffStr ? JSON.parse(staffStr) : null;
+        }
+
+        function setCurrentStaff(staff) {
+            sessionStorage.setItem('currentStaff', JSON.stringify(staff));
+        }
+
+        function logout() {
+            sessionStorage.removeItem('currentStaff');
+            renderApp();
+        }
+
+        // ===== NAVIGATION =====
+        let currentPage = 'dashboard';
+
+        function navigateTo(page) {
+            currentPage = page;
+            renderApp();
+        }
+
+        // ===== ACCESS CONTROL =====
+        function hasAccess(department, module) {
+            if (department === 'Manager') return true;
+
+            const access = {
+                'Front Office': ['dashboard', 'hotel-bookings', 'restaurant-reservations', 'front-office', 'guest-list'],
+                'Kitchen': ['dashboard', 'kitchen-orders'],
+                'Bar': ['dashboard', 'bar-orders'],
+                'Housekeeping': ['dashboard', 'housekeeping'],
+                'Billing': ['dashboard', 'billing', 'hotel-bookings', 'restaurant-reservations'],
+                'Reservation': ['dashboard', 'hotel-bookings', 'restaurant-reservations']
+            };
+
+            return access[department]?.includes(module) || false;
+        }
+
+        // ===== RENDER APP =====
+        function renderApp() {
+            const staff = getCurrentStaff();
+            const app = document.getElementById('app');
+
+            if (!staff) {
+                renderLoginPage();
+            } else {
+                renderDashboard();
+            }
+        }
+
+        // ===== LOGIN PAGE =====
+        function renderLoginPage() {
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                <div class="auth-container">
+                    <div class="auth-card">
+                        <div class="auth-header">
+                            <h1>Staff Portal</h1>
+                            <p>GINHAWA & After Glow Management</p>
+                        </div>
+
+                        <div id="errorMessage"></div>
+
+                        <form onsubmit="handleStaffLogin(event)">
+                            <div class="form-group">
+                                <label class="form-label" for="staffEmail">Email</label>
+                                <input type="email" id="staffEmail" class="form-input" required data-testid="input-staff-email">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="staffPassword">Password</label>
+                                <input type="password" id="staffPassword" class="form-input" required data-testid="input-staff-password">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="staffDepartment">Department</label>
+                                <select id="staffDepartment" class="form-select" required data-testid="select-department">
+                                    <option value="">Select department</option>
+                                    <option value="Manager">Manager (Full Access)</option>
+                                    <option value="Front Office">Front Office</option>
+                                    <option value="Kitchen">Kitchen</option>
+                                    <option value="Bar">Bar</option>
+                                    <option value="Housekeeping">Housekeeping</option>
+                                    <option value="Billing">Billing</option>
+                                    <option value="Reservation">Reservation</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;" data-testid="button-staff-login">Login</button>
+                        </form>
+
+                        <div style="text-align: center; margin-top: 1.5rem;">
+                            <a href="index.html" style="color: var(--primary-teal); text-decoration: none; font-weight: 600;" data-testid="link-customer-portal">Go to Customer Portal</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleStaffLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('staffEmail').value;
+            const password = document.getElementById('staffPassword').value;
+            const department = document.getElementById('staffDepartment').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            const staff = staffDataManager.findStaff(email, password);
+
+            if (staff && staff.department === department) {
+                setCurrentStaff(staff);
+                renderApp();
+            } else {
+                errorMessage.innerHTML = '<div class="alert alert-error">Invalid credentials or department</div>';
+            }
+        }
+
+        // ===== DASHBOARD =====
+        function renderDashboard() {
+            const staff = getCurrentStaff();
+            const app = document.getElementById('app');
+
+            const bookings = staffDataManager.getHotelBookings();
+            const orders = staffDataManager.getOrders();
+            const housekeeping = staffDataManager.getHousekeepingRequests();
+            
+            const today = new Date().toISOString().split('T')[0];
+            const todayBookings = bookings.filter(b => b.checkIn === today);
+            const pendingOrders = orders.filter(o => o.status === 'Pending');
+            const activeHousekeeping = housekeeping.filter(h => h.status === 'Pending' || h.status === 'In Progress');
+            const todayRevenue = calculateTodayRevenue();
+
+            const pendingKitchenOrders = orders.filter(o => o.category === 'Food' && o.status === 'Pending').length;
+            const pendingBarOrders = orders.filter(o => o.category === 'Drinks' && o.status === 'Pending').length;
+            const pendingHousekeeping = housekeeping.filter(h => h.status === 'Pending').length;
+
+            app.innerHTML = `
+                <div class="layout">
+                    ${renderSidebar(staff, pendingKitchenOrders, pendingBarOrders, pendingHousekeeping)}
+                    <div class="main-content">
+                        <div class="header">
+                            <div class="header-title">
+                                <h1>Dashboard</h1>
+                                <p>Welcome, ${staff.name} - ${staff.department}</p>
+                            </div>
+                            <div class="header-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="logout()" data-testid="button-logout">Logout</button>
+                            </div>
+                        </div>
+
+                        <div class="content">
+                            ${renderDashboardContent(todayBookings.length, pendingOrders.length, activeHousekeeping.length, todayRevenue)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSidebar(staff, pendingKitchen, pendingBar, pendingHousekeeping) {
+            const menuItems = [
+                { name: 'Dashboard', page: 'dashboard', icon: '📊', module: 'dashboard' },
+                { name: 'Hotel Bookings', page: 'hotel-bookings', icon: '🏨', module: 'hotel-bookings' },
+                { name: 'Restaurant Reservations', page: 'restaurant-reservations', icon: '🍽️', module: 'restaurant-reservations' },
+                { name: 'Front Office', page: 'front-office', icon: '🏢', module: 'front-office' },
+                { name: 'Room Facilities', page: 'room-facilities', icon: '🛏️', module: 'room-facilities' },
+                { name: 'Kitchen Orders', page: 'kitchen-orders', icon: '🍔', module: 'kitchen-orders', badge: pendingKitchen },
+                { name: 'Bar Orders', page: 'bar-orders', icon: '🍹', module: 'bar-orders', badge: pendingBar },
+                { name: 'Guest List', page: 'guest-list', icon: '👥', module: 'guest-list' },
+                { name: 'Billing', page: 'billing', icon: '💰', module: 'billing' },
+                { name: 'Housekeeping', page: 'housekeeping', icon: '🧹', module: 'housekeeping', badge: pendingHousekeeping }
+            ];
+
+            let navItems = '';
+            menuItems.forEach(item => {
+                if (hasAccess(staff.department, item.module)) {
+                    const active = currentPage === item.page ? 'active' : '';
+                    const badge = item.badge > 0 ? `<span class="badge-notification">${item.badge}</span>` : '';
+                    navItems += `
+                        <li class="nav-item">
+                            <a href="#" class="${active}" onclick="navigateTo('${item.page}'); return false;" data-testid="nav-${item.page}">
+                                <span>${item.icon}</span>
+                                <span>${item.name}</span>
+                                ${badge}
+                            </a>
+                        </li>
+                    `;
+                }
+            });
+
+            return `
+                <aside class="sidebar">
+                    <div class="sidebar-header">
+                        <div class="sidebar-brand">
+                            <div>GINHAWA <span class="divider">|</span> After Glow</div>
+                        </div>
+                        <div class="sidebar-user" data-testid="text-staff-info">
+                            ${staff.name}<br>
+                            <small>${staff.department}</small>
+                        </div>
+                    </div>
+                    <ul class="sidebar-nav">
+                        ${navItems}
+                        <li class="nav-item" style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 1rem;">
+                            <a href="index.html" data-testid="link-customer-portal">
+                                <span>🏠</span>
+                                <span>Customer Portal</span>
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+            `;
+        }
+
+        function renderDashboardContent(todayBookings, pendingOrders, activeHousekeeping, todayRevenue) {
+            return `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>Today's Bookings</h3>
+                            <div class="stat-value" data-testid="stat-today-bookings">${todayBookings}</div>
+                        </div>
+                        <div class="stat-icon">🏨</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>Pending Orders</h3>
+                            <div class="stat-value" data-testid="stat-pending-orders">${pendingOrders}</div>
+                        </div>
+                        <div class="stat-icon">🍽️</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>Active Housekeeping</h3>
+                            <div class="stat-value" data-testid="stat-active-housekeeping">${activeHousekeeping}</div>
+                        </div>
+                        <div class="stat-icon">🧹</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>Today's Revenue</h3>
+                            <div class="stat-value" data-testid="stat-today-revenue">₱${todayRevenue.toLocaleString()}</div>
+                        </div>
+                        <div class="stat-icon">💰</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Quick Actions</h2>
+                    </div>
+                    <div class="grid-2">
+                        <button class="btn btn-primary" onclick="showWalkInBookingModal()" data-testid="button-walk-in-booking">Create Walk-in Booking</button>
+                        <button class="btn btn-primary" onclick="showWalkInReservationModal()" data-testid="button-walk-in-reservation">Add Walk-in Reservation</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function calculateTodayRevenue() {
+            const today = new Date().toISOString().split('T')[0];
+            const invoices = staffDataManager.getInvoices();
+            return invoices
+                .filter(inv => inv.date === today)
+                .reduce((sum, inv) => sum + inv.amount, 0);
+        }
+
+        // ===== PAGE RENDERING =====
+        function renderPageContent() {
+            const staff = getCurrentStaff();
+            
+            switch(currentPage) {
+                case 'dashboard':
+                    renderDashboard();
+                    break;
+                case 'hotel-bookings':
+                    renderHotelBookingsPage();
+                    break;
+                case 'restaurant-reservations':
+                    renderRestaurantReservationsPage();
+                    break;
+                case 'front-office':
+                    renderFrontOfficePage();
+                    break;
+                case 'room-facilities':
+                    renderRoomFacilitiesPage();
+                    break;
+                case 'kitchen-orders':
+                    renderKitchenOrdersPage();
+                    break;
+                case 'bar-orders':
+                    renderBarOrdersPage();
+                    break;
+                case 'guest-list':
+                    renderGuestListPage();
+                    break;
+                case 'billing':
+                    renderBillingPage();
+                    break;
+                case 'housekeeping':
+                    renderHousekeepingPage();
+                    break;
+            }
+        }
+
+        function renderStaffPage(title, content) {
+            const staff = getCurrentStaff();
+            const orders = staffDataManager.getOrders();
+            const housekeeping = staffDataManager.getHousekeepingRequests();
+            
+            const pendingKitchen = orders.filter(o => o.category === 'Food' && o.status === 'Pending').length;
+            const pendingBar = orders.filter(o => o.category === 'Drinks' && o.status === 'Pending').length;
+            const pendingHousekeeping = housekeeping.filter(h => h.status === 'Pending').length;
+
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                <div class="layout">
+                    ${renderSidebar(staff, pendingKitchen, pendingBar, pendingHousekeeping)}
+                    <div class="main-content">
+                        <div class="header">
+                            <div class="header-title">
+                                <h1>${title}</h1>
+                            </div>
+                            <div class="header-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="logout()" data-testid="button-logout">Logout</button>
+                            </div>
+                        </div>
+                        <div class="content">
+                            ${content}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ===== HOTEL BOOKINGS PAGE =====
+        function renderHotelBookingsPage() {
+            const bookings = staffDataManager.getHotelBookings();
+            
+            const content = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Hotel Bookings Management</h2>
+                        <button class="btn btn-primary btn-sm" onclick="showWalkInBookingModal()" data-testid="button-create-walk-in">Create Walk-in Booking</button>
+                    </div>
+
+                    <div class="filter-bar">
+                        <input type="text" class="form-input" placeholder="Search by ID or Name" id="bookingSearch" onkeyup="filterBookings()" data-testid="input-search-bookings">
+                        <select class="form-select" id="bookingStatusFilter" onchange="filterBookings()" data-testid="select-filter-status">
+                            <option value="">All Statuses</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Checked-in">Checked-in</option>
+                            <option value="Checked-out">Checked-out</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Guest Name</th>
+                                    <th>Check-in</th>
+                                    <th>Check-out</th>
+                                    <th>Room Type</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookingsTableBody">
+                                ${renderBookingsTable(bookings)}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            renderStaffPage('Hotel Bookings', content);
+        }
+
+        function renderBookingsTable(bookings) {
+            if (bookings.length === 0) {
+                return '<tr><td colspan="8" style="text-align: center; padding: 2rem;">No bookings found</td></tr>';
+            }
+
+            return bookings.map(booking => `
+                <tr data-testid="row-booking-${booking.id}">
+                    <td style="font-family: 'SF Mono', 'Monaco', 'Consolas', 'Courier New', monospace; font-weight: 600;">${booking.id}</td>
+                    <td>${booking.customerName}</td>
+                    <td>${new Date(booking.checkIn).toLocaleDateString()}</td>
+                    <td>${new Date(booking.checkOut).toLocaleDateString()}</td>
+                    <td>${booking.roomType}</td>
+                    <td>₱${booking.totalPrice.toLocaleString()}</td>
+                    <td><span class="badge ${getStatusBadgeClass(booking.status)}">${booking.status}</span></td>
+                    <td>
+                        <select class="form-select" onchange="updateBookingStatus('${booking.id}', this.value)" data-testid="select-status-${booking.id}">
+                            <option value="">Update Status</option>
+                            <option value="Pending" ${booking.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                            <option value="Confirmed" ${booking.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                            <option value="Checked-in" ${booking.status === 'Checked-in' ? 'selected' : ''}>Checked-in</option>
+                            <option value="Checked-out" ${booking.status === 'Checked-out' ? 'selected' : ''}>Checked-out</option>
+                            <option value="Cancelled" ${booking.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                        </select>
+                        <button class="btn btn-danger btn-sm" onclick="deleteBooking('${booking.id}')" style="margin-top: 0.5rem;" data-testid="button-delete-${booking.id}">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterBookings() {
+            const search = document.getElementById('bookingSearch').value.toLowerCase();
+            const statusFilter = document.getElementById('bookingStatusFilter').value;
+            
+            let bookings = staffDataManager.getHotelBookings();
+            
+            if (search) {
+                bookings = bookings.filter(b => 
+                    b.id.toLowerCase().includes(search) || 
+                    b.customerName.toLowerCase().includes(search)
+                );
+            }
+            
+            if (statusFilter) {
+                bookings = bookings.filter(b => b.status === statusFilter);
+            }
+            
+            document.getElementById('bookingsTableBody').innerHTML = renderBookingsTable(bookings);
+        }
+
+        function updateBookingStatus(bookingId, status) {
+            if (status) {
+                staffDataManager.updateHotelBooking(bookingId, { status });
+                renderHotelBookingsPage();
+            }
+        }
+
+        function deleteBooking(bookingId) {
+            if (confirm('Are you sure you want to delete this booking?')) {
+                staffDataManager.deleteHotelBooking(bookingId);
+                renderHotelBookingsPage();
+            }
+        }
+
+        function getStatusBadgeClass(status) {
+            const statusMap = {
+                'Pending': 'badge-warning',
+                'Confirmed': 'badge-success',
+                'Checked-in': 'badge-info',
+                'Checked-out': 'badge-info',
+                'Cancelled': 'badge-error',
+                'Seated': 'badge-info',
+                'Completed': 'badge-success',
+                'Preparing': 'badge-warning',
+                'Ready': 'badge-success',
+                'Delivered': 'badge-info',
+                'In Progress': 'badge-warning'
+            };
+            return statusMap[status] || 'badge-info';
+        }
+
+        // ===== RESTAURANT RESERVATIONS PAGE =====
+        function renderRestaurantReservationsPage() {
+            const reservations = staffDataManager.getRestaurantReservations();
+            
+            const content = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Restaurant Reservations Management</h2>
+                        <button class="btn btn-primary btn-sm" onclick="showWalkInReservationModal()" data-testid="button-create-walk-in-reservation">Add Walk-in Reservation</button>
+                    </div>
+
+                    <div class="filter-bar">
+                        <input type="text" class="form-input" placeholder="Search by ID or Name" id="reservationSearch" onkeyup="filterReservations()" data-testid="input-search-reservations">
+                        <select class="form-select" id="reservationStatusFilter" onchange="filterReservations()" data-testid="select-filter-reservation-status">
+                            <option value="">All Statuses</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Seated">Seated</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Reservation ID</th>
+                                    <th>Guest Name</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Seating</th>
+                                    <th>Guests</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reservationsTableBody">
+                                ${renderReservationsTable(reservations)}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            renderStaffPage('Restaurant Reservations', content);
+        }
+
+        function renderReservationsTable(reservations) {
+            if (reservations.length === 0) {
+                return '<tr><td colspan="8" style="text-align: center; padding: 2rem;">No reservations found</td></tr>';
+            }
+
+            return reservations.map(reservation => `
+                <tr data-testid="row-reservation-${reservation.id}">
+                    <td style="font-family: 'SF Mono', 'Monaco', 'Consolas', 'Courier New', monospace; font-weight: 600;">${reservation.id}</td>
+                    <td>${reservation.customerName}</td>
+                    <td>${new Date(reservation.date).toLocaleDateString()}</td>
+                    <td>${reservation.time}</td>
+                    <td>${reservation.seating}</td>
+                    <td>${reservation.guests}</td>
+                    <td><span class="badge ${getStatusBadgeClass(reservation.status)}">${reservation.status}</span></td>
+                    <td>
+                        <select class="form-select" onchange="updateReservationStatus('${reservation.id}', this.value)" data-testid="select-status-${reservation.id}">
+                            <option value="">Update Status</option>
+                            <option value="Pending" ${reservation.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                            <option value="Confirmed" ${reservation.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                            <option value="Seated" ${reservation.status === 'Seated' ? 'selected' : ''}>Seated</option>
+                            <option value="Completed" ${reservation.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                            <option value="Cancelled" ${reservation.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                        </select>
+                        <button class="btn btn-danger btn-sm" onclick="deleteReservation('${reservation.id}')" style="margin-top: 0.5rem;" data-testid="button-delete-${reservation.id}">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterReservations() {
+            const search = document.getElementById('reservationSearch').value.toLowerCase();
+            const statusFilter = document.getElementById('reservationStatusFilter').value;
+            
+            let reservations = staffDataManager.getRestaurantReservations();
+            
+            if (search) {
+                reservations = reservations.filter(r => 
+                    r.id.toLowerCase().includes(search) || 
+                    r.customerName.toLowerCase().includes(search)
+                );
+            }
+            
+            if (statusFilter) {
+                reservations = reservations.filter(r => r.status === statusFilter);
+            }
+            
+            document.getElementById('reservationsTableBody').innerHTML = renderReservationsTable(reservations);
+        }
+
+        function updateReservationStatus(reservationId, status) {
+            if (status) {
+                staffDataManager.updateRestaurantReservation(reservationId, { status });
+                renderRestaurantReservationsPage();
+            }
+        }
+
+        function deleteReservation(reservationId) {
+            if (confirm('Are you sure you want to delete this reservation?')) {
+                staffDataManager.deleteRestaurantReservation(reservationId);
+                renderRestaurantReservationsPage();
+            }
+        }
+
+        // ===== FRONT OFFICE PAGE =====
+        function renderFrontOfficePage() {
+            const rooms = staffDataManager.getRooms();
+            const bookings = staffDataManager.getHotelBookings();
+            const checkedInGuests = bookings.filter(b => b.status === 'Checked-in');
+
+            const content = `
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div class="card-header">
+                        <h2 class="card-title">Room Status Grid</h2>
+                    </div>
+                    <div class="room-grid">
+                        ${rooms.map(room => `
+                            <div class="room-card ${room.status.toLowerCase()}" onclick="showRoomDetails(${room.number})" data-testid="room-${room.number}">
+                                <div class="room-number">Room ${room.number}</div>
+                                <div class="room-status">${room.status}</div>
+                                ${room.guestName ? `<div style="font-size: 0.875rem; margin-top: 0.5rem;">${room.guestName}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="grid-2" style="align-items: start;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Check-in</h2>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Search Booking</label>
+                            <input type="text" class="form-input" id="checkinSearch" placeholder="Booking ID or Guest Name" data-testid="input-checkin-search">
+                        </div>
+                        <div id="checkinResults"></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Check-out</h2>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Room</th>
+                                        <th>Guest</th>
+                                        <th>Check-out Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${checkedInGuests.map(guest => `
+                                        <tr>
+                                            <td>${guest.assignedRoom || 'N/A'}</td>
+                                            <td>${guest.customerName}</td>
+                                            <td>${new Date(guest.checkOut).toLocaleDateString()}</td>
+                                            <td><button class="btn btn-primary btn-sm" onclick="checkoutGuest('${guest.id}')" data-testid="button-checkout-${guest.id}">Check-out</button></td>
+                                        </tr>
+                                    `).join('') || '<tr><td colspan="4" style="text-align: center;">No checked-in guests</td></tr>'}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            renderStaffPage('Front Office', content);
+
+            // Add event listener for check-in search
+            setTimeout(() => {
+                const searchInput = document.getElementById('checkinSearch');
+                if (searchInput) {
+                    searchInput.addEventListener('input', searchForCheckin);
+                }
+            }, 100);
+        }
+
+        function searchForCheckin() {
+            const search = document.getElementById('checkinSearch').value.toLowerCase();
+            const resultsDiv = document.getElementById('checkinResults');
+            
+            if (!search) {
+                resultsDiv.innerHTML = '';
+                return;
+            }
+
+            const bookings = staffDataManager.getHotelBookings();
+            const results = bookings.filter(b => 
+                (b.status === 'Confirmed' || b.status === 'Pending') &&
+                (b.id.toLowerCase().includes(search) || b.customerName.toLowerCase().includes(search))
+            );
+
+            if (results.length === 0) {
+                resultsDiv.innerHTML = '<p style="color: var(--text-secondary); margin-top: 1rem;">No bookings found</p>';
+                return;
+            }
+
+            resultsDiv.innerHTML = results.map(booking => `
+                <div class="card" style="margin-top: 1rem; padding: 1rem;">
+                    <div><strong>${booking.id}</strong> - ${booking.customerName}</div>
+                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin: 0.5rem 0;">
+                        ${new Date(booking.checkIn).toLocaleDateString()} - ${new Date(booking.checkOut).toLocaleDateString()}
+                    </div>
+                    <div class="form-group" style="margin-top: 0.5rem;">
+                        <label class="form-label">Assign Room</label>
+                        <select class="form-select" id="room-${booking.id}" data-testid="select-room-${booking.id}">
+                            <option value="">Select room</option>
+                            ${staffDataManager.getRooms().filter(r => r.status === 'Available').map(r => 
+                                `<option value="${r.number}">Room ${r.number}</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="checkinGuest('${booking.id}')" data-testid="button-checkin-${booking.id}">Check-in</button>
+                </div>
+            `).join('');
+        }
+
+        function checkinGuest(bookingId) {
+            const roomSelect = document.getElementById(`room-${bookingId}`);
+            const roomNumber = parseInt(roomSelect.value);
+            
+            if (!roomNumber) {
+                alert('Please select a room');
+                return;
+            }
+
+            const booking = staffDataManager.getHotelBookings().find(b => b.id === bookingId);
+            staffDataManager.updateHotelBooking(bookingId, { 
+                status: 'Checked-in',
+                assignedRoom: roomNumber
+            });
+            staffDataManager.updateRoom(roomNumber, { 
+                status: 'Occupied',
+                guestName: booking.customerName,
+                bookingId: bookingId
+            });
+
+            renderFrontOfficePage();
+        }
+
+        function checkoutGuest(bookingId) {
+            if (!confirm('Confirm check-out?')) return;
+
+            const booking = staffDataManager.getHotelBookings().find(b => b.id === bookingId);
+            staffDataManager.updateHotelBooking(bookingId, { status: 'Checked-out' });
+            
+            if (booking.assignedRoom) {
+                staffDataManager.updateRoom(booking.assignedRoom, { 
+                    status: 'Cleaning',
+                    guestName: null,
+                    bookingId: null
+                });
+            }
+
+            renderFrontOfficePage();
+        }
+
+        function showRoomDetails(roomNumber) {
+            const room = staffDataManager.getRooms().find(r => r.number === roomNumber);
+            alert(`Room ${roomNumber}\nStatus: ${room.status}\n${room.guestName ? `Guest: ${room.guestName}` : ''}`);
+        }
+
+        // ===== ROOM FACILITIES PAGE =====
+        function renderRoomFacilitiesPage() {
+            const rooms = staffDataManager.getRooms();
+
+            const content = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Room Facilities Management</h2>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Room Number</th>
+                                    <th>Status</th>
+                                    <th>Guest Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rooms.map(room => `
+                                    <tr data-testid="row-room-${room.number}">
+                                        <td style="font-weight: 700;">GINHAWA Room ${room.number}</td>
+                                        <td><span class="badge ${room.status === 'Available' ? 'badge-success' : room.status === 'Occupied' ? 'badge-error' : 'badge-warning'}">${room.status}</span></td>
+                                        <td>${room.guestName || '-'}</td>
+                                        <td>
+                                            <select class="form-select" onchange="updateRoomStatus(${room.number}, this.value)" data-testid="select-room-status-${room.number}">
+                                                <option value="">Update Status</option>
+                                                <option value="Available" ${room.status === 'Available' ? 'selected' : ''}>Available</option>
+                                                <option value="Occupied" ${room.status === 'Occupied' ? 'selected' : ''}>Occupied</option>
+                                                <option value="Cleaning" ${room.status === 'Cleaning' ? 'selected' : ''}>Cleaning</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            renderStaffPage('Room Facilities', content);
+        }
+
+        function updateRoomStatus(roomNumber, status) {
+            if (status) {
+                staffDataManager.updateRoom(roomNumber, { status });
+                renderRoomFacilitiesPage();
+            }
+        }
+
+        // ===== KITCHEN ORDERS PAGE =====
+        function renderKitchenOrdersPage() {
+            const orders = staffDataManager.getOrders().filter(o => o.category === 'Food');
+
+            const content = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Kitchen Orders</h2>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Table/Room</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${renderOrdersTable(orders)}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            renderStaffPage('Kitchen Orders', content);
+        }
+
+        // ===== BAR ORDERS PAGE =====
+        function renderBarOrdersPage() {
+            const orders = staffDataManager.getOrders().filter(o => o.category === 'Drinks');
+
+            const content = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Bar Orders</h2>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Table/Room</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${renderOrdersTable(orders)}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            renderStaffPage('Bar Orders', content);
+        }
+
+        function renderOrdersTable(orders) {
+            if (orders.length === 0) {
+                return '<tr><td colspan="7" style="text-align: center; padding: 2rem;">No orders found</td></tr>';
+            }
+
+            return orders.map(order => `
+                <tr data-testid="row-order-${order.id}">
+                    <td style="font-family: 'SF Mono', 'Monaco', 'Consolas', 'Courier New', monospace; font-weight: 600;">${order.id}</td>
+                    <td>${order.customerName}</td>
+                    <td>${order.tableRoom}</td>
+                    <td>${order.items.map(item => `${item.name} (${item.quantity})`).join(', ')}</td>
+                    <td>₱${order.subtotal.toLocaleString()}</td>
+                    <td><span class="badge ${getStatusBadgeClass(order.status)}">${order.status}</span></td>
+                    <td>
+                        <select class="form-select" onchange="updateOrderStatus('${order.id}', this.value)" data-testid="select-order-status-${order.id}">
+                            <option value="">Update Status</option>
+                            <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                            <option value="Preparing" ${order.status === 'Preparing' ? 'selected' : ''}>Preparing</option>
+                            <option value="Ready" ${order.status === 'Ready' ? 'selected' : ''}>Ready</option>
+                            <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                        </select>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateOrderStatus(orderId, status) {
+            if (status) {
+                staffDataManager.updateOrder(orderId, { status });
+                renderPageContent();
+            }
+        }
+
+        // ===== GUEST LIST PAGE =====
+        function renderGuestListPage() {
+            const bookings = staffDataManager.getHotelBookings();
+            const reservations = staffDataManager.getRestaurantReservations();
+            
+            // Get unique customers
+            const customers = new Map();
+            
+            bookings.forEach(b => {
+                if (!customers.has(b.customerEmail)) {
+                    customers.set(b.customerEmail, {
+                        name: b.customerName,
+                        email: b.customerEmail,
+                        phone: b.customerPhone,
+                        hotelBookings: [],
+                        restaurantReservations: []
+                    });
+                }
+                customers.get(b.customerEmail).hotelBookings.push(b);
+            });
+
+            reservations.forEach(r => {
+                if (!customers.has(r.customerEmail)) {
+                    customers.set(r.customerEmail, {
+                        name: r.customerName,
+                        email: r.customerEmail,
+                        phone: r.customerPhone,
+                        hotelBookings: [],
+                        restaurantReservations: []
+                    });
+                }
+                customers.get(r.customerEmail).restaurantReservations.push(r);
+            });
+
+            const guestList = Array.from(customers.values());
+
+            const content = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Guest List</h2>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="Search by name or email" id="guestSearch" onkeyup="filterGuests()" data-testid="input-search-guests">
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Hotel Bookings</th>
+                                    <th>Restaurant Reservations</th>
+                                </tr>
+                            </thead>
+                            <tbody id="guestTableBody">
+                                ${renderGuestTable(guestList)}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            renderStaffPage('Guest List', content);
+        }
+
+        function renderGuestTable(guests) {
+            if (guests.length === 0) {
+                return '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No guests found</td></tr>';
+            }
+
+            return guests.map(guest => `
+                <tr data-testid="row-guest-${guest.email}">
+                    <td>${guest.name}</td>
+                    <td>${guest.email}</td>
+                    <td>${guest.phone}</td>
+                    <td>${guest.hotelBookings.length}</td>
+                    <td>${guest.restaurantReservations.length}</td>
+                </tr>
+            `).join('');
+        }
+
+        function filterGuests() {
+            const search = document.getElementById('guestSearch').value.toLowerCase();
+            const bookings = staffDataManager.getHotelBookings();
+            const reservations = staffDataManager.getRestaurantReservations();
+            
+            const customers = new Map();
+            
+            bookings.forEach(b => {
+                if (!customers.has(b.customerEmail)) {
+                    customers.set(b.customerEmail, {
+                        name: b.customerName,
+                        email: b.customerEmail,
+                        phone: b.customerPhone,
+                        hotelBookings: [],
+                        restaurantReservations: []
+                    });
+                }
+                customers.get(b.customerEmail).hotelBookings.push(b);
+            });
+
+            reservations.forEach(r => {
+                if (!customers.has(r.customerEmail)) {
+                    customers.set(r.customerEmail, {
+                        name: r.customerName,
+                        email: r.customerEmail,
+                        phone: r.customerPhone,
+                        hotelBookings: [],
+                        restaurantReservations: []
+                    });
+                }
+                customers.get(r.customerEmail).restaurantReservations.push(r);
+            });
+
+            let guestList = Array.from(customers.values());
+            
+            if (search) {
+                guestList = guestList.filter(g => 
+                    g.name.toLowerCase().includes(search) || 
+                    g.email.toLowerCase().includes(search)
+                );
+            }
+            
+            document.getElementById('guestTableBody').innerHTML = renderGuestTable(guestList);
+        }
+
+        // ===== BILLING PAGE =====
+        function renderBillingPage() {
+            const invoices = staffDataManager.getInvoices();
+
+            const content = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Billing & Invoices</h2>
+                        <button class="btn btn-primary btn-sm" onclick="showGenerateInvoiceModal()" data-testid="button-generate-invoice">Generate Invoice</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Invoice ID</th>
+                                    <th>Customer</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Payment Method</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${renderInvoicesTable(invoices)}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            renderStaffPage('Billing', content);
+        }
+
+        function renderInvoicesTable(invoices) {
+            if (invoices.length === 0) {
+                return '<tr><td colspan="7" style="text-align: center; padding: 2rem;">No invoices found</td></tr>';
+            }
+
+            return invoices.map(invoice => `
+                <tr data-testid="row-invoice-${invoice.id}">
+                    <td style="font-family: 'SF Mono', 'Monaco', 'Consolas', 'Courier New', monospace; font-weight: 600;">${invoice.id}</td>
+                    <td>${invoice.customerName}</td>
+                    <td>${invoice.description}</td>
+                    <td>₱${invoice.amount.toLocaleString()}</td>
+                    <td>${invoice.paymentMethod}</td>
+                    <td>${new Date(invoice.date).toLocaleDateString()}</td>
+                    <td><span class="badge badge-success">Paid</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function showGenerateInvoiceModal() {
+            // Create a simple modal for generating invoices
+            const modalHTML = `
+                <div class="modal active" id="invoiceModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Generate Invoice</h2>
+                            <button class="close-modal" onclick="closeModal('invoiceModal')" data-testid="button-close-invoice-modal">&times;</button>
+                        </div>
+                        <form onsubmit="generateInvoice(event)">
+                            <div class="form-group">
+                                <label class="form-label">Customer Name</label>
+                                <input type="text" class="form-input" id="invoiceCustomer" required data-testid="input-invoice-customer">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Description</label>
+                                <input type="text" class="form-input" id="invoiceDescription" required data-testid="input-invoice-description">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Amount (₱)</label>
+                                <input type="number" class="form-input" id="invoiceAmount" required data-testid="input-invoice-amount">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Payment Method</label>
+                                <select class="form-select" id="invoicePayment" required data-testid="select-invoice-payment">
+                                    <option value="Cash">Cash</option>
+                                    <option value="Credit Card">Credit Card</option>
+                                    <option value="GCash">GCash</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" data-testid="button-save-invoice">Generate Invoice</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        function generateInvoice(e) {
+            e.preventDefault();
+            const invoice = {
+                id: 'INV-' + Date.now(),
+                customerName: document.getElementById('invoiceCustomer').value,
+                description: document.getElementById('invoiceDescription').value,
+                amount: parseFloat(document.getElementById('invoiceAmount').value),
+                paymentMethod: document.getElementById('invoicePayment').value,
+                date: new Date().toISOString().split('T')[0],
+                status: 'Paid'
+            };
+
+            staffDataManager.saveInvoice(invoice);
+            closeModal('invoiceModal');
+            renderBillingPage();
+        }
+
+        // ===== HOUSEKEEPING PAGE =====
+        function renderHousekeepingPage() {
+            const requests = staffDataManager.getHousekeepingRequests();
+
+            const content = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Housekeeping Requests</h2>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Room</th>
+                                    <th>Guest</th>
+                                    <th>Request Types</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${renderHousekeepingTable(requests)}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            renderStaffPage('Housekeeping', content);
+        }
+
+        function renderHousekeepingTable(requests) {
+            if (requests.length === 0) {
+                return '<tr><td colspan="6" style="text-align: center; padding: 2rem;">No housekeeping requests found</td></tr>';
+            }
+
+            return requests.map(request => `
+                <tr data-testid="row-hk-${request.id}">
+                    <td style="font-family: 'SF Mono', 'Monaco', 'Consolas', 'Courier New', monospace; font-weight: 600;">${request.id}</td>
+                    <td>${request.roomNumber}</td>
+                    <td>${request.customerName}</td>
+                    <td>${request.requestTypes.join(', ')}</td>
+                    <td><span class="badge ${getStatusBadgeClass(request.status)}">${request.status}</span></td>
+                    <td>
+                        <select class="form-select" onchange="updateHousekeepingStatus('${request.id}', this.value)" data-testid="select-hk-status-${request.id}">
+                            <option value="">Update Status</option>
+                            <option value="Pending" ${request.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                            <option value="In Progress" ${request.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                            <option value="Completed" ${request.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                        </select>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateHousekeepingStatus(requestId, status) {
+            if (status) {
+                staffDataManager.updateHousekeepingRequest(requestId, { status });
+                renderHousekeepingPage();
+            }
+        }
+
+        // ===== WALK-IN MODALS =====
+        function showWalkInBookingModal() {
+            const today = new Date().toISOString().split('T')[0];
+            const modalHTML = `
+                <div class="modal active" id="walkInBookingModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Create Walk-in Booking</h2>
+                            <button class="close-modal" onclick="closeModal('walkInBookingModal')" data-testid="button-close-walk-in">&times;</button>
+                        </div>
+                        <form onsubmit="createWalkInBooking(event)">
+                            <div class="form-group">
+                                <label class="form-label">Guest Name</label>
+                                <input type="text" class="form-input" id="walkInName" required data-testid="input-walk-in-name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-input" id="walkInEmail" required data-testid="input-walk-in-email">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-input" id="walkInPhone" required data-testid="input-walk-in-phone">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Destination</label>
+                                <select class="form-select" id="walkInDestination" required data-testid="select-walk-in-destination">
+                                    <option value="Commonwealth, Quezon City">Commonwealth, Quezon City</option>
+                                    <option value="Eastwood City, Quezon City">Eastwood City, Quezon City</option>
+                                    <option value="UP Diliman Area, Quezon City">UP Diliman Area, Quezon City</option>
+                                    <option value="Katipunan, Quezon City">Katipunan, Quezon City</option>
+                                </select>
+                            </div>
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label class="form-label">Check-in</label>
+                                    <input type="date" class="form-input" id="walkInCheckIn" min="${today}" required data-testid="input-walk-in-checkin">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Check-out</label>
+                                    <input type="date" class="form-input" id="walkInCheckOut" min="${today}" required data-testid="input-walk-in-checkout">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Room Type</label>
+                                <select class="form-select" id="walkInRoomType" required data-testid="select-walk-in-room">
+                                    <option value="Standard Room:2500">Standard Room (₱2,500/night)</option>
+                                    <option value="Deluxe Room:4000">Deluxe Room (₱4,000/night)</option>
+                                    <option value="Suite:7000">Suite (₱7,000/night)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Guests</label>
+                                <input type="number" class="form-input" id="walkInGuests" min="1" max="10" value="1" required data-testid="input-walk-in-guests">
+                            </div>
+                            <button type="submit" class="btn btn-primary" data-testid="button-create-walk-in-booking">Create Booking</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        function createWalkInBooking(e) {
+            e.preventDefault();
+            const staff = getCurrentStaff();
+            
+            const roomTypeValue = document.getElementById('walkInRoomType').value.split(':');
+            const roomType = roomTypeValue[0];
+            const pricePerNight = parseInt(roomTypeValue[1]);
+            
+            const checkIn = document.getElementById('walkInCheckIn').value;
+            const checkOut = document.getElementById('walkInCheckOut').value;
+            const nights = Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24));
+
+            const booking = {
+                id: 'GIN-' + Date.now(),
+                customerEmail: document.getElementById('walkInEmail').value,
+                customerName: document.getElementById('walkInName').value,
+                customerPhone: document.getElementById('walkInPhone').value,
+                destination: document.getElementById('walkInDestination').value,
+                checkIn: checkIn,
+                checkOut: checkOut,
+                nights: nights,
+                guests: document.getElementById('walkInGuests').value,
+                roomType: roomType,
+                pricePerNight: pricePerNight,
+                totalPrice: nights * pricePerNight,
+                paymentMethod: 'Cash',
+                status: 'Confirmed',
+                createdAt: new Date().toISOString(),
+                createdBy: staff.name
+            };
+
+            staffDataManager.saveHotelBooking(booking);
+            closeModal('walkInBookingModal');
+            renderDashboard();
+        }
+
+        function showWalkInReservationModal() {
+            const today = new Date().toISOString().split('T')[0];
+            const modalHTML = `
+                <div class="modal active" id="walkInReservationModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Add Walk-in Reservation</h2>
+                            <button class="close-modal" onclick="closeModal('walkInReservationModal')" data-testid="button-close-walk-in-res">&times;</button>
+                        </div>
+                        <form onsubmit="createWalkInReservation(event)">
+                            <div class="form-group">
+                                <label class="form-label">Guest Name</label>
+                                <input type="text" class="form-input" id="walkInResName" required data-testid="input-walk-in-res-name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-input" id="walkInResEmail" required data-testid="input-walk-in-res-email">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-input" id="walkInResPhone" required data-testid="input-walk-in-res-phone">
+                            </div>
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label class="form-label">Date</label>
+                                    <input type="date" class="form-input" id="walkInResDate" min="${today}" required data-testid="input-walk-in-res-date">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Time</label>
+                                    <input type="time" class="form-input" id="walkInResTime" required data-testid="input-walk-in-res-time">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Seating</label>
+                                <select class="form-select" id="walkInResSeating" required data-testid="select-walk-in-res-seating">
+                                    <option value="Indoor">Indoor Seating</option>
+                                    <option value="Outdoor">Outdoor Seating</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Guests</label>
+                                <input type="number" class="form-input" id="walkInResGuests" min="1" max="20" value="2" required data-testid="input-walk-in-res-guests">
+                            </div>
+                            <button type="submit" class="btn btn-primary" data-testid="button-create-walk-in-reservation">Create Reservation</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        function createWalkInReservation(e) {
+            e.preventDefault();
+            const staff = getCurrentStaff();
+
+            const reservation = {
+                id: 'AG-' + Date.now(),
+                customerEmail: document.getElementById('walkInResEmail').value,
+                customerName: document.getElementById('walkInResName').value,
+                customerPhone: document.getElementById('walkInResPhone').value,
+                date: document.getElementById('walkInResDate').value,
+                time: document.getElementById('walkInResTime').value,
+                seating: document.getElementById('walkInResSeating').value,
+                guests: document.getElementById('walkInResGuests').value,
+                specialRequests: '',
+                status: 'Confirmed',
+                createdAt: new Date().toISOString(),
+                createdBy: staff.name
+            };
+
+            staffDataManager.saveRestaurantReservation(reservation);
+            closeModal('walkInReservationModal');
+            renderDashboard();
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', renderApp);
+    </script>
+</body>
+</html>
