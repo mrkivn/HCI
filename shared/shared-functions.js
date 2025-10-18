@@ -24,7 +24,8 @@ function initializeData() {
             { email: 'kitchen@hotel.com', password: 'kitchen123', department: 'Kitchen' },
             { email: 'bar@hotel.com', password: 'bar123', department: 'Bar' },
             { email: 'housekeeping@hotel.com', password: 'clean123', department: 'Housekeeping' },
-            { email: 'billing@hotel.com', password: 'bill123', department: 'Billing' }
+            { email: 'billing@hotel.com', password: 'bill123', department: 'Billing' },
+            { email: 'customerguest@hotel.com', password: 'guest123', department: 'Customer Guest' }
         ];
         localStorage.setItem('staff', JSON.stringify(staff));
 

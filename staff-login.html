@@ -26,13 +26,6 @@
             justify-content: center;
         }
 
-        .footer {
-            width: 100%;
-            position: relative;
-            left: 0;
-            right: 0;
-        }
-
         .auth-card {
             background-color: var(--bg-card);
             border-radius: 15px;
@@ -173,6 +166,10 @@
                     <div class="account-dept">Billing</div>
                     <div class="account-creds"><strong>Email:</strong> billing@hotel.com | <strong>Password:</strong> bill123</div>
                 </div>
+                <div class="account-item">
+                    <div class="account-dept">Customer Guest</div>
+                    <div class="account-creds"><strong>Email:</strong> customerguest@hotel.com | <strong>Password:</strong> guest123</div>
+                </div>
             </div>
 
             <div id="errorMessage" class="error-message"></div>
@@ -230,7 +227,8 @@
             'Kitchen': 'kitchen/kitchen-dashboard.html',
             'Bar': 'bar/bar-dashboard.html',
             'Housekeeping': 'housekeeping/housekeeping-dashboard.html',
-            'Billing': 'billing/billing-dashboard.html'
+            'Billing': 'billing/billing-dashboard.html',
+            'Customer Guest': 'customer-guest/customer-guest-dashboard.html'
         };
 
         // Show error message
