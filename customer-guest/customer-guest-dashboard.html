@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guest Dashboard - GINHAWA Hotel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../shared/shared-styles.css">
+</head>
+<body class="light-mode">
+    <div class="page-wrapper">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="customer-guest-dashboard.html" class="navbar-brand">
+                    <i class="fas fa-hotel"></i>
+                    <span>GINHAWA | Guest Portal</span>
+                </a>
+                <ul class="navbar-nav">
+                    <li><a href="../customer-home.html" class="nav-link"><i class="fas fa-home"></i> Back to Home</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="container">
+                <div id="accessDenied" style="text-align: center; padding: 60px 20px; display: none;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: var(--gold-primary); margin-bottom: 20px;"></i>
+                    <h2>Access Denied</h2>
+                    <p>You need an active check-in to access this portal.</p>
+                    <a href="../customer-home.html" class="btn btn-primary mt-2">Return to Home</a>
+                </div>
+
+                <div id="guestPortal" style="display: none;">
+                    <h1 class="text-gold mb-2"><i class="fas fa-door-open"></i> Welcome to Your Room</h1>
+                    
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h2>Your Booking Details</h2>
+                        </div>
+                        <div class="card-body" id="bookingDetails"></div>
+                    </div>
+
+                    <div class="grid-2">
+                        <a href="../housekeeping/housekeeping-request.html" class="card" style="text-decoration: none; text-align: center; padding: 40px;">
+                            <i class="fas fa-broom" style="font-size: 3rem; color: var(--gold-primary); margin-bottom: 15px;"></i>
+                            <h3>Housekeeping</h3>
+                            <p>Request housekeeping services</p>
+                        </a>
+
+                        <a href="../kitchen/order-food.html" class="card" style="text-decoration: none; text-align: center; padding: 40px;">
+                            <i class="fas fa-utensils" style="font-size: 3rem; color: var(--gold-primary); margin-bottom: 15px;"></i>
+                            <h3>Room Service</h3>
+                            <p>Order food to your room</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 GINHAWA Hotel & After Glow Restaurant. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="../shared/shared-functions.js"></script>
+    <script>
+        const user = checkAuth('customer');
+        
+        if (user) {
+            const bookings = getLocalData('hotelBookings');
+            const activeBooking = bookings.find(b => 
+                b.customerEmail === user.email && b.status === 'Checked-in'
+            );
+
+            if (activeBooking) {
+                document.getElementById('guestPortal').style.display = 'block';
+                document.getElementById('bookingDetails').innerHTML = `
+                    <div class="grid-2">
+                        <div><strong>Room Number:</strong> ${activeBooking.roomNumber}</div>
+                        <div><strong>Room Type:</strong> ${activeBooking.roomType}</div>
+                        <div><strong>Check-in:</strong> ${formatDate(activeBooking.checkin)}</div>
+                        <div><strong>Check-out:</strong> ${formatDate(activeBooking.checkout)}</div>
+                        <div><strong>Guests:</strong> ${activeBooking.guests}</div>
+                        <div><strong>Location:</strong> ${activeBooking.destination}</div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('accessDenied').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -149,7 +149,7 @@
                     <li><a href="customer-home.html" class="nav-link active">
                         <i class="fas fa-home"></i> Home
                     </a></li>
-                    <li><a href="#" class="nav-link" onclick="showMyBookings(); return false;">
+                    <li><a href="my-bookings.html" class="nav-link">
                         <i class="fas fa-calendar-check"></i> My Bookings
                     </a></li>
                     <li><a href="kitchen/order-food.html" class="nav-link">
@@ -240,7 +240,7 @@
                         <i class="fas fa-broom"></i>
                         <span>Housekeeping Request</span>
                     </a>
-                    <a href="#" onclick="showMyBookings(); return false;" class="quick-action-btn">
+                    <a href="my-bookings.html" class="quick-action-btn">
                         <i class="fas fa-list"></i>
                         <span>My Bookings</span>
                     </a>
@@ -291,10 +291,6 @@
             document.getElementById('restaurantReservations').textContent = activeReservations.length;
         }
 
-        function showMyBookings() {
-            // For now, just show an alert. Will be implemented in task 9
-            alert('My Bookings page will be implemented soon. You can access bookings through the navigation menu.');
-        }
     </script>
 </body>
 </html>

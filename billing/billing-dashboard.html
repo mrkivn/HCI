@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Dashboard - GINHAWA Hotel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../shared/shared-styles.css">
+    <link rel="stylesheet" href="../front-office/front-office.css">
+</head>
+<body class="light-mode">
+    <div class="page-wrapper">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="billing-dashboard.html" class="navbar-brand">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>GINHAWA | Billing</span>
+                </a>
+                <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+                <ul class="navbar-nav" id="navMenu">
+                    <li><a href="billing-dashboard.html" class="nav-link active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li class="account-dropdown">
+                        <button class="account-btn" id="accountBtn">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Billing</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu" id="accountDropdown">
+                            <button class="dropdown-item" onclick="toggleTheme()"><i class="fas fa-moon"></i> Toggle Theme</button>
+                            <button class="dropdown-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="container">
+                <h1 class="text-gold mb-2"><i class="fas fa-file-invoice-dollar"></i> Billing Dashboard</h1>
+
+                <div class="grid-3 mb-3">
+                    <div class="stat-card">
+                        <h3 id="totalRevenue">₱0</h3>
+                        <p>Total Revenue</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="todayRevenue">₱0</h3>
+                        <p>Today's Revenue</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="activeBookings">0</h3>
+                        <p>Active Bookings</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Recent Transactions</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Booking ID</th>
+                                        <th>Customer</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Payment Method</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactionsList">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 GINHAWA Hotel & After Glow Restaurant. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="../shared/shared-functions.js"></script>
+    <script>
+        const user = checkAuth('staff');
+
+        function loadDashboard() {
+            const bookings = getLocalData('hotelBookings');
+            const today = new Date().setHours(0,0,0,0);
+            
+            const totalRevenue = bookings.filter(b => b.status !== 'Cancelled').reduce((sum, b) => sum + b.totalPrice, 0);
+            const todayRevenue = bookings.filter(b => 
+                b.status !== 'Cancelled' && new Date(b.bookingDate).setHours(0,0,0,0) === today
+            ).reduce((sum, b) => sum + b.totalPrice, 0);
+            const activeBookings = bookings.filter(b => b.status === 'Checked-in').length;
+            
+            document.getElementById('totalRevenue').textContent = formatPrice(totalRevenue);
+            document.getElementById('todayRevenue').textContent = formatPrice(todayRevenue);
+            document.getElementById('activeBookings').textContent = activeBookings;
+            
+            loadTransactions(bookings);
+        }
+
+        function loadTransactions(bookings) {
+            const container = document.getElementById('transactionsList');
+            const sortedBookings = bookings.sort((a, b) => b.bookingDate - a.bookingDate).slice(0, 50);
+            
+            container.innerHTML = sortedBookings.map(booking => `
+                <tr>
+                    <td><strong>${booking.id}</strong></td>
+                    <td>${booking.customerName}</td>
+                    <td>Hotel Booking</td>
+                    <td class="text-gold"><strong>${formatPrice(booking.totalPrice)}</strong></td>
+                    <td>${booking.paymentMethod}</td>
+                    <td>${getStatusBadge(booking.status)}</td>
+                    <td>${new Date(booking.bookingDate).toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        function getStatusBadge(status) {
+            const badges = {
+                'Confirmed': '<span class="badge badge-warning">Confirmed</span>',
+                'Checked-in': '<span class="badge badge-success">Checked-in</span>',
+                'Completed': '<span class="badge badge-info">Completed</span>',
+                'Cancelled': '<span class="badge badge-danger">Cancelled</span>'
+            };
+            return badges[status] || `<span class="badge">${status}</span>`;
+        }
+
+        loadDashboard();
+    </script>
+</body>
+</html>

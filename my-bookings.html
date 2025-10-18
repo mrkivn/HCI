@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - GINHAWA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="shared/shared-styles.css">
+    <style>
+        .bookings-header {
+            text-align: center;
+            background: var(--black-primary);
+            color: var(--white);
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+
+        .bookings-header h1 {
+            color: var(--gold-primary);
+            margin-bottom: 10px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 12px 24px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-weight: 500;
+        }
+
+        .filter-tab:hover {
+            border-color: var(--gold-primary);
+        }
+
+        .filter-tab.active {
+            background: var(--gold-primary);
+            border-color: var(--gold-primary);
+            color: var(--black-primary);
+        }
+
+        .booking-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all var(--transition-speed);
+        }
+
+        .booking-card:hover {
+            border-color: var(--gold-primary);
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .booking-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .booking-id {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--gold-primary);
+        }
+
+        .booking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .booking-detail {
+            padding: 10px 0;
+        }
+
+        .detail-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .booking-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--gold-primary);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .booking-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="page-wrapper">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="customer-home.html" class="navbar-brand">
+                    <i class="fas fa-hotel"></i>
+                    <span>GINHAWA | After Glow</span>
+                </a>
+
+                <button class="hamburger" id="hamburger">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <ul class="navbar-nav" id="navMenu">
+                    <li><a href="customer-home.html" class="nav-link">
+                        <i class="fas fa-home"></i> Home
+                    </a></li>
+                    <li><a href="my-bookings.html" class="nav-link active">
+                        <i class="fas fa-calendar-check"></i> My Bookings
+                    </a></li>
+                    <li><a href="kitchen/order-food.html" class="nav-link">
+                        <i class="fas fa-utensils"></i> Order Food
+                    </a></li>
+                    <li><a href="bar/order-drinks.html" class="nav-link">
+                        <i class="fas fa-cocktail"></i> Order Drinks
+                    </a></li>
+                    <li class="account-dropdown">
+                        <button class="account-btn" id="accountBtn">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="userName">User</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu" id="accountDropdown">
+                            <button class="dropdown-item" onclick="toggleTheme()">
+                                <i class="fas fa-moon"></i>
+                                <span>Toggle Theme</span>
+                            </button>
+                            <button class="dropdown-item" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="bookings-header">
+                <h1><i class="fas fa-calendar-check"></i> My Bookings</h1>
+                <p>View and manage your reservations</p>
+            </div>
+
+            <div class="container">
+                <!-- Filter Tabs -->
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="filterBookings('all')">
+                        <i class="fas fa-list"></i> All
+                    </button>
+                    <button class="filter-tab" onclick="filterBookings('hotel')">
+                        <i class="fas fa-hotel"></i> Hotel Bookings
+                    </button>
+                    <button class="filter-tab" onclick="filterBookings('restaurant')">
+                        <i class="fas fa-utensils"></i> Restaurant Reservations
+                    </button>
+                </div>
+
+                <!-- Bookings List -->
+                <div id="bookingsList">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 GINHAWA Hotel & After Glow Restaurant. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="shared/shared-functions.js"></script>
+    <script>
+        // Check authentication
+        const user = checkAuth('customer');
+        if (user) {
+            document.getElementById('userName').textContent = user.name.split(' ')[0];
+            loadBookings();
+        }
+
+        let currentFilter = 'all';
+
+        function loadBookings() {
+            const hotelBookings = getLocalData('hotelBookings').filter(b => b.customerEmail === user.email);
+            const restaurantReservations = getLocalData('restaurantReservations').filter(r => r.customerEmail === user.email);
+
+            displayBookings(hotelBookings, restaurantReservations);
+        }
+
+        function filterBookings(type) {
+            currentFilter = type;
+
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            const hotelBookings = getLocalData('hotelBookings').filter(b => b.customerEmail === user.email);
+            const restaurantReservations = getLocalData('restaurantReservations').filter(r => r.customerEmail === user.email);
+
+            displayBookings(hotelBookings, restaurantReservations);
+        }
+
+        function displayBookings(hotelBookings, restaurantReservations) {
+            const container = document.getElementById('bookingsList');
+            container.innerHTML = '';
+
+            let itemsToShow = [];
+
+            if (currentFilter === 'all' || currentFilter === 'hotel') {
+                itemsToShow = [...itemsToShow, ...hotelBookings.map(b => ({...b, bookingType: 'hotel'}))];
+            }
+
+            if (currentFilter === 'all' || currentFilter === 'restaurant') {
+                itemsToShow = [...itemsToShow, ...restaurantReservations.map(r => ({...r, bookingType: 'restaurant'}))];
+            }
+
+            // Sort by booking date (newest first)
+            itemsToShow.sort((a, b) => (b.bookingDate || b.reservationDate) - (a.bookingDate || a.reservationDate));
+
+            if (itemsToShow.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <h2>No Bookings Found</h2>
+                        <p>You haven't made any bookings yet.</p>
+                        <a href="customer-home.html" class="btn btn-primary mt-2">
+                            <i class="fas fa-plus"></i> Make a Booking
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            itemsToShow.forEach(item => {
+                const card = createBookingCard(item);
+                container.appendChild(card);
+            });
+        }
+
+        function createBookingCard(booking) {
+            const card = document.createElement('div');
+            card.className = 'booking-card';
+
+            if (booking.bookingType === 'hotel') {
+                card.innerHTML = `
+                    <div class="booking-header-row">
+                        <div class="booking-id">
+                            <i class="fas fa-hotel"></i> ${booking.id}
+                        </div>
+                        <div>${getStatusBadge(booking.status)}</div>
+                    </div>
+                    <div class="booking-grid">
+                        <div class="booking-detail">
+                            <span class="detail-label">Destination</span>
+                            <span class="detail-value">${booking.destination}</span>
+                        </div>
+                        <div class="booking-detail">
+                            <span class="detail-label">Check-in</span>
+                            <span class="detail-value">${formatDate(booking.checkin)}</span>
+                        </div>
+                        <div class="booking-detail">
+                            <span class="detail-label">Check-out</span>
+                            <span class="detail-value">${formatDate(booking.checkout)}</span>
+                        </div>
+                        <div class="booking-detail">
+                            <span class="detail-label">Room Type</span>
+                            <span class="detail-value">${booking.roomType}</span>
+                        </div>
+                        <div class="booking-detail">
+                            <span class="detail-label">Guests</span>
+                            <span class="detail-value">${booking.guests}</span>
+                        </div>
+                        <div class="booking-detail">
+                            <span class="detail-label">Total Price</span>
+                            <span class="detail-value text-gold">${formatPrice(booking.totalPrice)}</span>
+                        </div>
+                    </div>
+                    ${booking.roomNumber ? `<p><strong>Room Number:</strong> ${booking.roomNumber}</p>` : ''}
+                    <div class="booking-actions">
+                        ${booking.status === 'Confirmed' ? `
+                            <button class="btn btn-danger btn-sm" onclick="cancelBooking('${booking.id}', 'hotel')">
+                                <i class="fas fa-times"></i> Cancel Booking
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+            } else {
+                card.innerHTML = `
+                    <div class="booking-header-row">
+                        <div class="booking-id">
+                            <i class="fas fa-utensils"></i> ${booking.id}
+                        </div>
+                        <div>${getStatusBadge(booking.status)}</div>
+                    </div>
+                    <div class="booking-grid">
+                        <div class="booking-detail">
+                            <span class="detail-label">Date</span>
+                            <span class="detail-value">${formatDate(booking.date)}</span>
+                        </div>
+                        <div class="booking-detail">
+                            <span class="detail-label">Time</span>
+                            <span class="detail-value">${booking.time}</span>
+                        </div>
+                        <div class="booking-detail">
+                            <span class="detail-label">Seating</span>
+                            <span class="detail-value">${booking.seating}</span>
+                        </div>
+                        <div class="booking-detail">
+                            <span class="detail-label">Guests</span>
+                            <span class="detail-value">${booking.guests}</span>
+                        </div>
+                    </div>
+                    ${booking.specialRequests ? `<p><strong>Special Requests:</strong> ${booking.specialRequests}</p>` : ''}
+                    <div class="booking-actions">
+                        ${booking.status === 'Confirmed' ? `
+                            <button class="btn btn-danger btn-sm" onclick="cancelBooking('${booking.id}', 'restaurant')">
+                                <i class="fas fa-times"></i> Cancel Reservation
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            return card;
+        }
+
+        function getStatusBadge(status) {
+            const badges = {
+                'Confirmed': '<span class="badge badge-success">Confirmed</span>',
+                'Checked-in': '<span class="badge badge-info">Checked-in</span>',
+                'Completed': '<span class="badge badge-gold">Completed</span>',
+                'Cancelled': '<span class="badge badge-danger">Cancelled</span>'
+            };
+            return badges[status] || `<span class="badge">${status}</span>`;
+        }
+
+        function cancelBooking(id, type) {
+            if (!confirm('Are you sure you want to cancel this booking?')) {
+                return;
+            }
+
+            if (type === 'hotel') {
+                const bookings = getLocalData('hotelBookings');
+                const booking = bookings.find(b => b.id === id);
+                if (booking) {
+                    booking.status = 'Cancelled';
+                    setLocalData('hotelBookings', bookings);
+                    showNotification('Hotel booking cancelled successfully', 'success');
+                }
+            } else {
+                const reservations = getLocalData('restaurantReservations');
+                const reservation = reservations.find(r => r.id === id);
+                if (reservation) {
+                    reservation.status = 'Cancelled';
+                    setLocalData('restaurantReservations', reservations);
+                    showNotification('Restaurant reservation cancelled successfully', 'success');
+                }
+            }
+
+            loadBookings();
+        }
+    </script>
+</body>
+</html>
