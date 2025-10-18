@@ -28,12 +28,12 @@ function updateStats() {
 }
 
 // Switch tab
-function switchTab(tab) {
+function switchTab(evt, tab) {
     currentTab = tab;
     
     // Update active tab
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    event.currentTarget.classList.add('active');
+    evt.currentTarget.classList.add('active');
     
     loadBookings();
 }

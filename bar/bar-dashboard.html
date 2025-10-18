@@ -54,10 +54,10 @@
                 </div>
 
                 <div class="tabs mb-2">
-                    <button class="tab active" onclick="switchTab('pending')">Pending</button>
-                    <button class="tab" onclick="switchTab('preparing')">Preparing</button>
-                    <button class="tab" onclick="switchTab('ready')">Ready</button>
-                    <button class="tab" onclick="switchTab('all')">All Orders</button>
+                    <button class="tab active" onclick="switchTab(event, 'pending')">Pending</button>
+                    <button class="tab" onclick="switchTab(event, 'preparing')">Preparing</button>
+                    <button class="tab" onclick="switchTab(event, 'ready')">Ready</button>
+                    <button class="tab" onclick="switchTab(event, 'all')">All Orders</button>
                 </div>
 
                 <div class="card">
@@ -94,10 +94,10 @@
             ).length;
         }
 
-        function switchTab(tab) {
+        function switchTab(evt, tab) {
             currentTab = tab;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            evt.currentTarget.classList.add('active');
             loadOrders();
         }
 

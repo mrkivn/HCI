@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../shared/shared-styles.css">
     <style>
         .dashboard-header {
-            background: linear-gradient(135deg, var(--black-dark) 0%, var(--black-primary) 100%);
+            background: var(--black-primary);
             color: var(--white);
             padding: 30px;
             margin-bottom: 30px;
@@ -294,19 +294,19 @@
 
         <div class="filters">
             <div class="filter-row">
-                <button class="filter-btn active" onclick="filterOrders('All')">
+                <button class="filter-btn active" onclick="filterOrders(event, 'All')">
                     <i class="fas fa-list"></i> All Orders
                 </button>
-                <button class="filter-btn" onclick="filterOrders('Pending')">
+                <button class="filter-btn" onclick="filterOrders(event, 'Pending')">
                     <i class="fas fa-clock"></i> Pending
                 </button>
-                <button class="filter-btn" onclick="filterOrders('Preparing')">
+                <button class="filter-btn" onclick="filterOrders(event, 'Preparing')">
                     <i class="fas fa-fire"></i> Preparing
                 </button>
-                <button class="filter-btn" onclick="filterOrders('Ready')">
+                <button class="filter-btn" onclick="filterOrders(event, 'Ready')">
                     <i class="fas fa-check-circle"></i> Ready
                 </button>
-                <button class="filter-btn" onclick="filterOrders('Delivered')">
+                <button class="filter-btn" onclick="filterOrders(event, 'Delivered')">
                     <i class="fas fa-truck"></i> Delivered
                 </button>
             </div>
@@ -463,14 +463,14 @@
         }
 
         // Filter orders
-        function filterOrders(filter) {
+        function filterOrders(evt, filter) {
             currentFilter = filter;
             
             // Update active button
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            event.target.closest('.filter-btn').classList.add('active');
+            evt.target.closest('.filter-btn').classList.add('active');
 
             loadOrders();
         }
