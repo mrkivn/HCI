@@ -1,0 +1,976 @@
+I need you to build a Hotel & Restaurant Management System for my HCI (Human-Computer Interaction) group project. This is a GROUP PROJECT where different students worked on different modules, so each module needs its own separate HTML/CSS/JS files in organized folders.
+CRITICAL REQUIREMENTS:
+
+Use ONLY HTML, CSS, and JavaScript (Vanilla JS, no frameworks)
+NO React, NO TypeScript, NO .tsx files, NO frameworks
+Delete any framework files - pure HTML/CSS/JS only
+Each module in separate folder (this is a group project simulation)
+Use localStorage for data persistence (demo purposes)
+Use Font Awesome icons (NOT emojis)
+Color theme: Gold (#FFD700, #FFA500) and Black (#000000, #1a1a1a, #2c2c2c)
+NO gradient effects - use solid colors and subtle shadows instead
+Fully responsive design with hamburger menu on mobile
+Real data from localStorage - NO fake/hardcoded data
+
+
+BRANDING:
+
+Hotel Name: GINHAWA
+Restaurant Name: After Glow
+Tagline Hotel: "Experience Comfort and Relaxation"
+Tagline Restaurant: "Where Every Moment Glows"
+
+
+FILE STRUCTURE (Group Project Organization):
+project/
+├── index.html (Landing/Customer Login)
+├── staff-login.html (Staff Login Page)
+├── customer-home.html (Customer Dashboard after login)
+├── README.md
+│
+├── booking/
+│   ├── booking.html
+│   ├── booking.css
+│   └── booking.js
+│
+├── reservation/
+│   ├── reservation.html
+│   ├── reservation.css
+│   └── reservation.js
+│
+├── front-office/
+│   ├── front-office-dashboard.html
+│   ├── front-office.css
+│   └── front-office.js
+│
+├── kitchen/
+│   ├── kitchen-dashboard.html
+│   ├── kitchen.css
+│   └── kitchen.js
+│
+├── bar/
+│   ├── bar-dashboard.html
+│   ├── bar.css
+│   └── bar.js
+│
+├── customer-guest/
+│   ├── customer-guest-dashboard.html
+│   ├── customer-guest.css
+│   └── customer-guest.js
+│
+├── housekeeping/
+│   ├── housekeeping-dashboard.html
+│   ├── housekeeping.css
+│   └── housekeeping.js
+│
+├── billing/
+│   ├── billing-dashboard.html
+│   ├── billing.css
+│   └── billing.js
+│
+└── shared/
+    ├── shared-styles.css (common styles)
+    └── shared-functions.js (helper functions)
+
+DESIGN REQUIREMENTS:
+Color Scheme (Gold & Black):
+
+Primary Gold: #FFD700
+Secondary Gold: #FFA500
+Dark Gold: #B8860B
+Primary Black: #000000
+Dark Gray: #1a1a1a
+Medium Gray: #2c2c2c
+Light Gray: #f5f5f5 (for backgrounds)
+Text on Dark: #ffffff
+Text on Light: #000000
+
+Design Principles:
+
+NO gradients - use solid colors
+Clean, modern, professional look
+Card-based layouts with subtle shadows
+Gold accents on black backgrounds
+High contrast for readability
+Consistent spacing and padding
+Smooth transitions (0.3s)
+Hover effects with gold highlights
+
+Typography:
+
+Font: 'Segoe UI', Tahoma, sans-serif or similar clean font
+Headers: Bold, 1.5em - 2.5em
+Body: 16px base, line-height 1.6
+Use Font Awesome 6 icons (via CDN)
+
+Navigation:
+
+Desktop: Logo on left, nav links on RIGHT side (horizontal)
+Mobile: Hamburger menu icon (☰) that opens sliding menu
+Logo text: "GINHAWA | After Glow" in gold
+Account icon with dropdown (dark mode toggle + logout)
+NO logout button in nav directly
+
+Footer:
+
+Must stick to BOTTOM of page (use CSS sticky footer)
+Gold text on black background
+"© 2025 GINHAWA Hotel & After Glow Restaurant. All rights reserved."
+
+Responsive Design:
+
+Mobile: 320px - 767px (hamburger menu, stacked layout)
+Tablet: 768px - 1023px (adjusted grid)
+Desktop: 1024px+ (full layout)
+
+
+CUSTOMER PORTAL FEATURES:
+1. index.html - Customer Login/Registration
+Layout:
+
+Centered login card on black/gold background
+GINHAWA | After Glow logo/title at top
+Two tabs: "Login" and "Register"
+
+Login Tab:
+
+Email input
+Password input
+Login button (gold background, black text)
+Link: "Forgot password?" (inactive for demo)
+Button below login form: "Staff Login" (links to staff-login.html)
+
+Register Tab:
+
+Full Name
+Email
+Phone Number (+63 format)
+Password
+Confirm Password
+Register button
+Validation: check duplicate emails, password match
+
+After successful login:
+
+Save to sessionStorage: {email, name, phone, type: 'customer'}
+Redirect to customer-home.html
+
+Demo Customer Account (pre-populated):
+
+Email: customer@test.com
+Password: password123
+Name: Demo Customer
+Phone: +63 917 123 4567
+
+
+2. customer-home.html - Customer Dashboard
+Navigation Bar:
+
+Logo on LEFT: "GINHAWA | After Glow" (clickable, goes to home)
+Nav links on RIGHT:
+
+Home
+My Bookings
+Order Food (links to kitchen order page)
+Order Drinks (links to bar order page)
+Housekeeping
+Account Icon (Font Awesome user icon) with dropdown:
+
+Dark Mode / Light Mode toggle switch
+Logout button
+
+
+
+
+Mobile: Hamburger menu icon, sliding menu from left
+Display customer name next to account icon
+
+Main Content:
+
+Welcome message: "Welcome back, [Customer Name]!"
+Two large cards (side by side on desktop, stacked on mobile):
+
+Book GINHAWA Hotel (icon + text, clickable)
+
+Links to booking/booking.html
+
+
+Reserve After Glow Restaurant (icon + text, clickable)
+
+Links to reservation/reservation.html
+
+
+
+
+Quick stats cards (optional):
+
+Upcoming bookings count
+Active orders count
+
+
+
+Footer:
+
+Stick to bottom of viewport
+Gold text on black background
+
+
+3. booking/booking.html - Hotel Booking Flow
+COMPLETE MULTI-STEP BOOKING PROCESS (DO NOT JUST ALERT):
+Step 1: Destination & Dates
+
+Select destination (dropdown):
+
+Commonwealth, Quezon City
+Eastwood City, Quezon City
+UP Diliman Area, Quezon City
+Katipunan, Quezon City
+
+
+Check-in date (date picker, min: today)
+Check-out date (date picker, min: check-in + 1 day)
+Number of guests (1-10, number input)
+Continue button → Go to Step 2
+
+Step 2: Room Selection
+
+Display 3 room type cards:
+
+Standard Room: ₱2,500/night
+
+Queen bed, WiFi, AC, Cable TV, Private bathroom
+
+
+Deluxe Room: ₱4,000/night
+
+King bed, WiFi, Premium amenities, Mini bar, City view, Work desk
+
+
+Suite: ₱7,000/night
+
+Living room, King bed, Luxury amenities, Premium mini bar, Jacuzzi, Butler service
+
+
+
+
+Click card to select (highlight with gold border)
+Show calculated total: nights × price
+Continue button → Go to Step 3
+
+Step 3: Booking Summary
+
+Display all details:
+
+Destination
+Check-in / Check-out dates
+Number of nights (calculated)
+Room type
+Price per night
+Total Price
+
+
+Auto-fill customer name, email, phone from sessionStorage
+Payment method selection (3 cards):
+
+Cash (icon)
+Credit Card (icon)
+GCash (icon)
+
+
+Confirm Booking button
+
+Step 4: Confirmation
+
+Success message with checkmark icon
+Display Booking ID: GIN-[timestamp]
+Full booking summary
+Buttons:
+
+Back to Home
+View My Bookings
+
+
+Save to localStorage "hotelBookings":
+
+javascript{
+  id: 'GIN-' + Date.now(),
+  type: 'hotel',
+  destination: string,
+  checkin: 'YYYY-MM-DD',
+  checkout: 'YYYY-MM-DD',
+  nights: number,
+  guests: number,
+  roomType: string,
+  roomPrice: number,
+  totalPrice: number,
+  customerEmail: string,
+  customerName: string,
+  customerPhone: string,
+  paymentMethod: string,
+  status: 'Confirmed',
+  bookingDate: Date.now(),
+  roomNumber: null (assigned later by front office)
+}
+
+4. reservation/reservation.html - Restaurant Reservation
+COMPLETE RESERVATION PROCESS (DO NOT JUST ALERT):
+Reservation Form:
+
+Date (date picker, min: today)
+Time (dropdown, 10:00 AM - 10:00 PM, 30-min intervals)
+Seating preference (two large cards):
+
+Indoor Seating (icon)
+Outdoor Seating (icon)
+
+
+Number of guests (1-20)
+Special requests (textarea, optional)
+Auto-fill customer details from sessionStorage
+Reserve button
+
+Confirmation Page:
+
+Success message
+Reservation ID: AG-[timestamp]
+Full reservation summary
+Save to localStorage "restaurantReservations":
+
+javascript{
+  id: 'AG-' + Date.now(),
+  type: 'restaurant',
+  date: 'YYYY-MM-DD',
+  time: string,
+  seating: 'Indoor'|'Outdoor',
+  guests: number,
+  specialRequests: string,
+  customerEmail: string,
+  customerName: string,
+  customerPhone: string,
+  status: 'Confirmed',
+  reservationDate: Date.now()
+}
+
+5. kitchen/ - Kitchen Order System (Customer Side in customer-home or separate page)
+Food Menu Page:
+
+Display food items in grid cards:
+
+Waffle: ₱150 (image/icon + description)
+Burger: ₱200
+Fries: ₱100
+Pasta: ₱250
+Steak: ₱500
+Salad: ₱180
+Pizza: ₱350
+
+
+Each card has:
+
+Item name
+Price
++/- quantity buttons
+Add to Cart button
+
+
+
+Shopping Cart (sidebar or separate section):
+
+List items with quantities
+Remove item button
+Subtotal
+Table/Room number input (required)
+Place Order button
+
+Order Confirmation:
+
+Order ID: ORD-[timestamp]
+Estimated time: 20-30 minutes
+Save to localStorage "orders":
+
+javascript{
+  id: 'ORD-' + Date.now(),
+  category: 'Food',
+  items: [{name: string, price: number, quantity: number}],
+  tableOrRoomNumber: string,
+  customerEmail: string,
+  customerName: string,
+  totalPrice: number,
+  status: 'Pending',
+  timestamp: Date.now()
+}
+
+6. bar/ - Bar Order System (Customer Side)
+Drinks Menu Page:
+
+Display drink items:
+
+Tropical Yakult Splash: ₱120
+Energy Bear Spark: ₱130
+Bear Fizz Delight: ₱125
+Classic Sparkle: ₱110
+Sweet Chill: ₱115
+Grape Fizz: ₱120
+Mojito: ₱150
+Margarita: ₱180
+
+
+Same cart functionality as food
+Save to localStorage "orders" with category: 'Drinks'
+
+
+7. customer-guest/ - Customer Guest Verification Dashboard
+Purpose: After customer is verified (checked-in), they can access this dashboard
+Features:
+
+Display current booking details:
+
+Room number
+Check-in/Check-out dates
+Room type
+
+
+Quick actions:
+
+Request housekeeping
+Order room service (food/drinks)
+View billing
+
+
+Guest information displayed
+
+Access Control:
+
+Only accessible if customer has active booking with status "Checked-in"
+Read from localStorage "hotelBookings" where customerEmail matches and status = "Checked-in"
+
+
+8. housekeeping/ - Housekeeping Request (Customer Side)
+Request Form:
+
+Room number input
+Request type (checkboxes):
+
+Room Cleaning
+Fresh Towels
+Toiletries
+Maintenance
+Other
+
+
+Additional notes (textarea)
+Submit button
+
+Confirmation:
+
+Request ID: HK-[timestamp]
+"Your request has been received!"
+Save to localStorage "housekeepingRequests":
+
+javascript{
+  id: 'HK-' + Date.now(),
+  roomNumber: string,
+  requestType: ['Room Cleaning', ...],
+  notes: string,
+  customerEmail: string,
+  customerName: string,
+  status: 'Pending',
+  timestamp: Date.now(),
+  assignedTo: null,
+  completedAt: null
+}
+```
+
+---
+
+### **9. My Bookings Page (in customer-home.html or separate)**
+
+**Display Customer's Data:**
+- Filter tabs: All | Hotel Bookings | Restaurant Reservations
+- Load from localStorage:
+  - "hotelBookings" where customerEmail matches
+  - "restaurantReservations" where customerEmail matches
+- **Hotel Booking Cards:**
+  - Booking ID
+  - Status badge (gold/black colors)
+  - Destination, dates, room type, room number
+  - Total price
+  - Cancel button (if status = Confirmed)
+- **Restaurant Reservation Cards:**
+  - Reservation ID
+  - Status badge
+  - Date, time, seating, guests
+  - Cancel button
+
+---
+
+## STAFF PORTAL FEATURES:
+
+### **10. staff-login.html - Staff Login Page**
+
+**Layout:**
+- Centered login card
+- GINHAWA | After Glow staff portal title
+- Email input
+- Password input
+- Login button (gold background)
+- **NO department dropdown** (department determined by email)
+
+**Below login card (or in a separate info box):**
+- **Demo Accounts for Testing:**
+```
+Manager:
+Email: manager@hotel.com
+Password: admin123
+
+Front Office:
+Email: frontdesk@hotel.com
+Password: front123
+
+Kitchen:
+Email: kitchen@hotel.com
+Password: kitchen123
+
+Bar:
+Email: bar@hotel.com
+Password: bar123
+
+Housekeeping:
+Email: housekeeping@hotel.com
+Password: clean123
+
+Billing:
+Email: billing@hotel.com
+Password: bill123
+Pre-populated staff in localStorage:
+javascript[
+  {email: 'manager@hotel.com', password: 'admin123', department: 'Manager'},
+  {email: 'frontdesk@hotel.com', password: 'front123', department: 'Front Office'},
+  {email: 'kitchen@hotel.com', password: 'kitchen123', department: 'Kitchen'},
+  {email: 'bar@hotel.com', password: 'bar123', department: 'Bar'},
+  {email: 'housekeeping@hotel.com', password: 'clean123', department: 'Housekeeping'},
+  {email: 'billing@hotel.com', password: 'bill123', department: 'Billing'}
+]
+After login:
+
+Verify email + password
+Determine department from email
+Save to sessionStorage: {email, department, type: 'staff'}
+Redirect to department-specific dashboard
+
+
+11. front-office/front-office-dashboard.html
+Sidebar Navigation (Left side, collapsible on mobile):
+
+Logo at top
+Department name: "Front Office"
+Menu items (ONLY relevant to Front Office):
+
+Dashboard (home icon)
+Hotel Bookings (badge with pending count)
+Check-in / Check-out
+Room Management (badge with cleaning rooms count)
+
+
+Back button at top (close sidebar on mobile)
+Logout button at bottom
+
+Top Bar:
+
+Hamburger menu icon (mobile only)
+Welcome: "Front Office Dashboard"
+Account icon with dropdown (dark mode toggle, logout)
+
+Dashboard Content (USE REAL DATA from localStorage):
+
+Stats cards:
+
+Today's Check-ins: Count from "hotelBookings" where checkin = today and status = 'Confirmed'
+Today's Check-outs: Count where checkout = today and status = 'Checked-in'
+Available Rooms: Count from "rooms" where status = 'Available'
+Occupied Rooms: Count where status = 'Occupied'
+
+
+
+Hotel Bookings Section:
+
+Table/cards showing ALL bookings from localStorage "hotelBookings"
+Columns: Booking ID, Customer Name, Check-in, Check-out, Room Type, Status, Actions
+Filter by status dropdown
+Search by booking ID or customer name
+Actions:
+
+View Details (modal)
+Check-in button (if status = 'Confirmed', opens room assignment)
+Check-out button (if status = 'Checked-in')
+
+
+
+Check-in Process:
+
+Click Check-in → Opens modal
+Show available rooms from "rooms" where status = 'Available' and type matches booking
+Select room → Assign room number to booking
+Update booking status to 'Checked-in'
+Update room status to 'Occupied' and set currentGuest
+
+Check-out Process:
+
+Click Check-out → Update booking status to 'Checked-out'
+Update room status to 'Cleaning'
+Clear currentGuest from room
+
+Room Management Section:
+
+Grid of all rooms from localStorage "rooms"
+Display: Room number, Type, Status, Current guest
+Color-coded cards:
+
+Gold border: Available
+Black background: Occupied (show guest name)
+Gray: Cleaning
+
+
+Click room to update status manually
+
+
+12. kitchen/kitchen-dashboard.html
+Sidebar Navigation (ONLY Kitchen-relevant items):
+
+Dashboard
+Pending Orders (badge with count)
+Order History
+Logout
+
+Dashboard (USE REAL DATA):
+
+Stats cards:
+
+Pending Orders: Count from "orders" where category = 'Food' and status = 'Pending'
+Preparing: Count where status = 'Preparing'
+Orders Served Today: Count where status = 'Served' and date = today
+
+
+
+Orders Section (Auto-refresh every 5 seconds):
+
+Display orders from localStorage "orders" where category includes 'Food'
+Filter by status: All | Pending | Preparing | Ready | Served
+Order cards showing REAL data:
+
+Order ID
+Customer name
+Table/Room number
+Items list with quantities (from order data)
+Total price
+Status badge
+Time ago (e.g., "5 minutes ago")
+
+
+Status update buttons:
+
+Accept (Pending → Preparing)
+Mark Ready (Preparing → Ready)
+Mark Served (Ready → Served)
+
+
+
+Auto-refresh Implementation:
+javascriptsetInterval(() => {
+  loadOrders(); // Reload from localStorage and update DOM
+}, 5000);
+NO fake data - all counts and orders come from localStorage
+
+13. bar/bar-dashboard.html
+Same structure as Kitchen but for Drinks:
+
+Filter orders where category includes 'Drinks'
+Same status workflow
+Real data from localStorage
+Auto-refresh every 5 seconds
+
+
+14. housekeeping/housekeeping-dashboard.html
+Sidebar (ONLY Housekeeping items):
+
+Dashboard
+Pending Requests (badge with count from REAL data)
+Assigned to Me
+Completed Today
+Logout
+
+Dashboard (REAL DATA):
+
+Stats:
+
+Pending Requests: Count from "housekeepingRequests" where status = 'Pending'
+In Progress: Count where status = 'In Progress'
+Completed Today: Count where status = 'Completed' and completedAt = today
+
+
+
+Requests Section (Auto-refresh every 5 seconds):
+
+Display from localStorage "housekeepingRequests"
+Request cards:
+
+Request ID
+Room number (large, prominent)
+Customer name (from request data)
+Request types as badges
+Notes
+Status badge
+Time ago
+
+
+Actions:
+
+Accept (Pending → In Progress)
+Complete (In Progress → Completed, set completedAt timestamp)
+
+
+
+Badge Count in Sidebar:
+
+Dynamically calculated from localStorage
+When clicked, show the actual requests (not fake numbers)
+
+
+15. billing/billing-dashboard.html
+Sidebar:
+
+Dashboard
+Generate Invoice
+Invoice History
+Pending Payments (badge with count)
+Logout
+
+Dashboard (REAL DATA):
+
+Stats:
+
+Total Revenue Today: Sum of paid invoices where date = today
+Pending Payments: Count from "invoices" where paymentStatus = 'Unpaid'
+Invoices Generated Today: Count where date = today
+
+
+
+Generate Invoice Section:
+
+Search booking by ID or customer name
+Load booking from localStorage
+Display booking details
+Auto-calculate:
+
+Room charges (room price × nights)
+Additional orders (search "orders" by customer email or room number)
+Subtotal
+Tax (12% VAT)
+Total
+
+
+Payment method dropdown
+Payment status toggle (Unpaid/Paid)
+Generate button
+
+Save Invoice:
+javascript{
+  id: 'INV-' + Date.now(),
+  bookingId: string,
+  customerName: string,
+  customerEmail: string,
+  items: [{description, amount}],
+  subtotal: number,
+  tax: number,
+  total: number,
+  paymentMethod: string,
+  paymentStatus: 'Unpaid'|'Paid',
+  timestamp: Date.now()
+}
+Invoice History:
+
+List all from localStorage "invoices"
+Filter by payment status
+View/Print invoice button (window.print())
+
+
+16. customer-guest/customer-guest-dashboard.html (Staff View)
+Purpose: Staff can view verified/checked-in customers
+Display:
+
+List all from "hotelBookings" where status = 'Checked-in'
+Customer cards showing:
+
+Customer name
+Room number
+Check-in / Check-out dates
+Room type
+Contact info
+
+
+Search by name or room number
+View customer's orders, housekeeping requests
+
+
+SHARED FUNCTIONALITY:
+shared/shared-styles.css - Common Styles
+css/* Color Variables */
+:root {
+  --gold-primary: #FFD700;
+  --gold-secondary: #FFA500;
+  --gold-dark: #B8860B;
+  --black-primary: #000000;
+  --black-dark: #1a1a1a;
+  --black-medium: #2c2c2c;
+  --gray-light: #f5f5f5;
+  --white: #ffffff;
+}
+
+/* Dark Mode */
+body.dark-mode {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2c2c2c;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+}
+
+/* Light Mode */
+body.light-mode {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --text-primary: #000000;
+  --text-secondary: #666666;
+}
+
+/* Base styles, cards, buttons, forms, etc. */
+/* (Use solid gold/black colors, no gradients) */
+shared/shared-functions.js - Helper Functions
+javascript// Initialize localStorage data
+function initializeData() {
+  if (!localStorage.getItem('initialized')) {
+    // Pre-populate rooms, staff, demo customer
+  }
+}
+
+// Generate IDs
+function generateId(prefix) {
+  return prefix + '-' + Date.now();
+}
+
+// Format price
+function formatPrice(amount) {
+  return '₱' + amount.toLocaleString('en-PH');
+}
+
+// Calculate nights
+function calculateNights(checkin, checkout) {
+  const start = new Date(checkin);
+  const end = new Date(checkout);
+  return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+}
+
+// Time ago
+function timeAgo(timestamp) {
+  const now = Date.now();
+  const diff = now - timestamp;
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return 'Just now';
+  if (minutes < 60) return minutes + ' min ago';
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return hours + ' hours ago';
+  return Math.floor(hours / 24) + ' days ago';
+}
+
+// Check authentication
+function checkAuth(requiredType) {
+  const user = JSON.parse(sessionStorage.getItem('currentUser') || 'null');
+  if (!user || user.type !== requiredType) {
+    window.location.href = requiredType === 'customer' ? '../index.html' : '../staff-login.html';
+  }
+  return user;
+}
+
+// Logout
+function logout() {
+  sessionStorage.removeItem('currentUser');
+  window.location.href = '../index.html';
+}
+
+// Dark mode toggle
+function toggleDarkMode() {
+  const body = document.body;
+  body.classList.toggle('dark-mode');
+  body.classList.toggle('light-mode');
+  localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+}
+
+// Load theme
+function loadTheme() {
+  const theme = localStorage.getItem('theme') || 'light';
+  document.body.classList.add(theme === 'dark' ? 'dark-mode' : 'light-mode');
+}
+
+// Toast notification
+function showToast(message, type = 'success') {
+  // Create and show toast
+}
+
+// Get count from localStorage
+function getCount(key, filterFn) {
+  const data = JSON.parse(localStorage.getItem(key) || '[]');
+  return filterFn ? data.filter(filterFn).length : data.length;
+}
+
+LOCALSTORAGE INITIALIZATION:
+On first page load (in shared-functions.js):
+javascriptif (!localStorage.getItem('initialized')) {
+  // Rooms (10 rooms)
+  const rooms = [
+    {roomNumber: '101', type: 'Standard', facilities: [...], status: 'Available', currentGuest: null},
+    // ... 9 more rooms
+  ];
+  localStorage.setItem('rooms', JSON.stringify(rooms));
+  
+  // Staff accounts
+  const staff = [
+    {email: 'manager@hotel.com', password: 'admin123', department: 'Manager'},
+    // ... other staff
+  ];
+  localStorage.setItem('staff', JSON.stringify(staff));
+  
+  // Demo customer
+  const customers = [{
+    email: 'customer@test.com',
+    password: 'password123',
+    name: 'Demo Customer',
+    phone: '+63 917 123 4567'
+  }];
+  localStorage.setItem('customers', JSON.stringify(customers));
+  
+  // Empty arrays
+  localStorage.setItem('hotelBookings', JSON.stringify([]));
+  localStorage.setItem('restaurantReservations', JSON.stringify([]));
+  localStorage.setItem('orders', JSON.stringify([]));
+  localStorage.setItem('housekeepingRequests', JSON.stringify([]));
+  localStorage.setItem('invoices', JSON.stringify([]));
+  
+  localStorage.setItem('initialized', 'true');
+}
+
+CRITICAL IMPLEMENTATION NOTES:
+
+NO FAKE DATA: All stats, counts, and displays must use REAL data from localStorage
+COMPLETE FLOWS: Do NOT use alert() for booking/reservation - implement full multi-step processes
+RESPONSIVE: Must work on mobile with hamburger menu
+FUNCTIONAL BADGES: Badge counts must be real and clickable, showing actual data
+NAVIGATION: Logo left, links right on desktop; hamburger on mobile
+FOOTER: Must stick to bottom using CSS sticky footer
+ICONS: Use Font Awesome 6 (CDN link)
+NO GRADIENTS: Solid gold and black colors only
+DARK MODE: Implement working dark/light mode toggle
+SEPARATE FILES: Each module in its own folder as shown in file structure
+REAL AUTO-REFRESH: Use setInterval() to reload data from localStorage every 5 seconds
+BACK BUTTON: In mobile sidebar, add back button to close sidebar
+
+
+BUILD THIS COMPLETE SYSTEM NOW with all features fully functional using ONLY HTML, CSS, and JavaScript. Each module must be in separate folders as specified. Use REAL data from localStorage throughout. NO framework files, NO fake data, NO alerts for completed flows.

@@ -127,7 +127,8 @@
 
 .room-card.selected {
     border-color: var(--gold-primary);
-    background: linear-gradient(to bottom right, var(--bg-card) 0%, rgba(255, 215, 0, 0.1) 100%);
+    background-color: var(--bg-card);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
 }
 
 .room-card h3 {
