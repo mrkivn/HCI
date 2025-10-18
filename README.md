@@ -34,47 +34,78 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
 - **Reservation ID Prefix**: AG- (e.g., AG-1697823456790)
 - **Invoice ID Prefix**: INV- (e.g., INV-1697823456791)
 
-## 🚀 GitHub Pages Deployment
+## 🚀 Local Development Setup
 
-### Quick Setup
+### Running the Project
 
-1. **Create a GitHub Repository**
+1. **Navigate to the project directory**
    ```bash
-   # Initialize git in your project folder
-   git init
-   
-   # Add all files
-   git add .
-   
-   # Commit
-   git commit -m "Initial commit: GINHAWA Hotel Management System"
-   
-   # Add remote repository (replace with your repo URL)
-   git remote add origin https://github.com/yourusername/hotel-management.git
-   
-   # Push to GitHub
-   git push -u origin main
+   cd hotel-restaurant-management
    ```
 
-2. **Enable GitHub Pages**
-   - Go to your repository on GitHub
-   - Click on **Settings**
-   - Navigate to **Pages** (in the left sidebar)
-   - Under **Source**, select **main** branch
-   - Click **Save**
-   - Your site will be published at: `https://yourusername.github.io/hotel-management/`
+2. **Start the Python HTTP server**
+   ```bash
+   python3 server.py
+   ```
 
-3. **Access the System**
-   - Customer Portal: `https://yourusername.github.io/hotel-management/index.html`
-   - Staff Portal: `https://yourusername.github.io/hotel-management/staff.html`
+3. **Open your browser**
+   - Navigate to: `http://localhost:5000`
+   - Customer Portal: `http://localhost:5000/index.html`
+   - Staff Portal: `http://localhost:5000/staff-login.html`
+
+4. **The application will automatically initialize**
+   - Default data is loaded into localStorage on first visit
+   - You can reset data by clearing browser localStorage
 
 ### Files Structure
 
 ```
-hotel-management/
-├── index.html          # Customer Portal (all CSS/JS embedded)
-├── staff.html          # Staff Portal (all CSS/JS embedded)
-└── README.md           # This file
+/
+├── index.html                      # Customer login/registration
+├── customer-home.html              # Customer dashboard
+├── staff-login.html                # Staff portal login
+├── server.py                       # Python HTTP server
+│
+├── shared/                         # Shared resources
+│   ├── shared-styles.css          # Common styles and design system
+│   └── shared-functions.js        # Utility functions and localStorage init
+│
+├── booking/                        # Hotel booking module
+│   ├── booking.html
+│   ├── booking.css
+│   └── booking.js
+│
+├── reservation/                    # Restaurant reservation module
+│   ├── reservation.html
+│   ├── reservation.css
+│   └── reservation.js
+│
+├── kitchen/                        # Food ordering & kitchen dashboard
+│   ├── order-food.html
+│   ├── order-food.css
+│   ├── order-food.js
+│   └── kitchen-dashboard.html     (in progress)
+│
+├── bar/                           # Drinks ordering & bar dashboard
+│   ├── order-drinks.html
+│   ├── order-drinks.css
+│   ├── order-drinks.js
+│   └── bar-dashboard.html         (in progress)
+│
+├── housekeeping/                  # Housekeeping requests & dashboard
+│   ├── housekeeping-request.html
+│   ├── housekeeping.css
+│   ├── housekeeping.js
+│   └── housekeeping-dashboard.html (in progress)
+│
+├── front-office/                  # Front office dashboard
+│   └── front-office-dashboard.html (in progress)
+│
+├── billing/                       # Billing and invoicing
+│   └── billing-dashboard.html     (in progress)
+│
+└── customer-guest/                # Customer management dashboard
+    └── customer-dashboard.html    (in progress)
 ```
 
 ## 👥 Demo Accounts
@@ -199,10 +230,11 @@ hotel-management/
 ## 🔧 Technical Details
 
 ### Technology Stack
-- **Frontend**: Vanilla HTML5, CSS3, JavaScript (ES6+)
-- **Fonts**: Inter (primary), JetBrains Mono (monospace for IDs)
-- **Storage**: localStorage API
-- **Deployment**: GitHub Pages (static hosting)
+- **Frontend**: Pure Vanilla HTML5, CSS3, JavaScript (ES6+) - No frameworks or libraries
+- **Icons**: Font Awesome 6.4.0
+- **Storage**: localStorage API (all data), sessionStorage (authentication)
+- **Server**: Python HTTP server for local development
+- **Architecture**: Modular structure simulating group project collaboration
 
 ### Data Persistence
 All data is stored in the browser's localStorage:
@@ -221,7 +253,14 @@ All data is stored in the browser's localStorage:
 - Safari 14+
 - Edge 90+
 
-**Note**: localStorage is domain-specific, so data on your local machine won't transfer to GitHub Pages deployment.
+**Note**: localStorage is domain-specific, so data on your local machine won't transfer to different domains.
+
+### Modular Architecture
+This project uses a modular structure where each feature has its own folder:
+- **Simulates Group Project**: Different students can work on different modules independently
+- **Code Organization**: Each module contains its own HTML, CSS, and JS files
+- **Shared Resources**: Common styles and utilities are centralized in the `shared/` folder
+- **Easy Navigation**: Clear folder structure makes it easy to find and modify specific features
 
 ## 🎯 Use Cases
 
