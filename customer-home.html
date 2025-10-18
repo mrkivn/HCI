@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GINHAWA - Customer Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="shared/shared-styles.css">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, var(--black-dark) 0%, var(--black-primary) 100%);
+            color: var(--white);
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero-section h1 {
+            color: var(--gold-primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            color: var(--white);
+        }
+
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .action-card {
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .action-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold-primary);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .action-card i {
+            font-size: 4rem;
+            color: var(--gold-primary);
+            margin-bottom: 20px;
+        }
+
+        .action-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .action-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-left: 4px solid var(--gold-primary);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card .icon {
+            font-size: 2.5rem;
+            color: var(--gold-primary);
+            margin-bottom: 15px;
+        }
+
+        .stat-card h3 {
+            font-size: 2.5rem;
+            color: var(--gold-primary);
+            margin: 0;
+        }
+
+        .stat-card p {
+            color: var(--text-secondary);
+            margin: 5px 0 0;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .quick-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 20px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all var(--transition-speed);
+        }
+
+        .quick-action-btn:hover {
+            background-color: var(--gold-primary);
+            color: var(--black-primary);
+            transform: translateX(5px);
+        }
+
+        .quick-action-btn i {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="page-wrapper">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="customer-home.html" class="navbar-brand">
+                    <i class="fas fa-hotel"></i>
+                    <span>GINHAWA | After Glow</span>
+                </a>
+
+                <button class="hamburger" id="hamburger">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <ul class="navbar-nav" id="navMenu">
+                    <li><a href="customer-home.html" class="nav-link active">
+                        <i class="fas fa-home"></i> Home
+                    </a></li>
+                    <li><a href="#" class="nav-link" onclick="showMyBookings(); return false;">
+                        <i class="fas fa-calendar-check"></i> My Bookings
+                    </a></li>
+                    <li><a href="kitchen/order-food.html" class="nav-link">
+                        <i class="fas fa-utensils"></i> Order Food
+                    </a></li>
+                    <li><a href="bar/order-drinks.html" class="nav-link">
+                        <i class="fas fa-cocktail"></i> Order Drinks
+                    </a></li>
+                    <li><a href="housekeeping/housekeeping-request.html" class="nav-link">
+                        <i class="fas fa-broom"></i> Housekeeping
+                    </a></li>
+                    <li class="account-dropdown">
+                        <button class="account-btn" id="accountBtn">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="userName">User</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu" id="accountDropdown">
+                            <button class="dropdown-item" onclick="toggleTheme()">
+                                <i class="fas fa-moon"></i>
+                                <span>Toggle Theme</span>
+                            </button>
+                            <button class="dropdown-item" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="hero-section">
+                <h1>Welcome back, <span id="customerName">Guest</span>!</h1>
+                <p>How can we serve you today?</p>
+            </div>
+
+            <div class="container">
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="icon"><i class="fas fa-bed"></i></div>
+                        <h3 id="upcomingBookings">0</h3>
+                        <p>Upcoming Bookings</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon"><i class="fas fa-utensils"></i></div>
+                        <h3 id="activeOrders">0</h3>
+                        <p>Active Orders</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon"><i class="fas fa-calendar"></i></div>
+                        <h3 id="restaurantReservations">0</h3>
+                        <p>Restaurant Reservations</p>
+                    </div>
+                </div>
+
+                <!-- Main Action Cards -->
+                <h2 class="text-center mb-2">Our Services</h2>
+                <div class="action-cards">
+                    <a href="booking/booking.html" class="action-card">
+                        <i class="fas fa-hotel"></i>
+                        <h3>Book GINHAWA Hotel</h3>
+                        <p>Experience comfort and relaxation in our premium rooms</p>
+                    </a>
+
+                    <a href="reservation/reservation.html" class="action-card">
+                        <i class="fas fa-utensils"></i>
+                        <h3>Reserve After Glow Restaurant</h3>
+                        <p>Where every moment glows with exceptional dining</p>
+                    </a>
+                </div>
+
+                <!-- Quick Actions -->
+                <h3 class="mb-2">Quick Actions</h3>
+                <div class="quick-actions">
+                    <a href="kitchen/order-food.html" class="quick-action-btn">
+                        <i class="fas fa-pizza-slice"></i>
+                        <span>Order Food</span>
+                    </a>
+                    <a href="bar/order-drinks.html" class="quick-action-btn">
+                        <i class="fas fa-cocktail"></i>
+                        <span>Order Drinks</span>
+                    </a>
+                    <a href="housekeeping/housekeeping-request.html" class="quick-action-btn">
+                        <i class="fas fa-broom"></i>
+                        <span>Housekeeping Request</span>
+                    </a>
+                    <a href="#" onclick="showMyBookings(); return false;" class="quick-action-btn">
+                        <i class="fas fa-list"></i>
+                        <span>My Bookings</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 GINHAWA Hotel & After Glow Restaurant. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="shared/shared-functions.js"></script>
+    <script>
+        // Check authentication
+        const user = checkAuth('customer');
+        
+        if (user) {
+            // Display user name
+            document.getElementById('userName').textContent = user.name.split(' ')[0]; // First name only
+            document.getElementById('customerName').textContent = user.name;
+
+            // Load and display stats
+            loadStats();
+        }
+
+        function loadStats() {
+            const userEmail = user.email;
+            
+            // Get bookings
+            const hotelBookings = getLocalData('hotelBookings').filter(b => b.customerEmail === userEmail);
+            const upcomingBookings = hotelBookings.filter(b => 
+                b.status === 'Confirmed' || b.status === 'Checked-in'
+            );
+            document.getElementById('upcomingBookings').textContent = upcomingBookings.length;
+
+            // Get orders
+            const orders = getLocalData('orders').filter(o => o.customerEmail === userEmail);
+            const activeOrders = orders.filter(o => 
+                o.status === 'Pending' || o.status === 'Preparing' || o.status === 'Ready'
+            );
+            document.getElementById('activeOrders').textContent = activeOrders.length;
+
+            // Get restaurant reservations
+            const reservations = getLocalData('restaurantReservations').filter(r => r.customerEmail === userEmail);
+            const activeReservations = reservations.filter(r => r.status === 'Confirmed');
+            document.getElementById('restaurantReservations').textContent = activeReservations.length;
+        }
+
+        function showMyBookings() {
+            // For now, just show an alert. Will be implemented in task 9
+            alert('My Bookings page will be implemented soon. You can access bookings through the navigation menu.');
+        }
+    </script>
+</body>
+</html>
