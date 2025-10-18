@@ -31,26 +31,47 @@
                 </div>
 
                 <div id="guestPortal" style="display: none;">
-                    <h1 class="text-gold mb-2"><i class="fas fa-door-open"></i> Welcome to Your Room</h1>
+                    <h1 class="text-gold mb-2"><i class="fas fa-door-open"></i> Guest Verification Portal</h1>
+                    <p class="text-muted mb-3">Welcome to GINHAWA Hotel. Your check-in has been verified.</p>
                     
+                    <div class="card mb-3" style="border-left: 4px solid var(--gold-primary);">
+                        <div class="card-header" style="background-color: var(--gold-primary); color: var(--black-primary);">
+                            <h2 style="margin: 0; color: var(--black-primary);"><i class="fas fa-user-check"></i> Guest Information</h2>
+                        </div>
+                        <div class="card-body" id="guestInfo"></div>
+                    </div>
+
                     <div class="card mb-3">
                         <div class="card-header">
-                            <h2>Your Booking Details</h2>
+                            <h2><i class="fas fa-bed"></i> Room & Booking Details</h2>
                         </div>
                         <div class="card-body" id="bookingDetails"></div>
                     </div>
 
-                    <div class="grid-2">
-                        <a href="../housekeeping/housekeeping-request.html" class="card" style="text-decoration: none; text-align: center; padding: 40px;">
+                    <h2 class="text-gold mb-2"><i class="fas fa-concierge-bell"></i> Guest Services</h2>
+                    <div class="grid-2 mb-3">
+                        <a href="../housekeeping/housekeeping-request.html" class="card" style="text-decoration: none; text-align: center; padding: 40px; transition: transform 0.3s;">
                             <i class="fas fa-broom" style="font-size: 3rem; color: var(--gold-primary); margin-bottom: 15px;"></i>
                             <h3>Housekeeping</h3>
                             <p>Request housekeeping services</p>
                         </a>
 
-                        <a href="../kitchen/order-food.html" class="card" style="text-decoration: none; text-align: center; padding: 40px;">
+                        <a href="../kitchen/order-food.html" class="card" style="text-decoration: none; text-align: center; padding: 40px; transition: transform 0.3s;">
                             <i class="fas fa-utensils" style="font-size: 3rem; color: var(--gold-primary); margin-bottom: 15px;"></i>
                             <h3>Room Service</h3>
                             <p>Order food to your room</p>
+                        </a>
+
+                        <a href="../bar/order-drinks.html" class="card" style="text-decoration: none; text-align: center; padding: 40px; transition: transform 0.3s;">
+                            <i class="fas fa-cocktail" style="font-size: 3rem; color: var(--gold-primary); margin-bottom: 15px;"></i>
+                            <h3>Bar Service</h3>
+                            <p>Order drinks to your room</p>
+                        </a>
+
+                        <a href="../reservation/reservation.html" class="card" style="text-decoration: none; text-align: center; padding: 40px; transition: transform 0.3s;">
+                            <i class="fas fa-calendar-check" style="font-size: 3rem; color: var(--gold-primary); margin-bottom: 15px;"></i>
+                            <h3>Restaurant Reservation</h3>
+                            <p>Reserve a table at After Glow</p>
                         </a>
                     </div>
                 </div>
@@ -74,14 +95,105 @@
 
             if (activeBooking) {
                 document.getElementById('guestPortal').style.display = 'block';
+                
+                // Display guest information
+                document.getElementById('guestInfo').innerHTML = `
+                    <div style="background-color: var(--bg-secondary); padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                            <div style="width: 60px; height: 60px; background-color: var(--gold-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-user" style="font-size: 2rem; color: var(--black-primary);"></i>
+                            </div>
+                            <div>
+                                <h3 style="margin: 0; color: var(--gold-primary);">${activeBooking.customerName}</h3>
+                                <span class="badge badge-success" style="margin-top: 5px;">
+                                    <i class="fas fa-check-circle"></i> Checked-in Guest
+                                </span>
+                            </div>
+                        </div>
+                        <div class="grid-2" style="gap: 15px;">
+                            <div style="padding: 15px; background-color: var(--bg-card); border-radius: 6px;">
+                                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">
+                                    <i class="fas fa-envelope"></i> Email
+                                </div>
+                                <div style="font-weight: 500;">${activeBooking.customerEmail}</div>
+                            </div>
+                            <div style="padding: 15px; background-color: var(--bg-card); border-radius: 6px;">
+                                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">
+                                    <i class="fas fa-phone"></i> Phone
+                                </div>
+                                <div style="font-weight: 500;">${activeBooking.customerPhone || user.phone || 'N/A'}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Display booking details
+                const checkInDate = new Date(activeBooking.checkin);
+                const checkOutDate = new Date(activeBooking.checkout);
+                const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+                
                 document.getElementById('bookingDetails').innerHTML = `
-                    <div class="grid-2">
-                        <div><strong>Room Number:</strong> ${activeBooking.roomNumber}</div>
-                        <div><strong>Room Type:</strong> ${activeBooking.roomType}</div>
-                        <div><strong>Check-in:</strong> ${formatDate(activeBooking.checkin)}</div>
-                        <div><strong>Check-out:</strong> ${formatDate(activeBooking.checkout)}</div>
-                        <div><strong>Guests:</strong> ${activeBooking.guests}</div>
-                        <div><strong>Location:</strong> ${activeBooking.destination}</div>
+                    <div class="grid-2" style="gap: 20px;">
+                        <div style="padding: 15px; background-color: var(--bg-secondary); border-radius: 8px;">
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">
+                                <i class="fas fa-hashtag"></i> Booking ID
+                            </div>
+                            <div style="font-weight: bold; color: var(--gold-primary); font-size: 1.1rem;">${activeBooking.id}</div>
+                        </div>
+                        <div style="padding: 15px; background-color: var(--bg-secondary); border-radius: 8px;">
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">
+                                <i class="fas fa-door-open"></i> Room Number
+                            </div>
+                            <div style="font-weight: bold; color: var(--gold-primary); font-size: 1.1rem;">${activeBooking.roomNumber}</div>
+                        </div>
+                        <div style="padding: 15px; background-color: var(--bg-secondary); border-radius: 8px;">
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">
+                                <i class="fas fa-bed"></i> Room Type
+                            </div>
+                            <div style="font-weight: 500;">${activeBooking.roomType}</div>
+                        </div>
+                        <div style="padding: 15px; background-color: var(--bg-secondary); border-radius: 8px;">
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">
+                                <i class="fas fa-map-marker-alt"></i> Location
+                            </div>
+                            <div style="font-weight: 500;">${activeBooking.destination}</div>
+                        </div>
+                        <div style="padding: 15px; background-color: var(--bg-secondary); border-radius: 8px;">
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">
+                                <i class="fas fa-calendar-check"></i> Check-in Date
+                            </div>
+                            <div style="font-weight: 500;">${formatDate(activeBooking.checkin)}</div>
+                        </div>
+                        <div style="padding: 15px; background-color: var(--bg-secondary); border-radius: 8px;">
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">
+                                <i class="fas fa-calendar-times"></i> Check-out Date
+                            </div>
+                            <div style="font-weight: 500;">${formatDate(activeBooking.checkout)}</div>
+                        </div>
+                        <div style="padding: 15px; background-color: var(--bg-secondary); border-radius: 8px;">
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">
+                                <i class="fas fa-moon"></i> Number of Nights
+                            </div>
+                            <div style="font-weight: 500;">${nights} night${nights > 1 ? 's' : ''}</div>
+                        </div>
+                        <div style="padding: 15px; background-color: var(--bg-secondary); border-radius: 8px;">
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">
+                                <i class="fas fa-users"></i> Number of Guests
+                            </div>
+                            <div style="font-weight: 500;">${activeBooking.guests} guest${activeBooking.guests > 1 ? 's' : ''}</div>
+                        </div>
+                        <div style="padding: 15px; background-color: var(--bg-secondary); border-radius: 8px;">
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">
+                                <i class="fas fa-credit-card"></i> Payment Method
+                            </div>
+                            <div style="font-weight: 500;">${activeBooking.paymentMethod}</div>
+                        </div>
+                        <div style="padding: 15px; background-color: var(--bg-secondary); border-radius: 8px;">
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">
+                                <i class="fas fa-peso-sign"></i> Total Amount
+                            </div>
+                            <div style="font-weight: bold; color: var(--gold-primary); font-size: 1.1rem;">${formatPrice(activeBooking.totalPrice)}</div>
+                        </div>
                     </div>
                 `;
             } else {

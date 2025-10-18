@@ -328,7 +328,8 @@
 
         // Load and display orders
         function loadOrders() {
-            const orders = getLocalData('foodOrders');
+            const allOrders = getLocalData('orders');
+            const orders = allOrders.filter(o => o.category === 'Food');
             const container = document.getElementById('ordersContainer');
 
             // Filter orders
@@ -384,12 +385,12 @@
                             <span class="detail-value">${order.customerName}</span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label"><i class="fas fa-location-dot"></i> Location:</span>
-                            <span class="detail-value">${order.location || 'N/A'}</span>
+                            <span class="detail-label"><i class="fas fa-location-dot"></i> Table/Room:</span>
+                            <span class="detail-value">${order.tableOrRoomNumber || 'N/A'}</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label"><i class="fas fa-peso-sign"></i> Total:</span>
-                            <span class="detail-value">${formatPrice(order.total)}</span>
+                            <span class="detail-value">${formatPrice(order.totalPrice)}</span>
                         </div>
                     </div>
 
@@ -448,7 +449,7 @@
 
         // Update order status
         function updateOrderStatus(orderId, newStatus) {
-            const orders = getLocalData('foodOrders');
+            const orders = getLocalData('orders');
             const orderIndex = orders.findIndex(o => o.id === orderId);
 
             if (orderIndex !== -1) {
@@ -456,7 +457,7 @@
                 if (newStatus === 'Delivered') {
                     orders[orderIndex].deliveredAt = Date.now();
                 }
-                setLocalData('foodOrders', orders);
+                setLocalData('orders', orders);
                 showNotification(`Order ${orderId} status updated to ${newStatus}`, 'success');
                 loadOrders();
             }
