@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Portal - GINHAWA & After Glow</title>
+    <meta name="description" content="Staff management portal for GINHAWA Hotel and After Glow Restaurant.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="staff-login.html" class="navbar-brand">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Staff Portal</span>
+                </a>
+                
+                <ul class="navbar-nav">
+                    <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Customer Portal</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="container">
+                <div class="auth-container">
+                    <div class="auth-card">
+                        <div class="auth-header">
+                            <h1><i class="fas fa-user-tie"></i> Staff Login</h1>
+                            <p>GINHAWA & After Glow Staff Portal</p>
+                        </div>
+                        
+                        <form id="staffLoginForm">
+                            <div class="form-group">
+                                <label for="staffEmail" class="form-label">Staff Email</label>
+                                <input type="email" id="staffEmail" class="form-input" placeholder="Enter your staff email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="staffPassword" class="form-label">Password</label>
+                                <input type="password" id="staffPassword" class="form-input" placeholder="Enter your password" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                        </form>
+                        
+                        <div class="demo-accounts">
+                            <h3><i class="fas fa-info-circle"></i> Demo Accounts (For Testing)</h3>
+                            <div class="demo-account-list">
+                                <div class="demo-account-item">
+                                    <span class="demo-account-role"><i class="fas fa-user-shield"></i> Manager</span>
+                                    <div class="demo-account-credentials">
+                                        <span>manager@hotel.com</span>
+                                        <span>admin123</span>
+                                    </div>
+                                </div>
+                                <div class="demo-account-item">
+                                    <span class="demo-account-role"><i class="fas fa-concierge-bell"></i> Front Office</span>
+                                    <div class="demo-account-credentials">
+                                        <span>frontdesk@hotel.com</span>
+                                        <span>front123</span>
+                                    </div>
+                                </div>
+                                <div class="demo-account-item">
+                                    <span class="demo-account-role"><i class="fas fa-utensils"></i> Kitchen</span>
+                                    <div class="demo-account-credentials">
+                                        <span>kitchen@hotel.com</span>
+                                        <span>kitchen123</span>
+                                    </div>
+                                </div>
+                                <div class="demo-account-item">
+                                    <span class="demo-account-role"><i class="fas fa-wine-glass"></i> Bar</span>
+                                    <div class="demo-account-credentials">
+                                        <span>bar@hotel.com</span>
+                                        <span>bar123</span>
+                                    </div>
+                                </div>
+                                <div class="demo-account-item">
+                                    <span class="demo-account-role"><i class="fas fa-broom"></i> Housekeeping</span>
+                                    <div class="demo-account-credentials">
+                                        <span>housekeeping@hotel.com</span>
+                                        <span>clean123</span>
+                                    </div>
+                                </div>
+                                <div class="demo-account-item">
+                                    <span class="demo-account-role"><i class="fas fa-file-invoice-dollar"></i> Billing</span>
+                                    <div class="demo-account-credentials">
+                                        <span>billing@hotel.com</span>
+                                        <span>bill123</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 GINHAWA Hotel & After Glow Restaurant. All rights reserved.</p>
+            <p>Built with <i class="fas fa-heart" style="color: var(--color-gold);"></i> for HCI Projects</p>
+        </footer>
+    </div>
+
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/nav.js"></script>
+    <script>
+        const staffAccounts = {
+            'manager@hotel.com': { password: 'admin123', name: 'Manager', department: 'Manager' },
+            'frontdesk@hotel.com': { password: 'front123', name: 'Front Desk Staff', department: 'Front Office' },
+            'kitchen@hotel.com': { password: 'kitchen123', name: 'Kitchen Staff', department: 'Kitchen' },
+            'bar@hotel.com': { password: 'bar123', name: 'Bar Staff', department: 'Bar' },
+            'housekeeping@hotel.com': { password: 'clean123', name: 'Housekeeping Staff', department: 'Housekeeping' },
+            'billing@hotel.com': { password: 'bill123', name: 'Billing Staff', department: 'Billing' }
+        };
+
+        document.getElementById('staffLoginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('staffEmail').value;
+            const password = document.getElementById('staffPassword').value;
+            
+            if (staffAccounts[email] && staffAccounts[email].password === password) {
+                const staff = staffAccounts[email];
+                localStorage.setItem('currentStaff', JSON.stringify({ email, ...staff }));
+                window.location.href = 'staff-dashboard.html';
+            } else {
+                alert('Invalid credentials! Please use one of the demo accounts listed below.');
+            }
+        });
+    </script>
+</body>
+</html>

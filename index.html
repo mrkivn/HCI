@@ -1,2249 +1,258 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GINHAWA Hotel & After Glow Restaurant Management System</title>
-    <meta name="description" content="Book your stay at GINHAWA Hotel or reserve a table at After Glow Restaurant. Experience comfort and relaxation where every moment glows.">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-teal: #17a2b8;
-            --primary-teal-dark: #138496;
-            --primary-teal-light: #5bc0de;
-            --accent-amber: #f59e0b;
-            --accent-amber-dark: #d97706;
-            --accent-amber-light: #fbbf24;
-            
-            --bg-light: #ffffff;
-            --bg-gray: #f8f9fa;
-            --bg-dark: #1a1d23;
-            --bg-card: #ffffff;
-            
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --text-light: #9ca3af;
-            
-            --border-color: #e5e7eb;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --info: #3b82f6;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--bg-gray);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        .navbar {
-            background: linear-gradient(135deg, var(--primary-teal) 0%, var(--primary-teal-dark) 100%);
-            color: white;
-            padding: 1rem 0;
-            box-shadow: var(--shadow-md);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: -0.025em;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .navbar-brand .divider {
-            color: var(--accent-amber);
-            font-weight: 400;
-        }
-
-        .navbar-nav {
-            display: flex;
-            gap: 0.5rem;
-            list-style: none;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            transition: background 0.2s;
-            font-weight: 500;
-            font-size: 0.9375rem;
-        }
-
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .btn {
-            padding: 0.625rem 1.25rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            font-size: 0.9375rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-            font-family: inherit;
-        }
-
-        .btn-primary {
-            background: var(--primary-teal);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-teal-dark);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-accent {
-            background: var(--accent-amber);
-            color: white;
-        }
-
-        .btn-accent:hover {
-            background: var(--accent-amber-dark);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--primary-teal);
-            border: 2px solid var(--primary-teal);
-        }
-
-        .btn-outline:hover {
-            background: var(--primary-teal);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: var(--bg-gray);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background: #e5e7eb;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--error);
-            color: white;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-        }
-
-        .auth-container {
-            min-height: calc(100vh - 80px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 1.5rem;
-        }
-
-        .auth-card {
-            background: var(--bg-card);
-            border-radius: 1rem;
-            box-shadow: var(--shadow-xl);
-            padding: 2.5rem;
-            max-width: 450px;
-            width: 100%;
-        }
-
-        .auth-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .auth-header h1 {
-            font-size: 1.875rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--primary-teal), var(--accent-amber));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .auth-header p {
-            color: var(--text-secondary);
-            font-size: 0.9375rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-            font-size: 0.9375rem;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            font-size: 0.9375rem;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary-teal);
-            box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.1);
-        }
-
-        .form-input.error {
-            border-color: var(--error);
-        }
-
-        .error-message {
-            color: var(--error);
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-
-        .auth-toggle {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.9375rem;
-        }
-
-        .auth-toggle a {
-            color: var(--primary-teal);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .auth-toggle a:hover {
-            text-decoration: underline;
-        }
-
-        .card {
-            background: var(--bg-card);
-            border-radius: 1rem;
-            box-shadow: var(--shadow);
-            padding: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        .card:hover {
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-2px);
-        }
-
-        .card-clickable {
-            cursor: pointer;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .welcome-section {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .welcome-section h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 0.75rem;
-            background: linear-gradient(135deg, var(--primary-teal), var(--accent-amber));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .welcome-section p {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-        }
-
-        .action-card {
-            text-align: center;
-            padding: 3rem 2rem;
-            background: linear-gradient(135deg, rgba(23, 162, 184, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
-            border: 2px solid var(--border-color);
-        }
-
-        .action-card .icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .action-card h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .action-card p {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-        }
-
-        .page-header {
-            margin-bottom: 2rem;
-        }
-
-        .page-header h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-        }
-
-        .page-header p {
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
-
-        .steps {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .steps::before {
-            content: '';
-            position: absolute;
-            top: 1.25rem;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--border-color);
-            z-index: 0;
-        }
-
-        .step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-            z-index: 1;
-            background: var(--bg-gray);
-            padding: 0 1rem;
-        }
-
-        .step-number {
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: var(--text-secondary);
-        }
-
-        .step.active .step-number {
-            background: var(--primary-teal);
-            border-color: var(--primary-teal);
-            color: white;
-        }
-
-        .step.completed .step-number {
-            background: var(--success);
-            border-color: var(--success);
-            color: white;
-        }
-
-        .step-label {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-
-        .step.active .step-label {
-            color: var(--primary-teal);
-        }
-
-        .room-card {
-            border: 2px solid var(--border-color);
-            cursor: pointer;
-            position: relative;
-        }
-
-        .room-card.selected {
-            border-color: var(--primary-teal);
-            background: rgba(23, 162, 184, 0.05);
-        }
-
-        .room-card .room-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-        }
-
-        .room-card h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .room-card .price {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary-teal);
-        }
-
-        .room-card ul {
-            list-style: none;
-            margin-bottom: 0;
-        }
-
-        .room-card li {
-            padding: 0.5rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-        }
-
-        .room-card li::before {
-            content: '✓';
-            color: var(--success);
-            font-weight: 700;
-        }
-
-        .payment-method {
-            padding: 1.5rem;
-            border: 2px solid var(--border-color);
-            border-radius: 0.75rem;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-        }
-
-        .payment-method:hover {
-            border-color: var(--primary-teal);
-            background: rgba(23, 162, 184, 0.05);
-        }
-
-        .payment-method.selected {
-            border-color: var(--primary-teal);
-            background: rgba(23, 162, 184, 0.05);
-        }
-
-        .payment-method .icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .payment-method .label {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .summary-section {
-            background: var(--bg-gray);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .summary-row:last-child {
-            border-bottom: none;
-        }
-
-        .summary-row.total {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary-teal);
-            padding-top: 1rem;
-        }
-
-        .success-message {
-            text-align: center;
-            padding: 3rem 2rem;
-        }
-
-        .success-icon {
-            width: 5rem;
-            height: 5rem;
-            background: var(--success);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 2.5rem;
-            color: white;
-        }
-
-        .success-message h2 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .success-message .booking-id {
-            font-family: 'SF Mono', 'Monaco', 'Consolas', 'Courier New', monospace;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--primary-teal);
-            background: var(--bg-gray);
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            display: inline-block;
-            margin: 1rem 0;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--border-color);
-            flex-wrap: wrap;
-        }
-
-        .tab {
-            padding: 0.75rem 1.5rem;
-            background: none;
-            border: none;
-            border-bottom: 3px solid transparent;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-secondary);
-            transition: all 0.2s;
-            font-size: 0.9375rem;
-            margin-bottom: -2px;
-        }
-
-        .tab:hover {
-            color: var(--primary-teal);
-        }
-
-        .tab.active {
-            color: var(--primary-teal);
-            border-bottom-color: var(--primary-teal);
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.375rem 0.75rem;
-            border-radius: 0.375rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.025em;
-        }
-
-        .badge-success {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-        }
-
-        .badge-warning {
-            background: rgba(245, 158, 11, 0.1);
-            color: var(--warning);
-        }
-
-        .badge-error {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--error);
-        }
-
-        .badge-info {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--info);
-        }
-
-        .booking-card {
-            border-left: 4px solid var(--primary-teal);
-        }
-
-        .booking-card .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-        }
-
-        .booking-card .booking-id {
-            font-family: 'SF Mono', 'Monaco', 'Consolas', 'Courier New', monospace;
-            font-weight: 600;
-            font-size: 0.9375rem;
-        }
-
-        .booking-card .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--bg-gray);
-        }
-
-        .booking-card .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .booking-card .detail-label {
-            color: var(--text-secondary);
-            font-size: 0.9375rem;
-        }
-
-        .booking-card .detail-value {
-            font-weight: 600;
-            font-size: 0.9375rem;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-        }
-
-        .empty-state .icon {
-            font-size: 4rem;
-            opacity: 0.3;
-            margin-bottom: 1rem;
-        }
-
-        .empty-state h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .empty-state p {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-        }
-
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .menu-item-info h4 {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .menu-item-info .price {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: var(--primary-teal);
-        }
-
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .quantity-btn {
-            width: 2rem;
-            height: 2rem;
-            border-radius: 0.375rem;
-            border: none;
-            background: var(--primary-teal);
-            color: white;
-            font-size: 1.25rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .quantity-btn:hover {
-            background: var(--primary-teal-dark);
-        }
-
-        .quantity-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .quantity {
-            font-weight: 600;
-            min-width: 2rem;
-            text-align: center;
-        }
-
-        .cart-section {
-            background: var(--bg-gray);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            position: sticky;
-            top: 100px;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-
-        .seating-option {
-            padding: 2rem;
-            border: 2px solid var(--border-color);
-            border-radius: 0.75rem;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-        }
-
-        .seating-option:hover {
-            border-color: var(--accent-amber);
-            background: rgba(245, 158, 11, 0.05);
-        }
-
-        .seating-option.selected {
-            border-color: var(--accent-amber);
-            background: rgba(245, 158, 11, 0.05);
-        }
-
-        .seating-option .icon {
-            font-size: 3rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .seating-option h3 {
-            font-size: 1.125rem;
-            font-weight: 600;
-        }
-
-        .footer {
-            background: var(--text-primary);
-            color: white;
-            text-align: center;
-            padding: 2rem 1.5rem;
-            margin-top: 4rem;
-        }
-
-        .footer p {
-            margin-bottom: 0.5rem;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .alert {
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .alert-error {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--error);
-            border: 1px solid var(--error);
-        }
-
-        .alert-success {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-            border: 1px solid var(--success);
-        }
-
-        @media (max-width: 768px) {
-            .navbar-brand {
-                font-size: 1.25rem;
-            }
-
-            .navbar-nav {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .welcome-section h1 {
-                font-size: 1.875rem;
-            }
-
-            .steps {
-                flex-wrap: wrap;
-            }
-
-            .step {
-                padding: 0 0.5rem;
-            }
-
-            .grid-2, .grid-3 {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <title>GINHAWA Hotel & After Glow Restaurant</title>
+    <meta name="description" content="Book your stay at GINHAWA Hotel or reserve a table at After Glow Restaurant.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="navbar-container">
-            <div class="navbar-brand">
-                <span>GINHAWA</span>
-                <span class="divider">|</span>
-                <span style="color: var(--accent-amber);">After Glow</span>
+    <div class="page-wrapper">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="index.html" class="navbar-brand">
+                    <i class="fas fa-hotel"></i>
+                    <span>GINHAWA & After Glow</span>
+                </a>
+                
+                <button class="hamburger" id="hamburger">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="navbar-nav" id="navMenu">
+                    <li><a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Home</a></li>
+                    <li class="account-dropdown">
+                        <button class="account-btn" id="accountBtn">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="userName">Guest</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu" id="accountDropdown">
+                            <button class="dropdown-item theme-toggle" onclick="toggleTheme()">
+                                <i class="fas fa-moon theme-icon"></i>
+                                <span>Toggle Theme</span>
+                            </button>
+                            <a href="index.html" class="dropdown-item" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
             </div>
-            <ul class="navbar-nav" id="navMenu">
-                <!-- Will be populated by JavaScript -->
-            </ul>
-        </div>
-    </nav>
+        </nav>
 
-    <!-- Main Content -->
-    <main id="mainContent">
-        <!-- Content will be loaded here by JavaScript -->
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <p><strong>GINHAWA Hotel</strong> - Experience Comfort and Relaxation</p>
-        <p><strong>After Glow Restaurant</strong> - Where Every Moment Glows</p>
-        <p>&copy; 2025 GINHAWA Hotel & After Glow Restaurant. All rights reserved.</p>
-    </footer>
-
-    <script>
-        // ===== DATA MANAGEMENT =====
-        class DataManager {
-            constructor() {
-                this.initializeData();
-            }
-
-            initializeData() {
-                // Initialize customers with demo account
-                if (!localStorage.getItem('customers')) {
-                    const demoCustomer = {
-                        email: 'customer@test.com',
-                        password: 'password123',
-                        name: 'Demo Customer',
-                        phone: '+63 917 123 4567'
-                    };
-                    localStorage.setItem('customers', JSON.stringify([demoCustomer]));
-                }
-
-                // Initialize other storage if not exists
-                if (!localStorage.getItem('hotelBookings')) {
-                    localStorage.setItem('hotelBookings', JSON.stringify([]));
-                }
-                if (!localStorage.getItem('restaurantReservations')) {
-                    localStorage.setItem('restaurantReservations', JSON.stringify([]));
-                }
-                if (!localStorage.getItem('orders')) {
-                    localStorage.setItem('orders', JSON.stringify([]));
-                }
-                if (!localStorage.getItem('housekeepingRequests')) {
-                    localStorage.setItem('housekeepingRequests', JSON.stringify([]));
-                }
-            }
-
-            getCustomers() {
-                return JSON.parse(localStorage.getItem('customers') || '[]');
-            }
-
-            saveCustomer(customer) {
-                const customers = this.getCustomers();
-                customers.push(customer);
-                localStorage.setItem('customers', JSON.stringify(customers));
-            }
-
-            findCustomer(email, password) {
-                const customers = this.getCustomers();
-                return customers.find(c => c.email === email && c.password === password);
-            }
-
-            customerExists(email) {
-                const customers = this.getCustomers();
-                return customers.some(c => c.email === email);
-            }
-
-            saveHotelBooking(booking) {
-                const bookings = JSON.parse(localStorage.getItem('hotelBookings') || '[]');
-                bookings.push(booking);
-                localStorage.setItem('hotelBookings', JSON.stringify(bookings));
-            }
-
-            getHotelBookings(customerEmail) {
-                const bookings = JSON.parse(localStorage.getItem('hotelBookings') || '[]');
-                return customerEmail ? bookings.filter(b => b.customerEmail === customerEmail) : bookings;
-            }
-
-            updateHotelBooking(bookingId, updates) {
-                const bookings = JSON.parse(localStorage.getItem('hotelBookings') || '[]');
-                const index = bookings.findIndex(b => b.id === bookingId);
-                if (index !== -1) {
-                    bookings[index] = { ...bookings[index], ...updates };
-                    localStorage.setItem('hotelBookings', JSON.stringify(bookings));
-                }
-            }
-
-            saveRestaurantReservation(reservation) {
-                const reservations = JSON.parse(localStorage.getItem('restaurantReservations') || '[]');
-                reservations.push(reservation);
-                localStorage.setItem('restaurantReservations', JSON.stringify(reservations));
-            }
-
-            getRestaurantReservations(customerEmail) {
-                const reservations = JSON.parse(localStorage.getItem('restaurantReservations') || '[]');
-                return customerEmail ? reservations.filter(r => r.customerEmail === customerEmail) : reservations;
-            }
-
-            updateRestaurantReservation(reservationId, updates) {
-                const reservations = JSON.parse(localStorage.getItem('restaurantReservations') || '[]');
-                const index = reservations.findIndex(r => r.id === reservationId);
-                if (index !== -1) {
-                    reservations[index] = { ...reservations[index], ...updates };
-                    localStorage.setItem('restaurantReservations', JSON.stringify(reservations));
-                }
-            }
-
-            saveOrder(order) {
-                const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-                orders.push(order);
-                localStorage.setItem('orders', JSON.stringify(orders));
-            }
-
-            saveHousekeepingRequest(request) {
-                const requests = JSON.parse(localStorage.getItem('housekeepingRequests') || '[]');
-                requests.push(request);
-                localStorage.setItem('housekeepingRequests', JSON.stringify(requests));
-            }
-        }
-
-        const dataManager = new DataManager();
-
-        // ===== SESSION MANAGEMENT =====
-        function getCurrentUser() {
-            const userStr = sessionStorage.getItem('currentUser');
-            return userStr ? JSON.parse(userStr) : null;
-        }
-
-        function setCurrentUser(user) {
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
-        }
-
-        function logout() {
-            sessionStorage.removeItem('currentUser');
-            navigateTo('login');
-        }
-
-        // ===== NAVIGATION =====
-        let currentPage = 'login';
-
-        function navigateTo(page) {
-            currentPage = page;
-            updateNavigation();
-            renderPage();
-        }
-
-        function updateNavigation() {
-            const navMenu = document.getElementById('navMenu');
-            const user = getCurrentUser();
-
-            if (!user) {
-                navMenu.innerHTML = '';
-                return;
-            }
-
-            const menuItems = [
-                { name: 'Home', page: 'home' },
-                { name: 'My Bookings', page: 'bookings' },
-                { name: 'Order Food', page: 'order' },
-                { name: 'Housekeeping', page: 'housekeeping' },
-                { name: 'Staff Login', page: 'staff' }
-            ];
-
-            let html = '';
-            menuItems.forEach(item => {
-                if (item.page === 'staff') {
-                    html += `<li><a href="staff.html" class="nav-link" data-testid="link-staff">Staff Login</a></li>`;
-                } else {
-                    const active = currentPage === item.page ? 'active' : '';
-                    html += `<li><a href="#" class="nav-link ${active}" onclick="navigateTo('${item.page}')" data-testid="link-${item.page}">${item.name}</a></li>`;
-                }
-            });
-
-            html += `
-                <li style="margin-left: auto; display: flex; align-items: center; gap: 1rem;">
-                    <span style="font-size: 0.9375rem;" data-testid="text-username">${user.name}</span>
-                    <button class="btn btn-secondary" onclick="logout()" data-testid="button-logout" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Logout</button>
-                </li>
-            `;
-
-            navMenu.innerHTML = html;
-        }
-
-        function renderPage() {
-            const mainContent = document.getElementById('mainContent');
-            
-            switch (currentPage) {
-                case 'login':
-                    renderLoginPage();
-                    break;
-                case 'home':
-                    renderHomePage();
-                    break;
-                case 'hotel-booking':
-                    renderHotelBooking();
-                    break;
-                case 'restaurant-reservation':
-                    renderRestaurantReservation();
-                    break;
-                case 'bookings':
-                    renderMyBookings();
-                    break;
-                case 'order':
-                    renderOrderPage();
-                    break;
-                case 'housekeeping':
-                    renderHousekeeping();
-                    break;
-            }
-        }
-
-        // ===== LOGIN/REGISTRATION PAGE =====
-        function renderLoginPage() {
-            const mainContent = document.getElementById('mainContent');
-            mainContent.innerHTML = `
+        <main class="main-content">
+            <div class="container" id="loginView">
                 <div class="auth-container">
                     <div class="auth-card">
                         <div class="auth-header">
-                            <h1>Welcome</h1>
-                            <p id="authSubtitle">Login to your account</p>
-                        </div>
-
-                        <div id="errorMessage"></div>
-
-                        <!-- Login Form -->
-                        <form id="loginForm" onsubmit="handleLogin(event)">
-                            <div class="form-group">
-                                <label class="form-label" for="loginEmail">Email</label>
-                                <input type="email" id="loginEmail" class="form-input" required data-testid="input-login-email">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="loginPassword">Password</label>
-                                <input type="password" id="loginPassword" class="form-input" required data-testid="input-login-password">
-                            </div>
-                            <button type="submit" class="btn btn-primary" style="width: 100%;" data-testid="button-login">Login</button>
-                        </form>
-
-                        <!-- Registration Form -->
-                        <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
-                            <div class="form-group">
-                                <label class="form-label" for="registerName">Full Name</label>
-                                <input type="text" id="registerName" class="form-input" required data-testid="input-register-name">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="registerEmail">Email</label>
-                                <input type="email" id="registerEmail" class="form-input" required data-testid="input-register-email">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="registerPhone">Phone Number</label>
-                                <input type="tel" id="registerPhone" class="form-input" placeholder="+63 XXX XXX XXXX" required data-testid="input-register-phone">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="registerPassword">Password</label>
-                                <input type="password" id="registerPassword" class="form-input" required data-testid="input-register-password">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="registerConfirmPassword">Confirm Password</label>
-                                <input type="password" id="registerConfirmPassword" class="form-input" required data-testid="input-register-confirm-password">
-                            </div>
-                            <button type="submit" class="btn btn-primary" style="width: 100%;" data-testid="button-register">Register</button>
-                        </form>
-
-                        <div class="auth-toggle">
-                            <a href="#" id="toggleAuth" onclick="toggleAuthForm(event)" data-testid="link-toggle-auth">Don't have an account? Register</a>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function toggleAuthForm(e) {
-            e.preventDefault();
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            const toggleLink = document.getElementById('toggleAuth');
-            const subtitle = document.getElementById('authSubtitle');
-            const errorMessage = document.getElementById('errorMessage');
-
-            errorMessage.innerHTML = '';
-
-            if (loginForm.classList.contains('hidden')) {
-                loginForm.classList.remove('hidden');
-                registerForm.classList.add('hidden');
-                toggleLink.textContent = "Don't have an account? Register";
-                subtitle.textContent = "Login to your account";
-            } else {
-                loginForm.classList.add('hidden');
-                registerForm.classList.remove('hidden');
-                toggleLink.textContent = "Already have an account? Login";
-                subtitle.textContent = "Create a new account";
-            }
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const errorMessage = document.getElementById('errorMessage');
-
-            const user = dataManager.findCustomer(email, password);
-
-            if (user) {
-                setCurrentUser(user);
-                navigateTo('home');
-            } else {
-                errorMessage.innerHTML = '<div class="alert alert-error">Invalid email or password</div>';
-            }
-        }
-
-        function handleRegister(e) {
-            e.preventDefault();
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const phone = document.getElementById('registerPhone').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-            const errorMessage = document.getElementById('errorMessage');
-
-            // Validation
-            if (password !== confirmPassword) {
-                errorMessage.innerHTML = '<div class="alert alert-error">Passwords do not match</div>';
-                return;
-            }
-
-            if (dataManager.customerExists(email)) {
-                errorMessage.innerHTML = '<div class="alert alert-error">Email already exists</div>';
-                return;
-            }
-
-            const customer = { name, email, phone, password };
-            dataManager.saveCustomer(customer);
-            setCurrentUser(customer);
-            navigateTo('home');
-        }
-
-        // ===== HOME PAGE =====
-        function renderHomePage() {
-            const user = getCurrentUser();
-            const mainContent = document.getElementById('mainContent');
-            mainContent.innerHTML = `
-                <div class="container">
-                    <div class="welcome-section">
-                        <h1>Welcome back, ${user.name}!</h1>
-                        <p>What would you like to do today?</p>
-                    </div>
-
-                    <div class="grid-2">
-                        <div class="card action-card card-clickable" onclick="navigateTo('hotel-booking')" data-testid="card-book-hotel">
-                            <div class="icon">🏨</div>
-                            <h2>Book GINHAWA Hotel</h2>
+                            <h1><i class="fas fa-hotel"></i> Welcome to GINHAWA</h1>
                             <p>Experience Comfort and Relaxation</p>
-                            <button class="btn btn-primary" data-testid="button-book-hotel">Start Booking</button>
                         </div>
+                        
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                        </form>
+                        
+                        <div class="auth-toggle">
+                            <p>Don't have an account? <a href="#" id="showRegister">Register</a></p>
+                        </div>
+                        
+                        <div class="divider">
+                            <span>or</span>
+                        </div>
+                        
+                        <a href="staff-login.html" class="btn btn-outline" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-user-tie"></i> Staff Login
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="card action-card card-clickable" onclick="navigateTo('restaurant-reservation')" data-testid="card-reserve-restaurant">
-                            <div class="icon">🍽️</div>
-                            <h2>Reserve After Glow Restaurant</h2>
-                            <p>Where Every Moment Glows</p>
-                            <button class="btn btn-accent" data-testid="button-reserve-restaurant">Make Reservation</button>
+            <div class="container hidden" id="registerView">
+                <div class="auth-container">
+                    <div class="auth-card">
+                        <div class="auth-header">
+                            <h1><i class="fas fa-user-plus"></i> Create Account</h1>
+                            <p>Join GINHAWA & After Glow</p>
+                        </div>
+                        
+                        <form id="registerForm">
+                            <div class="form-group">
+                                <label for="regName" class="form-label">Full Name</label>
+                                <input type="text" id="regName" class="form-input" placeholder="Enter your full name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="regEmail" class="form-label">Email</label>
+                                <input type="email" id="regEmail" class="form-input" placeholder="Enter your email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="regPassword" class="form-label">Password</label>
+                                <input type="password" id="regPassword" class="form-input" placeholder="Create a password" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                <i class="fas fa-user-plus"></i> Register
+                            </button>
+                        </form>
+                        
+                        <div class="auth-toggle">
+                            <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
                         </div>
                     </div>
                 </div>
-            `;
-        }
+            </div>
 
-        // ===== HOTEL BOOKING =====
-        let hotelBookingData = {
-            step: 1,
-            destination: '',
-            checkIn: '',
-            checkOut: '',
-            guests: 1,
-            roomType: '',
-            roomPrice: 0,
-            paymentMethod: ''
-        };
-
-        function renderHotelBooking() {
-            const mainContent = document.getElementById('mainContent');
-            
-            let content = `
-                <div class="container">
-                    <div class="page-header">
-                        <h1>Book GINHAWA Hotel</h1>
-                        <p>Experience Comfort and Relaxation</p>
+            <div class="container hidden" id="dashboardView">
+                <div class="welcome-section">
+                    <h1>Welcome to GINHAWA & After Glow</h1>
+                    <p>Your comfort is our priority</p>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="action-card">
+                        <div class="icon"><i class="fas fa-bed"></i></div>
+                        <h2>Book GINHAWA Hotel</h2>
+                        <p>Experience comfort and relaxation</p>
+                        <button class="btn btn-primary" onclick="alert('Booking feature - demo purposes')">
+                            <i class="fas fa-calendar-check"></i> Book Now
+                        </button>
                     </div>
-
-                    <div class="steps">
-                        <div class="step ${hotelBookingData.step === 1 ? 'active' : ''} ${hotelBookingData.step > 1 ? 'completed' : ''}">
-                            <div class="step-number">1</div>
-                            <div class="step-label">Destination & Dates</div>
-                        </div>
-                        <div class="step ${hotelBookingData.step === 2 ? 'active' : ''} ${hotelBookingData.step > 2 ? 'completed' : ''}">
-                            <div class="step-number">2</div>
-                            <div class="step-label">Room Selection</div>
-                        </div>
-                        <div class="step ${hotelBookingData.step === 3 ? 'active' : ''} ${hotelBookingData.step > 3 ? 'completed' : ''}">
-                            <div class="step-number">3</div>
-                            <div class="step-label">Summary</div>
-                        </div>
-                        <div class="step ${hotelBookingData.step === 4 ? 'active' : ''}">
-                            <div class="step-number">4</div>
-                            <div class="step-label">Confirmation</div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-            `;
-
-            if (hotelBookingData.step === 1) {
-                const today = new Date().toISOString().split('T')[0];
-                content += `
-                    <h2 style="margin-bottom: 1.5rem;">Select Destination and Dates</h2>
-                    <form onsubmit="handleHotelStep1(event)">
-                        <div class="form-group">
-                            <label class="form-label" for="destination">Destination</label>
-                            <select id="destination" class="form-input" required data-testid="select-destination">
-                                <option value="">Select a destination</option>
-                                <option value="Commonwealth, Quezon City">Commonwealth, Quezon City</option>
-                                <option value="Eastwood City, Quezon City">Eastwood City, Quezon City</option>
-                                <option value="UP Diliman Area, Quezon City">UP Diliman Area, Quezon City</option>
-                                <option value="Katipunan, Quezon City">Katipunan, Quezon City</option>
-                            </select>
-                        </div>
-                        <div class="grid-2">
-                            <div class="form-group">
-                                <label class="form-label" for="checkIn">Check-in Date</label>
-                                <input type="date" id="checkIn" class="form-input" min="${today}" required data-testid="input-checkin">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="checkOut">Check-out Date</label>
-                                <input type="date" id="checkOut" class="form-input" min="${today}" required data-testid="input-checkout">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="guests">Number of Guests</label>
-                            <input type="number" id="guests" class="form-input" min="1" max="10" value="1" required data-testid="input-guests">
-                        </div>
-                        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-                            <button type="button" class="btn btn-secondary" onclick="navigateTo('home')" data-testid="button-cancel">Cancel</button>
-                            <button type="submit" class="btn btn-primary" data-testid="button-continue-step1">Continue</button>
-                        </div>
-                    </form>
-                `;
-            } else if (hotelBookingData.step === 2) {
-                content += `
-                    <h2 style="margin-bottom: 1.5rem;">Select Room Type</h2>
-                    <div class="grid-3">
-                        <div class="card room-card ${hotelBookingData.roomType === 'Standard Room' ? 'selected' : ''}" onclick="selectRoom('Standard Room', 2500)" data-testid="card-room-standard">
-                            <div class="room-header">
-                                <h3>Standard Room</h3>
-                                <div class="price">₱2,500<small style="font-size: 0.875rem; font-weight: 400;">/night</small></div>
-                            </div>
-                            <ul>
-                                <li>Queen-size bed</li>
-                                <li>Free WiFi</li>
-                                <li>Air conditioning</li>
-                                <li>Cable TV</li>
-                                <li>Private bathroom</li>
-                            </ul>
-                        </div>
-
-                        <div class="card room-card ${hotelBookingData.roomType === 'Deluxe Room' ? 'selected' : ''}" onclick="selectRoom('Deluxe Room', 4000)" data-testid="card-room-deluxe">
-                            <div class="room-header">
-                                <h3>Deluxe Room</h3>
-                                <div class="price">₱4,000<small style="font-size: 0.875rem; font-weight: 400;">/night</small></div>
-                            </div>
-                            <ul>
-                                <li>King-size bed</li>
-                                <li>Free WiFi</li>
-                                <li>Premium amenities</li>
-                                <li>Mini bar</li>
-                                <li>City view</li>
-                                <li>Work desk</li>
-                            </ul>
-                        </div>
-
-                        <div class="card room-card ${hotelBookingData.roomType === 'Suite' ? 'selected' : ''}" onclick="selectRoom('Suite', 7000)" data-testid="card-room-suite">
-                            <div class="room-header">
-                                <h3>Suite</h3>
-                                <div class="price">₱7,000<small style="font-size: 0.875rem; font-weight: 400;">/night</small></div>
-                            </div>
-                            <ul>
-                                <li>Separate living room</li>
-                                <li>King-size bed</li>
-                                <li>Luxury amenities</li>
-                                <li>Premium mini bar</li>
-                                <li>Jacuzzi</li>
-                                <li>Butler service</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
-                        <button class="btn btn-secondary" onclick="hotelBookingData.step = 1; renderHotelBooking();" data-testid="button-back-step2">Back</button>
-                        <button class="btn btn-primary" onclick="handleHotelStep2()" ${!hotelBookingData.roomType ? 'disabled' : ''} data-testid="button-continue-step2">Continue</button>
-                    </div>
-                `;
-            } else if (hotelBookingData.step === 3) {
-                const user = getCurrentUser();
-                const checkIn = new Date(hotelBookingData.checkIn);
-                const checkOut = new Date(hotelBookingData.checkOut);
-                const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
-                const total = nights * hotelBookingData.roomPrice;
-
-                content += `
-                    <h2 style="margin-bottom: 1.5rem;">Booking Summary</h2>
                     
-                    <div class="summary-section">
-                        <div class="summary-row">
-                            <span>Guest Name</span>
-                            <strong>${user.name}</strong>
-                        </div>
-                        <div class="summary-row">
-                            <span>Email</span>
-                            <strong>${user.email}</strong>
-                        </div>
-                        <div class="summary-row">
-                            <span>Phone</span>
-                            <strong>${user.phone}</strong>
-                        </div>
-                        <div class="summary-row">
-                            <span>Destination</span>
-                            <strong>${hotelBookingData.destination}</strong>
-                        </div>
-                        <div class="summary-row">
-                            <span>Check-in</span>
-                            <strong>${new Date(hotelBookingData.checkIn).toLocaleDateString()}</strong>
-                        </div>
-                        <div class="summary-row">
-                            <span>Check-out</span>
-                            <strong>${new Date(hotelBookingData.checkOut).toLocaleDateString()}</strong>
-                        </div>
-                        <div class="summary-row">
-                            <span>Number of Nights</span>
-                            <strong>${nights}</strong>
-                        </div>
-                        <div class="summary-row">
-                            <span>Room Type</span>
-                            <strong>${hotelBookingData.roomType}</strong>
-                        </div>
-                        <div class="summary-row">
-                            <span>Guests</span>
-                            <strong>${hotelBookingData.guests}</strong>
-                        </div>
-                        <div class="summary-row">
-                            <span>Price per Night</span>
-                            <strong>₱${hotelBookingData.roomPrice.toLocaleString()}</strong>
-                        </div>
-                        <div class="summary-row total">
-                            <span>Total Price</span>
-                            <strong>₱${total.toLocaleString()}</strong>
-                        </div>
+                    <div class="action-card">
+                        <div class="icon"><i class="fas fa-utensils"></i></div>
+                        <h2>Reserve After Glow Restaurant</h2>
+                        <p>Where every moment glows</p>
+                        <button class="btn btn-primary" onclick="alert('Reservation feature - demo purposes')">
+                            <i class="fas fa-calendar-alt"></i> Reserve Table
+                        </button>
                     </div>
-
-                    <h3 style="margin: 1.5rem 0 1rem;">Select Payment Method</h3>
+                </div>
+                
+                <div style="margin-top: 2rem;">
                     <div class="grid-3">
-                        <div class="payment-method ${hotelBookingData.paymentMethod === 'Cash' ? 'selected' : ''}" onclick="selectPaymentMethod('Cash')" data-testid="payment-cash">
-                            <div class="icon">💵</div>
-                            <div class="label">Cash</div>
+                        <div class="action-card">
+                            <div class="icon"><i class="fas fa-hamburger"></i></div>
+                            <h2>Order Food</h2>
+                            <p>Browse our menu</p>
+                            <button class="btn btn-primary" onclick="alert('Menu feature - demo purposes')">
+                                <i class="fas fa-shopping-cart"></i> View Menu
+                            </button>
                         </div>
-                        <div class="payment-method ${hotelBookingData.paymentMethod === 'Credit Card' ? 'selected' : ''}" onclick="selectPaymentMethod('Credit Card')" data-testid="payment-credit">
-                            <div class="icon">💳</div>
-                            <div class="label">Credit Card</div>
+                        
+                        <div class="action-card">
+                            <div class="icon"><i class="fas fa-broom"></i></div>
+                            <h2>Housekeeping</h2>
+                            <p>Request service</p>
+                            <button class="btn btn-primary" onclick="alert('Housekeeping feature - demo purposes')">
+                                <i class="fas fa-bell"></i> Request Service
+                            </button>
                         </div>
-                        <div class="payment-method ${hotelBookingData.paymentMethod === 'GCash' ? 'selected' : ''}" onclick="selectPaymentMethod('GCash')" data-testid="payment-gcash">
-                            <div class="icon">📱</div>
-                            <div class="label">GCash</div>
+                        
+                        <div class="action-card">
+                            <div class="icon"><i class="fas fa-list-alt"></i></div>
+                            <h2>My Bookings</h2>
+                            <p>View your reservations</p>
+                            <button class="btn btn-primary" onclick="alert('Bookings feature - demo purposes')">
+                                <i class="fas fa-eye"></i> View Bookings
+                            </button>
                         </div>
-                    </div>
-
-                    <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
-                        <button class="btn btn-secondary" onclick="hotelBookingData.step = 2; renderHotelBooking();" data-testid="button-back-step3">Back</button>
-                        <button class="btn btn-success" onclick="confirmHotelBooking()" ${!hotelBookingData.paymentMethod ? 'disabled' : ''} data-testid="button-confirm-booking">Confirm Booking</button>
-                    </div>
-                `;
-            } else if (hotelBookingData.step === 4) {
-                const bookingId = hotelBookingData.bookingId;
-                content += `
-                    <div class="success-message">
-                        <div class="success-icon">✓</div>
-                        <h2>Booking Confirmed!</h2>
-                        <p>Thank you for choosing GINHAWA Hotel</p>
-                        <div class="booking-id" data-testid="text-booking-id">${bookingId}</div>
-                        <div class="summary-section" style="text-align: left; max-width: 500px; margin: 2rem auto;">
-                            <div class="summary-row">
-                                <span>Destination</span>
-                                <strong>${hotelBookingData.destination}</strong>
-                            </div>
-                            <div class="summary-row">
-                                <span>Check-in</span>
-                                <strong>${new Date(hotelBookingData.checkIn).toLocaleDateString()}</strong>
-                            </div>
-                            <div class="summary-row">
-                                <span>Check-out</span>
-                                <strong>${new Date(hotelBookingData.checkOut).toLocaleDateString()}</strong>
-                            </div>
-                            <div class="summary-row">
-                                <span>Room Type</span>
-                                <strong>${hotelBookingData.roomType}</strong>
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
-                            <button class="btn btn-secondary" onclick="navigateTo('home')" data-testid="button-back-home">Back to Home</button>
-                            <button class="btn btn-primary" onclick="navigateTo('bookings')" data-testid="button-view-bookings">View My Bookings</button>
-                        </div>
-                    </div>
-                `;
-            }
-
-            content += `
                     </div>
                 </div>
-            `;
+            </div>
+        </main>
 
-            mainContent.innerHTML = content;
+        <footer class="footer">
+            <p>&copy; 2025 GINHAWA Hotel & After Glow Restaurant. All rights reserved.</p>
+            <p>Built with <i class="fas fa-heart" style="color: var(--color-gold);"></i> for HCI Projects</p>
+        </footer>
+    </div>
+
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/nav.js"></script>
+    <script>
+        // Authentication functionality
+        const loginView = document.getElementById('loginView');
+        const registerView = document.getElementById('registerView');
+        const dashboardView = document.getElementById('dashboardView');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const showRegister = document.getElementById('showRegister');
+        const showLogin = document.getElementById('showLogin');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userName = document.getElementById('userName');
+
+        // Check if user is logged in
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            const user = JSON.parse(currentUser);
+            showDashboard(user);
         }
 
-        function handleHotelStep1(e) {
+        showRegister.addEventListener('click', (e) => {
             e.preventDefault();
-            const destination = document.getElementById('destination').value;
-            const checkIn = document.getElementById('checkIn').value;
-            const checkOut = document.getElementById('checkOut').value;
-            const guests = document.getElementById('guests').value;
-
-            // Validate dates
-            if (new Date(checkOut) <= new Date(checkIn)) {
-                alert('Check-out date must be after check-in date');
-                return;
-            }
-
-            hotelBookingData.destination = destination;
-            hotelBookingData.checkIn = checkIn;
-            hotelBookingData.checkOut = checkOut;
-            hotelBookingData.guests = guests;
-            hotelBookingData.step = 2;
-            renderHotelBooking();
-        }
-
-        function selectRoom(roomType, price) {
-            hotelBookingData.roomType = roomType;
-            hotelBookingData.roomPrice = price;
-            renderHotelBooking();
-        }
-
-        function handleHotelStep2() {
-            if (!hotelBookingData.roomType) {
-                alert('Please select a room type');
-                return;
-            }
-            hotelBookingData.step = 3;
-            renderHotelBooking();
-        }
-
-        function selectPaymentMethod(method) {
-            hotelBookingData.paymentMethod = method;
-            renderHotelBooking();
-        }
-
-        function confirmHotelBooking() {
-            if (!hotelBookingData.paymentMethod) {
-                alert('Please select a payment method');
-                return;
-            }
-
-            const user = getCurrentUser();
-            const checkIn = new Date(hotelBookingData.checkIn);
-            const checkOut = new Date(hotelBookingData.checkOut);
-            const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
-            const total = nights * hotelBookingData.roomPrice;
-
-            const booking = {
-                id: 'GIN-' + Date.now(),
-                customerEmail: user.email,
-                customerName: user.name,
-                customerPhone: user.phone,
-                destination: hotelBookingData.destination,
-                checkIn: hotelBookingData.checkIn,
-                checkOut: hotelBookingData.checkOut,
-                nights: nights,
-                guests: hotelBookingData.guests,
-                roomType: hotelBookingData.roomType,
-                pricePerNight: hotelBookingData.roomPrice,
-                totalPrice: total,
-                paymentMethod: hotelBookingData.paymentMethod,
-                status: 'Confirmed',
-                createdAt: new Date().toISOString()
-            };
-
-            dataManager.saveHotelBooking(booking);
-            hotelBookingData.bookingId = booking.id;
-            hotelBookingData.step = 4;
-            renderHotelBooking();
-        }
-
-        // ===== RESTAURANT RESERVATION =====
-        function renderRestaurantReservation() {
-            const user = getCurrentUser();
-            const mainContent = document.getElementById('mainContent');
-            const today = new Date().toISOString().split('T')[0];
-
-            mainContent.innerHTML = `
-                <div class="container">
-                    <div class="page-header">
-                        <h1>Reserve After Glow Restaurant</h1>
-                        <p>Where Every Moment Glows</p>
-                    </div>
-
-                    <div class="card" style="max-width: 800px; margin: 0 auto;">
-                        <form onsubmit="handleRestaurantReservation(event)">
-                            <div class="grid-2">
-                                <div class="form-group">
-                                    <label class="form-label" for="resDate">Date</label>
-                                    <input type="date" id="resDate" class="form-input" min="${today}" required data-testid="input-reservation-date">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="resTime">Time</label>
-                                    <select id="resTime" class="form-input" required data-testid="select-reservation-time">
-                                        <option value="">Select time</option>
-                                        ${generateTimeOptions()}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Seating Preference</label>
-                                <div class="grid-2">
-                                    <div class="seating-option" id="indoorSeating" onclick="selectSeating('Indoor')" data-testid="seating-indoor">
-                                        <div class="icon">🏠</div>
-                                        <h3>Indoor Seating</h3>
-                                    </div>
-                                    <div class="seating-option" id="outdoorSeating" onclick="selectSeating('Outdoor')" data-testid="seating-outdoor">
-                                        <div class="icon">🌳</div>
-                                        <h3>Outdoor Seating</h3>
-                                    </div>
-                                </div>
-                                <input type="hidden" id="seatingPref" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="resGuests">Number of Guests</label>
-                                <input type="number" id="resGuests" class="form-input" min="1" max="20" value="2" required data-testid="input-reservation-guests">
-                            </div>
-
-                            <div class="grid-2">
-                                <div class="form-group">
-                                    <label class="form-label" for="resName">Name</label>
-                                    <input type="text" id="resName" class="form-input" value="${user.name}" readonly data-testid="input-reservation-name">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="resPhone">Phone</label>
-                                    <input type="tel" id="resPhone" class="form-input" value="${user.phone}" readonly data-testid="input-reservation-phone">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="specialRequests">Special Requests (Optional)</label>
-                                <textarea id="specialRequests" class="form-input" rows="3" placeholder="Any special requests or dietary requirements..." data-testid="textarea-special-requests"></textarea>
-                            </div>
-
-                            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
-                                <button type="button" class="btn btn-secondary" onclick="navigateTo('home')" data-testid="button-cancel-reservation">Cancel</button>
-                                <button type="submit" class="btn btn-accent" data-testid="button-reserve">Reserve Table</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div id="confirmationMessage" class="hidden"></div>
-                </div>
-            `;
-        }
-
-        function generateTimeOptions() {
-            let options = '';
-            for (let hour = 10; hour <= 22; hour++) {
-                for (let min = 0; min < 60; min += 30) {
-                    const time = `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
-                    const period = hour >= 12 ? 'PM' : 'AM';
-                    const displayHour = hour > 12 ? hour - 12 : hour;
-                    const displayTime = `${displayHour}:${min.toString().padStart(2, '0')} ${period}`;
-                    options += `<option value="${time}">${displayTime}</option>`;
-                }
-            }
-            return options;
-        }
-
-        let selectedSeating = '';
-
-        function selectSeating(type) {
-            selectedSeating = type;
-            document.getElementById('seatingPref').value = type;
-            document.getElementById('indoorSeating').classList.remove('selected');
-            document.getElementById('outdoorSeating').classList.remove('selected');
-            
-            if (type === 'Indoor') {
-                document.getElementById('indoorSeating').classList.add('selected');
-            } else {
-                document.getElementById('outdoorSeating').classList.add('selected');
-            }
-        }
-
-        function handleRestaurantReservation(e) {
-            e.preventDefault();
-            const user = getCurrentUser();
-            
-            const reservation = {
-                id: 'AG-' + Date.now(),
-                customerEmail: user.email,
-                customerName: user.name,
-                customerPhone: user.phone,
-                date: document.getElementById('resDate').value,
-                time: document.getElementById('resTime').value,
-                seating: selectedSeating,
-                guests: document.getElementById('resGuests').value,
-                specialRequests: document.getElementById('specialRequests').value,
-                status: 'Confirmed',
-                createdAt: new Date().toISOString()
-            };
-
-            dataManager.saveRestaurantReservation(reservation);
-
-            const mainContent = document.getElementById('mainContent');
-            mainContent.innerHTML = `
-                <div class="container">
-                    <div class="card" style="max-width: 600px; margin: 0 auto;">
-                        <div class="success-message">
-                            <div class="success-icon">✓</div>
-                            <h2>Reservation Confirmed!</h2>
-                            <p>Thank you for your reservation at After Glow Restaurant</p>
-                            <div class="booking-id" data-testid="text-reservation-id">${reservation.id}</div>
-                            <div class="summary-section" style="text-align: left; margin: 2rem auto;">
-                                <div class="summary-row">
-                                    <span>Date</span>
-                                    <strong>${new Date(reservation.date).toLocaleDateString()}</strong>
-                                </div>
-                                <div class="summary-row">
-                                    <span>Time</span>
-                                    <strong>${reservation.time}</strong>
-                                </div>
-                                <div class="summary-row">
-                                    <span>Seating</span>
-                                    <strong>${reservation.seating} Seating</strong>
-                                </div>
-                                <div class="summary-row">
-                                    <span>Guests</span>
-                                    <strong>${reservation.guests}</strong>
-                                </div>
-                            </div>
-                            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
-                                <button class="btn btn-secondary" onclick="navigateTo('home')" data-testid="button-back-home">Back to Home</button>
-                                <button class="btn btn-primary" onclick="navigateTo('bookings')" data-testid="button-view-bookings">View My Bookings</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // ===== MY BOOKINGS =====
-        function renderMyBookings() {
-            const user = getCurrentUser();
-            const mainContent = document.getElementById('mainContent');
-
-            const hotelBookings = dataManager.getHotelBookings(user.email);
-            const restaurantReservations = dataManager.getRestaurantReservations(user.email);
-
-            mainContent.innerHTML = `
-                <div class="container">
-                    <div class="page-header">
-                        <h1>My Bookings</h1>
-                        <p>View and manage your reservations</p>
-                    </div>
-
-                    <div class="tabs">
-                        <button class="tab active" onclick="switchBookingTab('all')" data-testid="tab-all">All</button>
-                        <button class="tab" onclick="switchBookingTab('hotels')" data-testid="tab-hotels">Hotels</button>
-                        <button class="tab" onclick="switchBookingTab('restaurants')" data-testid="tab-restaurants">Restaurants</button>
-                    </div>
-
-                    <div id="bookingsContent">
-                        ${renderAllBookings(hotelBookings, restaurantReservations)}
-                    </div>
-                </div>
-            `;
-        }
-
-        function switchBookingTab(tab) {
-            const user = getCurrentUser();
-            const hotelBookings = dataManager.getHotelBookings(user.email);
-            const restaurantReservations = dataManager.getRestaurantReservations(user.email);
-            
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-
-            const content = document.getElementById('bookingsContent');
-            
-            if (tab === 'all') {
-                content.innerHTML = renderAllBookings(hotelBookings, restaurantReservations);
-            } else if (tab === 'hotels') {
-                content.innerHTML = renderHotelBookingsOnly(hotelBookings);
-            } else {
-                content.innerHTML = renderRestaurantBookingsOnly(restaurantReservations);
-            }
-        }
-
-        function renderAllBookings(hotelBookings, restaurantReservations) {
-            if (hotelBookings.length === 0 && restaurantReservations.length === 0) {
-                return `
-                    <div class="empty-state">
-                        <div class="icon">📋</div>
-                        <h3>No bookings yet</h3>
-                        <p>Start exploring our services!</p>
-                        <button class="btn btn-primary" onclick="navigateTo('home')" data-testid="button-start-exploring">Start Exploring</button>
-                    </div>
-                `;
-            }
-
-            let html = '';
-            
-            if (hotelBookings.length > 0) {
-                html += '<h2 style="margin: 2rem 0 1rem;">Hotel Bookings</h2>';
-                html += renderHotelBookings(hotelBookings);
-            }
-
-            if (restaurantReservations.length > 0) {
-                html += '<h2 style="margin: 2rem 0 1rem;">Restaurant Reservations</h2>';
-                html += renderRestaurantReservations(restaurantReservations);
-            }
-
-            return html;
-        }
-
-        function renderHotelBookingsOnly(hotelBookings) {
-            if (hotelBookings.length === 0) {
-                return `
-                    <div class="empty-state">
-                        <div class="icon">🏨</div>
-                        <h3>No hotel bookings</h3>
-                        <p>Book your stay at GINHAWA Hotel today!</p>
-                        <button class="btn btn-primary" onclick="navigateTo('hotel-booking')" data-testid="button-book-now">Book Now</button>
-                    </div>
-                `;
-            }
-            return renderHotelBookings(hotelBookings);
-        }
-
-        function renderRestaurantBookingsOnly(restaurantReservations) {
-            if (restaurantReservations.length === 0) {
-                return `
-                    <div class="empty-state">
-                        <div class="icon">🍽️</div>
-                        <h3>No restaurant reservations</h3>
-                        <p>Reserve a table at After Glow Restaurant!</p>
-                        <button class="btn btn-accent" onclick="navigateTo('restaurant-reservation')" data-testid="button-reserve-now">Reserve Now</button>
-                    </div>
-                `;
-            }
-            return renderRestaurantReservations(restaurantReservations);
-        }
-
-        function renderHotelBookings(bookings) {
-            return bookings.map(booking => `
-                <div class="card booking-card" data-testid="card-booking-${booking.id}">
-                    <div class="card-header">
-                        <div>
-                            <div class="booking-id" data-testid="text-booking-id-${booking.id}">${booking.id}</div>
-                            <h3 style="margin: 0.5rem 0;">GINHAWA Hotel</h3>
-                        </div>
-                        <span class="badge ${getStatusBadgeClass(booking.status)}" data-testid="badge-status-${booking.id}">${booking.status}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Destination</span>
-                        <span class="detail-value">${booking.destination}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Check-in</span>
-                        <span class="detail-value">${new Date(booking.checkIn).toLocaleDateString()}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Check-out</span>
-                        <span class="detail-value">${new Date(booking.checkOut).toLocaleDateString()}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Room Type</span>
-                        <span class="detail-value">${booking.roomType}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Total Price</span>
-                        <span class="detail-value" style="color: var(--primary-teal); font-weight: 700;">₱${booking.totalPrice.toLocaleString()}</span>
-                    </div>
-                    ${(booking.status === 'Confirmed' || booking.status === 'Pending') ? `
-                        <div style="margin-top: 1rem;">
-                            <button class="btn btn-danger" onclick="cancelHotelBooking('${booking.id}')" data-testid="button-cancel-${booking.id}">Cancel Booking</button>
-                        </div>
-                    ` : ''}
-                </div>
-            `).join('');
-        }
-
-        function renderRestaurantReservations(reservations) {
-            return reservations.map(reservation => `
-                <div class="card booking-card" style="border-left-color: var(--accent-amber);" data-testid="card-reservation-${reservation.id}">
-                    <div class="card-header">
-                        <div>
-                            <div class="booking-id" data-testid="text-reservation-id-${reservation.id}">${reservation.id}</div>
-                            <h3 style="margin: 0.5rem 0;">After Glow Restaurant</h3>
-                        </div>
-                        <span class="badge ${getStatusBadgeClass(reservation.status)}" data-testid="badge-status-${reservation.id}">${reservation.status}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Date</span>
-                        <span class="detail-value">${new Date(reservation.date).toLocaleDateString()}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Time</span>
-                        <span class="detail-value">${reservation.time}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Seating</span>
-                        <span class="detail-value">${reservation.seating} Seating</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Guests</span>
-                        <span class="detail-value">${reservation.guests}</span>
-                    </div>
-                    ${(reservation.status === 'Confirmed' || reservation.status === 'Pending') ? `
-                        <div style="margin-top: 1rem;">
-                            <button class="btn btn-danger" onclick="cancelRestaurantReservation('${reservation.id}')" data-testid="button-cancel-${reservation.id}">Cancel Reservation</button>
-                        </div>
-                    ` : ''}
-                </div>
-            `).join('');
-        }
-
-        function getStatusBadgeClass(status) {
-            const statusMap = {
-                'Pending': 'badge-warning',
-                'Confirmed': 'badge-success',
-                'Checked-in': 'badge-info',
-                'Checked-out': 'badge-info',
-                'Cancelled': 'badge-error',
-                'Seated': 'badge-info',
-                'Completed': 'badge-success'
-            };
-            return statusMap[status] || 'badge-info';
-        }
-
-        function cancelHotelBooking(bookingId) {
-            if (confirm('Are you sure you want to cancel this booking?')) {
-                dataManager.updateHotelBooking(bookingId, { status: 'Cancelled' });
-                renderMyBookings();
-            }
-        }
-
-        function cancelRestaurantReservation(reservationId) {
-            if (confirm('Are you sure you want to cancel this reservation?')) {
-                dataManager.updateRestaurantReservation(reservationId, { status: 'Cancelled' });
-                renderMyBookings();
-            }
-        }
-
-        // ===== ORDER FOOD =====
-        const menuItems = {
-            food: [
-                { name: 'Waffle', price: 150 },
-                { name: 'Burger', price: 200 },
-                { name: 'Fries', price: 100 }
-            ],
-            drinks: [
-                { name: 'Tropical Yakult Splash', price: 120 },
-                { name: 'Energy Bear Spark', price: 130 },
-                { name: 'Bear Fizz Delight', price: 125 },
-                { name: 'Classic Sparkle', price: 110 },
-                { name: 'Sweet Chill', price: 115 },
-                { name: 'Grape Fizz', price: 120 }
-            ]
-        };
-
-        let cart = [];
-        let activeMenuTab = 'food';
-
-        function renderOrderPage() {
-            const user = getCurrentUser();
-            const mainContent = document.getElementById('mainContent');
-
-            mainContent.innerHTML = `
-                <div class="container">
-                    <div class="page-header">
-                        <h1>Kitchen & Bar Menu</h1>
-                        <p>Order delicious food and refreshing drinks</p>
-                    </div>
-
-                    <div class="tabs">
-                        <button class="tab ${activeMenuTab === 'food' ? 'active' : ''}" onclick="switchMenuTab('food')" data-testid="tab-food">🍔 Food</button>
-                        <button class="tab ${activeMenuTab === 'drinks' ? 'active' : ''}" onclick="switchMenuTab('drinks')" data-testid="tab-drinks">🍹 Drinks</button>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; align-items: start;">
-                        <div id="menuItems">
-                            ${renderMenuItems()}
-                        </div>
-
-                        <div class="cart-section">
-                            <h3 style="margin-bottom: 1rem;">Your Order</h3>
-                            <div id="cartItems">
-                                ${renderCartItems()}
-                            </div>
-                            ${cart.length > 0 ? `
-                                <div style="margin-top: 1.5rem;">
-                                    <div class="form-group">
-                                        <label class="form-label" for="tableRoom">Table/Room Number</label>
-                                        <input type="text" id="tableRoom" class="form-input" placeholder="e.g., Table 5 or Room 101" required data-testid="input-table-room">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" for="orderName">Name</label>
-                                        <input type="text" id="orderName" class="form-input" value="${user.name}" readonly data-testid="input-order-name">
-                                    </div>
-                                    <button class="btn btn-primary" onclick="placeOrder()" style="width: 100%;" data-testid="button-place-order">Place Order</button>
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function switchMenuTab(tab) {
-            activeMenuTab = tab;
-            renderOrderPage();
-        }
-
-        function renderMenuItems() {
-            const items = activeMenuTab === 'food' ? menuItems.food : menuItems.drinks;
-            return items.map((item, index) => {
-                const cartItem = cart.find(c => c.name === item.name);
-                const quantity = cartItem ? cartItem.quantity : 0;
-
-                return `
-                    <div class="menu-item" data-testid="menu-item-${item.name.toLowerCase().replace(/ /g, '-')}">
-                        <div class="menu-item-info">
-                            <h4>${item.name}</h4>
-                            <div class="price">₱${item.price}</div>
-                        </div>
-                        <div class="quantity-controls">
-                            <button class="quantity-btn" onclick="updateQuantity('${item.name}', ${item.price}, -1)" ${quantity === 0 ? 'disabled' : ''} data-testid="button-decrease-${item.name.toLowerCase().replace(/ /g, '-')}">−</button>
-                            <span class="quantity" data-testid="quantity-${item.name.toLowerCase().replace(/ /g, '-')}">${quantity}</span>
-                            <button class="quantity-btn" onclick="updateQuantity('${item.name}', ${item.price}, 1)" data-testid="button-increase-${item.name.toLowerCase().replace(/ /g, '-')}">+</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderCartItems() {
-            if (cart.length === 0) {
-                return '<p style="color: var(--text-secondary); text-align: center; padding: 2rem 0;">Your cart is empty</p>';
-            }
-
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-            return `
-                ${cart.map(item => `
-                    <div class="cart-item">
-                        <div>
-                            <div style="font-weight: 600;">${item.name}</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">₱${item.price} × ${item.quantity}</div>
-                        </div>
-                        <div style="font-weight: 700;">₱${(item.price * item.quantity).toLocaleString()}</div>
-                    </div>
-                `).join('')}
-                <div class="cart-item" style="border-top: 2px solid var(--border-color); margin-top: 1rem; padding-top: 1rem;">
-                    <div style="font-weight: 700; font-size: 1.125rem;">Subtotal</div>
-                    <div style="font-weight: 700; font-size: 1.125rem; color: var(--primary-teal);" data-testid="text-subtotal">₱${subtotal.toLocaleString()}</div>
-                </div>
-            `;
-        }
-
-        function updateQuantity(name, price, change) {
-            const existingItem = cart.find(item => item.name === name);
-
-            if (existingItem) {
-                existingItem.quantity += change;
-                if (existingItem.quantity <= 0) {
-                    cart = cart.filter(item => item.name !== name);
-                }
-            } else if (change > 0) {
-                cart.push({ name, price, quantity: 1, category: activeMenuTab });
-            }
-
-            renderOrderPage();
-        }
-
-        function placeOrder() {
-            const tableRoom = document.getElementById('tableRoom').value.trim();
-            if (!tableRoom) {
-                alert('Please enter a table or room number');
-                return;
-            }
-
-            if (cart.length === 0) {
-                alert('Your cart is empty');
-                return;
-            }
-
-            const user = getCurrentUser();
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
-            // Determine category based on items
-            const hasFood = cart.some(item => item.category === 'food');
-            const hasDrinks = cart.some(item => item.category === 'drinks');
-            let category = 'Food';
-            if (hasFood && hasDrinks) category = 'Food';
-            else if (hasDrinks) category = 'Drinks';
-
-            const order = {
-                id: 'ORD-' + Date.now(),
-                customerEmail: user.email,
-                customerName: user.name,
-                tableRoom: tableRoom,
-                items: [...cart],
-                subtotal: subtotal,
-                category: category,
-                status: 'Pending',
-                createdAt: new Date().toISOString()
-            };
-
-            dataManager.saveOrder(order);
-            
-            const mainContent = document.getElementById('mainContent');
-            mainContent.innerHTML = `
-                <div class="container">
-                    <div class="card" style="max-width: 600px; margin: 0 auto;">
-                        <div class="success-message">
-                            <div class="success-icon">✓</div>
-                            <h2>Order Placed!</h2>
-                            <p>Your order has been placed successfully</p>
-                            <div class="booking-id" data-testid="text-order-id">${order.id}</div>
-                            <p style="margin-top: 1.5rem; color: var(--text-secondary);">Estimated time: 20-30 minutes</p>
-                            <div style="margin-top: 2rem;">
-                                <button class="btn btn-primary" onclick="cart = []; activeMenuTab = 'food'; navigateTo('order')" data-testid="button-order-more">Order More</button>
-                                <button class="btn btn-secondary" onclick="cart = []; navigateTo('home')" style="margin-left: 1rem;" data-testid="button-back-home">Back to Home</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // ===== HOUSEKEEPING =====
-        function renderHousekeeping() {
-            const user = getCurrentUser();
-            const mainContent = document.getElementById('mainContent');
-
-            mainContent.innerHTML = `
-                <div class="container">
-                    <div class="page-header">
-                        <h1>Housekeeping Request</h1>
-                        <p>Request housekeeping services for your room</p>
-                    </div>
-
-                    <div class="card" style="max-width: 800px; margin: 0 auto;">
-                        <form onsubmit="handleHousekeepingRequest(event)">
-                            <div class="form-group">
-                                <label class="form-label" for="roomNumber">Room Number</label>
-                                <input type="text" id="roomNumber" class="form-input" placeholder="e.g., 101" required data-testid="input-room-number">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Request Type (Select all that apply)</label>
-                                <div style="display: grid; gap: 0.75rem;">
-                                    <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
-                                        <input type="checkbox" name="requestType" value="Room Cleaning" data-testid="checkbox-room-cleaning">
-                                        <span>Room Cleaning</span>
-                                    </label>
-                                    <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
-                                        <input type="checkbox" name="requestType" value="Fresh Towels" data-testid="checkbox-fresh-towels">
-                                        <span>Fresh Towels</span>
-                                    </label>
-                                    <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
-                                        <input type="checkbox" name="requestType" value="Toiletries" data-testid="checkbox-toiletries">
-                                        <span>Toiletries</span>
-                                    </label>
-                                    <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
-                                        <input type="checkbox" name="requestType" value="Maintenance" data-testid="checkbox-maintenance">
-                                        <span>Maintenance</span>
-                                    </label>
-                                    <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
-                                        <input type="checkbox" name="requestType" value="Other" data-testid="checkbox-other">
-                                        <span>Other</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="additionalNotes">Additional Notes</label>
-                                <textarea id="additionalNotes" class="form-input" rows="4" placeholder="Any additional details or special requests..." data-testid="textarea-additional-notes"></textarea>
-                            </div>
-
-                            <div class="grid-2">
-                                <div class="form-group">
-                                    <label class="form-label" for="hkName">Name</label>
-                                    <input type="text" id="hkName" class="form-input" value="${user.name}" readonly data-testid="input-hk-name">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="hkPhone">Phone</label>
-                                    <input type="tel" id="hkPhone" class="form-input" value="${user.phone}" readonly data-testid="input-hk-phone">
-                                </div>
-                            </div>
-
-                            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
-                                <button type="button" class="btn btn-secondary" onclick="navigateTo('home')" data-testid="button-cancel-hk">Cancel</button>
-                                <button type="submit" class="btn btn-primary" data-testid="button-submit-request">Submit Request</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            `;
-        }
-
-        function handleHousekeepingRequest(e) {
-            e.preventDefault();
-            const user = getCurrentUser();
-            
-            const checkboxes = document.querySelectorAll('input[name="requestType"]:checked');
-            if (checkboxes.length === 0) {
-                alert('Please select at least one request type');
-                return;
-            }
-
-            const requestTypes = Array.from(checkboxes).map(cb => cb.value);
-
-            const request = {
-                id: 'HK-' + Date.now(),
-                customerEmail: user.email,
-                customerName: user.name,
-                customerPhone: user.phone,
-                roomNumber: document.getElementById('roomNumber').value,
-                requestTypes: requestTypes,
-                additionalNotes: document.getElementById('additionalNotes').value,
-                status: 'Pending',
-                createdAt: new Date().toISOString()
-            };
-
-            dataManager.saveHousekeepingRequest(request);
-
-            const mainContent = document.getElementById('mainContent');
-            mainContent.innerHTML = `
-                <div class="container">
-                    <div class="card" style="max-width: 600px; margin: 0 auto;">
-                        <div class="success-message">
-                            <div class="success-icon">✓</div>
-                            <h2>Request Received!</h2>
-                            <p>Your housekeeping request has been received</p>
-                            <div class="booking-id" data-testid="text-hk-request-id">${request.id}</div>
-                            <p style="margin-top: 1.5rem; color: var(--text-secondary);">Our staff will respond to your request shortly</p>
-                            <div style="margin-top: 2rem;">
-                                <button class="btn btn-primary" onclick="navigateTo('home')" data-testid="button-back-home">Back to Home</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // ===== INITIALIZATION =====
-        document.addEventListener('DOMContentLoaded', function() {
-            const user = getCurrentUser();
-            if (user) {
-                navigateTo('home');
-            } else {
-                navigateTo('login');
-            }
+            loginView.classList.add('hidden');
+            registerView.classList.remove('hidden');
         });
+
+        showLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerView.classList.add('hidden');
+            loginView.classList.remove('hidden');
+        });
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Demo login - accept any credentials
+            const user = { name: 'Demo Customer', email: email };
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            showDashboard(user);
+        });
+
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            
+            const user = { name: name, email: email };
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            showDashboard(user);
+        });
+
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('currentUser');
+            location.reload();
+        });
+
+        function showDashboard(user) {
+            loginView.classList.add('hidden');
+            registerView.classList.add('hidden');
+            dashboardView.classList.remove('hidden');
+            userName.textContent = user.name;
+        }
     </script>
 </body>
 </html>
