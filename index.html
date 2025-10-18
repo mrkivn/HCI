@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="shared/shared-styles.css">
     <style>
         body {
-            background: linear-gradient(135deg, var(--black-primary) 0%, var(--black-dark) 100%);
+            background: var(--black-dark);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px;
@@ -19,6 +20,10 @@
         .auth-container {
             width: 100%;
             max-width: 500px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .auth-card {
@@ -225,10 +230,6 @@
                     <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
                         <i class="fas fa-sign-in-alt"></i> Login
                     </button>
-
-                    <div class="auth-toggle">
-                        <p>Forgot password? <a href="#" onclick="alert('Please contact support for password reset.'); return false;">Reset here</a></p>
-                    </div>
                 </form>
             </div>
 
@@ -316,6 +317,10 @@
             </div>
         </div>
     </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 GINHAWA Hotel & After Glow Restaurant. All rights reserved.</p>
+    </footer>
 
     <script src="shared/shared-functions.js"></script>
     <script>
