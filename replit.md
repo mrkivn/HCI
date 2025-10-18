@@ -12,6 +12,11 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
   - Removed all gradients to comply with solid color design requirement
   - Integrated localStorage for bookings, reservations, orders, and housekeeping requests
   - All customer and staff features fully functional
+  - **Enhanced UI/UX improvements:**
+    - Fixed footer styling on login pages to extend full width across viewport
+    - Enhanced customer-guest dashboard with comprehensive verification portal showing guest profile, contact info, and detailed booking information
+    - Fixed kitchen dashboard data source to correctly display actual food orders from unified orders storage
+    - Added Bar Service and Restaurant Reservation cards to guest services section
 
 ## User Preferences
 - **Color Theme**: Gold (#D4AF37) and Black (#000000) - no gradients
