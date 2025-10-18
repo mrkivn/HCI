@@ -1,0 +1,32 @@
+so this is just an HCI project. where its goal is standard good looking UI design. idk if it's possible if you make it only using html, css and javascript, if it's not possible with javascript then use typescript, but using only javascript, html and css would be better. delete the other files like tsx or something framework. 
+
+now, my request is make it where it has different html files where it's like made by different grouped students, where the first html file is the login, then for booking is after login in as customer
+
+but my main request is in login, add a staff button below it where if the user is a staff, it has its own dashboard. so instead of requiring to login on the login page, make an another html for the staff login.
+
+the customer view which is after loging in is good but remove the staff login there since we planned to make it have its own html
+
+for the nav, i want it on the right side of the logo text, instead of below of it.
+
+make the whole project responsive for nav, put hamburger button instead, if it's on mobile view.
+
+let's also use icons instead of emojis, maybe like font awesome 
+
+
+for the booking and reservation process are fine
+
+for the user's name on the nav, add an account icon where it has an options when user clicked the account icon that it's a button; dark mode and light mode switch button and logout button, so remove the logout button on the nav
+
+the footer is not on the bottom of the screen, fix it
+
+for the staff portal, if it has its own accounts like manager@hotel.com, frontdesk@hotel.com, then remove the department option, instead, add the accounts and passwords below of it or below of the login card for demo purposes of this project.
+
+now for the staff dashboard, it's not even responsive for mobile. and the every department's dashboard has the same dashboards like for housekeeping: why is there pending orders right? doesn't make sense. there's also quick actions for create booking and reservation walkin. same as the other department like front office. just have whatever they have to use. and why is there name there? like john doe or chef maria? i dont want that.
+and the left side of the nav of the every staff's dashboard are not even functional, like if there's a red dot mark with its number of it, clicking it should show the customer's name or something record/log or something
+
+
+
+for the design, avoid using gradiant color effect.
+make the user satisfied with the design as possible
+i want the color theme is gold and black
+
