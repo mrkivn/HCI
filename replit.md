@@ -6,17 +6,17 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
 ## Recent Changes
 - **October 18, 2025**: Complete hotel & restaurant management system completed
   - Built My Bookings page with filtering and cancellation features
-  - Created all 5 staff dashboards (Front Office, Kitchen, Bar, Housekeeping, Billing)
-  - Added customer-guest verification dashboard for checked-in guests
+  - Created all 6 staff dashboards (Front Office, Kitchen, Bar, Housekeeping, Billing, Customer Guest)
   - Fixed critical tab switching bug in all staff dashboards
   - Removed all gradients to comply with solid color design requirement
   - Integrated localStorage for bookings, reservations, orders, and housekeeping requests
   - All customer and staff features fully functional
-  - **Enhanced UI/UX improvements:**
-    - Fixed footer styling on login pages to extend full width across viewport
-    - Enhanced customer-guest dashboard with comprehensive verification portal showing guest profile, contact info, and detailed booking information
+  - **Latest updates:**
+    - Fixed footer styling on login pages to match customer-home.html (removed custom CSS overrides)
+    - Added Customer Guest staff role for viewing all customer information
+    - Created Customer Guest dashboard showing registered customers with their bookings, orders, and reservations
     - Fixed kitchen dashboard data source to correctly display actual food orders from unified orders storage
-    - Added Bar Service and Restaurant Reservation cards to guest services section
+    - All localStorage keys and field names aligned across the application
 
 ## User Preferences
 - **Color Theme**: Gold (#D4AF37) and Black (#000000) - no gradients
@@ -98,6 +98,7 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
   - **Bar**: Drink order queue, inventory
   - **Housekeeping**: Service requests, cleaning schedule
   - **Billing**: Invoices, payment processing
+  - **Customer Guest**: View all registered customers and their activity (bookings, orders, reservations)
 - Functional notification badges showing pending items
 - Responsive sidebar navigation
 - Mobile-friendly with hamburger menu
@@ -117,6 +118,7 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
 | Bar | bar@hotel.com | bar123 |
 | Housekeeping | housekeeping@hotel.com | clean123 |
 | Billing | billing@hotel.com | bill123 |
+| Customer Guest | customerguest@hotel.com | guest123 |
 
 ## Running the Application
 
