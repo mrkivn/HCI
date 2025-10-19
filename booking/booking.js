@@ -352,7 +352,7 @@ function goToStep1() {
 }
 
 function viewMyBookings() {
-    alert('My Bookings page will be implemented soon.');
+    window.location.href = '/my-bookings.html';
 }
 
 // Initialize

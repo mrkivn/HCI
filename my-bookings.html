@@ -213,16 +213,27 @@
     <script>
         // Check authentication
         const user = checkAuth('customer');
+        let currentFilter = 'all';
+
         if (user) {
             document.getElementById('userName').textContent = user.name.split(' ')[0];
+            console.log('User logged in:', user);
             loadBookings();
         }
 
-        let currentFilter = 'all';
-
         function loadBookings() {
-            const hotelBookings = getLocalData('hotelBookings').filter(b => b.customerEmail === user.email);
-            const restaurantReservations = getLocalData('restaurantReservations').filter(r => r.customerEmail === user.email);
+            console.log('Loading bookings for:', user.email);
+            const allHotelBookings = getLocalData('hotelBookings');
+            const allRestaurantReservations = getLocalData('restaurantReservations');
+            
+            console.log('All hotel bookings:', allHotelBookings);
+            console.log('All restaurant reservations:', allRestaurantReservations);
+            
+            const hotelBookings = allHotelBookings.filter(b => b.customerEmail === user.email);
+            const restaurantReservations = allRestaurantReservations.filter(r => r.customerEmail === user.email);
+            
+            console.log('Filtered hotel bookings:', hotelBookings);
+            console.log('Filtered restaurant reservations:', restaurantReservations);
 
             displayBookings(hotelBookings, restaurantReservations);
         }
