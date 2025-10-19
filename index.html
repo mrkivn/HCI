@@ -7,40 +7,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="shared/shared-styles.css">
     <style>
-        body {
-            background: var(--black-dark);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .auth-container {
-            width: 100%;
-            max-width: 500px;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .auth-card {
-            background-color: var(--bg-card);
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2);
-        }
-
-        .auth-header {
+        .hero-section {
+            background: var(--black-primary);
+            color: var(--white);
+            padding: 50px 20px;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
-        .auth-header h1 {
+        .hero-section h1 {
             color: var(--gold-primary);
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
@@ -48,13 +25,27 @@
             gap: 15px;
         }
 
-        .auth-header h1 i {
-            font-size: 2.5rem;
+        .hero-section h1 i {
+            font-size: 3rem;
         }
 
-        .auth-header p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
+        .hero-section p {
+            font-size: 1.2rem;
+            color: var(--white);
+        }
+
+        .auth-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .auth-card {
+            background-color: var(--bg-card);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2);
+            margin-bottom: 40px;
         }
 
         .tabs {
@@ -65,7 +56,7 @@
 
         .tab {
             flex: 1;
-            padding: 12px;
+            padding: 15px;
             border: none;
             background-color: var(--bg-secondary);
             color: var(--text-secondary);
@@ -94,22 +85,6 @@
             display: block;
         }
 
-        .auth-toggle {
-            text-align: center;
-            margin-top: 20px;
-            color: var(--text-secondary);
-        }
-
-        .auth-toggle a {
-            color: var(--gold-primary);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .auth-toggle a:hover {
-            text-decoration: underline;
-        }
-
         .staff-link {
             text-align: center;
             margin-top: 30px;
@@ -124,30 +99,44 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            font-size: 1rem;
         }
 
         .staff-link a:hover {
             color: var(--gold-primary);
         }
 
+        .demo-section {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
         .demo-info {
-            background-color: var(--bg-secondary);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background-color: var(--bg-card);
+            padding: 25px;
+            border-radius: 10px;
             border-left: 4px solid var(--gold-primary);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .demo-info h4 {
             color: var(--gold-primary);
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .demo-info p {
             color: var(--text-secondary);
-            font-size: 0.85rem;
-            margin: 3px 0;
+            font-size: 0.95rem;
+            margin: 5px 0;
+        }
+
+        .demo-info p strong {
+            color: var(--text-primary);
         }
 
         .error-message {
@@ -167,184 +156,230 @@
             margin-bottom: 15px;
             display: none;
         }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .auth-card {
+                padding: 30px 20px;
+            }
+
+            .demo-info {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body class="light-mode">
-    <div class="auth-container">
-        <div class="auth-card">
-            <div class="auth-header">
-                <h1>
+    <div class="page-wrapper">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="index.html" class="navbar-brand">
                     <i class="fas fa-hotel"></i>
                     <span class="brand-name">GINHAWA</span>
-                </h1>
-                <p>Experience Comfort and Relaxation</p>
-            </div>
-
-            <div class="demo-info">
-                <h4><i class="fas fa-info-circle"></i> Demo Account</h4>
-                <p><strong>Email:</strong> customer@test.com</p>
-                <p><strong>Password:</strong> password123</p>
-            </div>
-
-            <div class="tabs">
-                <button class="tab active" onclick="switchTab('login')">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </button>
-                <button class="tab" onclick="switchTab('register')">
-                    <i class="fas fa-user-plus"></i> Register
-                </button>
-            </div>
-
-            <div id="errorMessage" class="error-message"></div>
-            <div id="successMessage" class="success-message"></div>
-
-            <!-- Login Tab -->
-            <div id="loginTab" class="tab-content active">
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="loginEmail" class="form-label">
-                            <i class="fas fa-envelope"></i> Email
-                        </label>
-                        <input 
-                            type="email" 
-                            id="loginEmail" 
-                            class="form-input" 
-                            placeholder="Enter your email" 
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="loginPassword" class="form-label">
-                            <i class="fas fa-lock"></i> Password
-                        </label>
-                        <input 
-                            type="password" 
-                            id="loginPassword" 
-                            class="form-input" 
-                            placeholder="Enter your password" 
-                            required
-                        >
-                    </div>
-
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
-                        <i class="fas fa-sign-in-alt"></i> Login
-                    </button>
-                </form>
-            </div>
-
-            <!-- Register Tab -->
-            <div id="registerTab" class="tab-content">
-                <form id="registerForm">
-                    <div class="form-group">
-                        <label for="registerName" class="form-label">
-                            <i class="fas fa-user"></i> Full Name
-                        </label>
-                        <input 
-                            type="text" 
-                            id="registerName" 
-                            class="form-input" 
-                            placeholder="Enter your full name" 
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="registerEmail" class="form-label">
-                            <i class="fas fa-envelope"></i> Email
-                        </label>
-                        <input 
-                            type="email" 
-                            id="registerEmail" 
-                            class="form-input" 
-                            placeholder="Enter your email" 
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="registerPhone" class="form-label">
-                            <i class="fas fa-phone"></i> Phone Number
-                        </label>
-                        <input 
-                            type="tel" 
-                            id="registerPhone" 
-                            class="form-input" 
-                            placeholder="+63 917 123 4567" 
-                            pattern="\+63\s?\d{3}\s?\d{3}\s?\d{4}"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="registerPassword" class="form-label">
-                            <i class="fas fa-lock"></i> Password
-                        </label>
-                        <input 
-                            type="password" 
-                            id="registerPassword" 
-                            class="form-input" 
-                            placeholder="Create a password" 
-                            required
-                            minlength="6"
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="registerConfirmPassword" class="form-label">
-                            <i class="fas fa-lock"></i> Confirm Password
-                        </label>
-                        <input 
-                            type="password" 
-                            id="registerConfirmPassword" 
-                            class="form-input" 
-                            placeholder="Confirm your password" 
-                            required
-                            minlength="6"
-                        >
-                    </div>
-
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
-                        <i class="fas fa-user-plus"></i> Register
-                    </button>
-                </form>
-            </div>
-
-            <div class="staff-link">
-                <a href="staff-login.html">
-                    <i class="fas fa-user-tie"></i> Staff Login
                 </a>
-            </div>
-        </div>
-    </div>
 
-    <footer class="footer">
-        <p>&copy; 2025 GINHAWA Hotel & After Glow Restaurant. All rights reserved.</p>
-    </footer>
+                <button class="hamburger" id="hamburger">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <ul class="navbar-nav" id="navMenu">
+                    <li><a href="index.html" class="nav-link active">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a></li>
+                    <li><a href="staff-login.html" class="nav-link">
+                        <i class="fas fa-user-tie"></i> Staff Login
+                    </a></li>
+                    <li>
+                        <button class="account-btn" onclick="toggleTheme()">
+                            <i class="fas fa-moon"></i>
+                            <span>Toggle Theme</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>
+                <i class="fas fa-hotel"></i>
+                <span class="brand-name">GINHAWA</span>
+            </h1>
+            <p>Experience Comfort and Relaxation</p>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchTab('login')">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                        <button class="tab" onclick="switchTab('register')">
+                            <i class="fas fa-user-plus"></i> Register
+                        </button>
+                    </div>
+
+                    <div id="errorMessage" class="error-message"></div>
+                    <div id="successMessage" class="success-message"></div>
+
+                    <!-- Login Tab -->
+                    <div id="loginTab" class="tab-content active">
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="loginEmail" class="form-label">
+                                    <i class="fas fa-envelope"></i> Email
+                                </label>
+                                <input 
+                                    type="email" 
+                                    id="loginEmail" 
+                                    class="form-input" 
+                                    placeholder="Enter your email" 
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="loginPassword" class="form-label">
+                                    <i class="fas fa-lock"></i> Password
+                                </label>
+                                <input 
+                                    type="password" 
+                                    id="loginPassword" 
+                                    class="form-input" 
+                                    placeholder="Enter your password" 
+                                    required
+                                >
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Register Tab -->
+                    <div id="registerTab" class="tab-content">
+                        <form id="registerForm">
+                            <div class="form-group">
+                                <label for="registerName" class="form-label">
+                                    <i class="fas fa-user"></i> Full Name
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="registerName" 
+                                    class="form-input" 
+                                    placeholder="Enter your full name" 
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="registerEmail" class="form-label">
+                                    <i class="fas fa-envelope"></i> Email
+                                </label>
+                                <input 
+                                    type="email" 
+                                    id="registerEmail" 
+                                    class="form-input" 
+                                    placeholder="Enter your email" 
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="registerPhone" class="form-label">
+                                    <i class="fas fa-phone"></i> Phone Number
+                                </label>
+                                <input 
+                                    type="tel" 
+                                    id="registerPhone" 
+                                    class="form-input" 
+                                    placeholder="Enter your phone number" 
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="registerPassword" class="form-label">
+                                    <i class="fas fa-lock"></i> Password
+                                </label>
+                                <input 
+                                    type="password" 
+                                    id="registerPassword" 
+                                    class="form-input" 
+                                    placeholder="Create a password" 
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmPassword" class="form-label">
+                                    <i class="fas fa-lock"></i> Confirm Password
+                                </label>
+                                <input 
+                                    type="password" 
+                                    id="confirmPassword" 
+                                    class="form-input" 
+                                    placeholder="Confirm your password" 
+                                    required
+                                >
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                                <i class="fas fa-user-plus"></i> Register
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="staff-link">
+                        <a href="staff-login.html">
+                            <i class="fas fa-user-tie"></i> Staff Member? Login here
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Account Info (Outside Card) -->
+            <div class="demo-section">
+                <div class="demo-info">
+                    <h4><i class="fas fa-info-circle"></i> Demo Account</h4>
+                    <p><strong>Email:</strong> customer@test.com</p>
+                    <p><strong>Password:</strong> password123</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 <span class="brand-name">GINHAWA</span> Hotel & After Glow Restaurant. All rights reserved.</p>
+        </footer>
+    </div>
 
     <script src="shared/shared-functions.js"></script>
     <script>
-        // Tab switching
-        function switchTab(tab) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.querySelectorAll('.tab').forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // Show selected tab
-            if (tab === 'login') {
+        // Tab Switching
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            if (tabName === 'login') {
+                tabs[0].classList.add('active');
                 document.getElementById('loginTab').classList.add('active');
-                document.querySelectorAll('.tab')[0].classList.add('active');
             } else {
+                tabs[1].classList.add('active');
                 document.getElementById('registerTab').classList.add('active');
-                document.querySelectorAll('.tab')[1].classList.add('active');
             }
-
-            // Clear messages
-            hideMessages();
         }
 
         // Show error message
@@ -365,12 +400,6 @@
             setTimeout(() => {
                 successDiv.style.display = 'none';
             }, 3000);
-        }
-
-        // Hide all messages
-        function hideMessages() {
-            document.getElementById('errorMessage').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'none';
         }
 
         // Login Form Handler
@@ -396,9 +425,7 @@
                 };
                 sessionStorage.setItem('user', JSON.stringify(user));
 
-                showSuccess('Login successful! Redirecting...');
-                
-                // Redirect to customer home
+                showNotification('Login successful! Redirecting...', 'success');
                 setTimeout(() => {
                     window.location.href = 'customer-home.html';
                 }, 1000);
@@ -410,60 +437,72 @@
         // Register Form Handler
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
-
+            
             const name = document.getElementById('registerName').value.trim();
             const email = document.getElementById('registerEmail').value.trim();
             const phone = document.getElementById('registerPhone').value.trim();
             const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
 
             // Validation
-            if (!isValidEmail(email)) {
-                showError('Please enter a valid email address.');
-                return;
-            }
-
-            if (!isValidPhone(phone)) {
-                showError('Please enter a valid phone number in format: +63 917 123 4567');
+            if (password !== confirmPassword) {
+                showError('Passwords do not match!');
                 return;
             }
 
             if (password.length < 6) {
-                showError('Password must be at least 6 characters long.');
+                showError('Password must be at least 6 characters long!');
                 return;
             }
 
-            if (password !== confirmPassword) {
-                showError('Passwords do not match.');
-                return;
-            }
-
-            // Check for duplicate email
+            // Get existing customers
             const customers = getLocalData('customers');
+
+            // Check if email already exists
             if (customers.find(c => c.email === email)) {
-                showError('An account with this email already exists. Please login.');
+                showError('Email already registered! Please login instead.');
                 return;
             }
 
-            // Create new customer
-            const newCustomer = { email, password, name, phone };
+            // Add new customer
+            const newCustomer = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                phone: phone,
+                password: password,
+                createdAt: new Date().toISOString()
+            };
+
             customers.push(newCustomer);
-            setLocalData('customers', customers);
+            saveLocalData('customers', customers);
 
-            showSuccess('Registration successful! Please login with your credentials.');
-
-            // Clear form and switch to login tab
+            showSuccess('Registration successful! Redirecting to login...');
+            
+            // Clear form
             document.getElementById('registerForm').reset();
+            
+            // Switch to login tab
             setTimeout(() => {
                 switchTab('login');
                 document.getElementById('loginEmail').value = email;
-            }, 1500);
+            }, 2000);
         });
 
         // Check if already logged in
         const user = getCurrentUser();
         if (user && user.type === 'customer') {
             window.location.href = 'customer-home.html';
+        }
+
+        // Hamburger menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+
+        if (hamburger) {
+            hamburger.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
         }
     </script>
 </body>

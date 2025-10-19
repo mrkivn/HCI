@@ -4,6 +4,23 @@
 A complete hotel and restaurant management system demo built for HCI (Human-Computer Interaction) projects. The application features a modern gold and black theme with responsive design and department-specific staff dashboards.
 
 ## Recent Changes
+- **October 19, 2025**: Login pages redesign and branding updates
+  - **Redesigned login pages (index.html & staff-login.html):**
+    - Added navigation bar at the top matching customer-home layout
+    - Added hero section with large GINHAWA branding
+    - Made login cards responsive and wider (no longer skinny looking)
+    - Moved demo account display outside of cards, positioned before footer
+    - Added better footer matching customer-home design
+    - Improved mobile responsiveness
+  - **Branding updates:**
+    - Applied Cinzel Decorative font to all "GINHAWA" text throughout the application
+    - Removed "After Glow" from most pages (kept only in footer and food/drink sections)
+    - Updated all staff dashboard logos with proper branding
+    - Consistent brand-name class usage across all pages
+  - **Code cleanup:**
+    - Deleted test files (test_bookings.html, add_test_booking.html)
+    - Fixed "My Bookings" button to properly redirect instead of showing alert
+
 - **October 18, 2025**: Complete hotel & restaurant management system completed
   - Built My Bookings page with filtering and cancellation features
   - Created all 6 staff dashboards (Front Office, Kitchen, Bar, Housekeeping, Billing, Customer Guest)
@@ -11,19 +28,20 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
   - Removed all gradients to comply with solid color design requirement
   - Integrated localStorage for bookings, reservations, orders, and housekeeping requests
   - All customer and staff features fully functional
-  - **Latest updates:**
-    - Fixed footer styling on login pages to match customer-home.html (removed custom CSS overrides)
-    - Added Customer Guest staff role for viewing all customer information
-    - Created Customer Guest dashboard showing registered customers with their bookings, orders, and reservations
-    - Fixed kitchen dashboard data source to correctly display actual food orders from unified orders storage
-    - All localStorage keys and field names aligned across the application
+  - Fixed footer styling on login pages to match customer-home.html
+  - Added Customer Guest staff role for viewing all customer information
+  - Created Customer Guest dashboard showing registered customers with their bookings, orders, and reservations
+  - Fixed kitchen dashboard data source to correctly display actual food orders from unified orders storage
+  - All localStorage keys and field names aligned across the application
 
 ## User Preferences
 - **Color Theme**: Gold (#D4AF37) and Black (#000000) - no gradients
+- **Branding Font**: Cinzel Decorative for "GINHAWA" text only
 - **Icons**: Font Awesome instead of emojis
 - **Design**: Clean, professional, responsive
 - **Navigation**: Right-aligned menu items, hamburger menu on mobile
 - **Footer**: Fixed to bottom of viewport
+- **Branding**: "After Glow" appears only in footer and food/drink related pages
 
 ## Project Architecture
 
