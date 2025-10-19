@@ -4,6 +4,9 @@
    Gold & Black Theme - No Gradients
    ============================================ */
 
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
+
 /* Color Variables */
 :root {
     --gold-primary: #FFD700;
@@ -122,6 +125,12 @@ h3 {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.navbar-brand .brand-name,
+.brand-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 700;
 }
 
 .navbar-brand i {
