@@ -152,6 +152,9 @@ function toggleTheme() {
 // Load theme preference
 function loadTheme() {
     const theme = localStorage.getItem('theme') || 'light';
+    // Remove any existing theme classes first
+    document.body.classList.remove('light-mode', 'dark-mode');
+    // Then add the saved theme
     document.body.classList.add(theme + '-mode');
 }
 
