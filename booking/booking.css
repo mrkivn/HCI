@@ -119,6 +119,9 @@
     cursor: pointer;
     transition: all var(--transition-speed);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .room-image {
@@ -174,6 +177,7 @@
     list-style: none;
     margin: 15px 0;
     padding: 0 25px;
+    flex-grow: 1;
 }
 
 .room-features li {
