@@ -24,16 +24,19 @@ const roomTypes = [
     {
         type: 'Standard',
         price: 2500,
+        image: '../attached_assets/stock_images/luxury_hotel_standar_6321c978.jpg',
         features: ['Queen bed', 'WiFi', 'Air Conditioning', 'Cable TV', 'Private bathroom']
     },
     {
         type: 'Deluxe',
         price: 4000,
+        image: '../attached_assets/stock_images/luxury_hotel_deluxe__f19515ec.jpg',
         features: ['King bed', 'WiFi', 'Premium amenities', 'Mini bar', 'City view', 'Work desk']
     },
     {
         type: 'Suite',
         price: 7000,
+        image: '../attached_assets/stock_images/luxury_hotel_preside_c5812580.jpg',
         features: ['Living room', 'King bed', 'Luxury amenities', 'Premium mini bar', 'Jacuzzi', 'Butler service']
     }
 ];
@@ -124,6 +127,9 @@ function loadRooms() {
         card.onclick = () => selectRoom(room.type, room.price);
         
         card.innerHTML = `
+            <div class="room-image">
+                <img src="${room.image}" alt="${room.type} Room" />
+            </div>
             <h3>${room.type} Room</h3>
             <div class="room-price">
                 ${formatPrice(room.price)} <small>per night</small>
