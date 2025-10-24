@@ -19,8 +19,21 @@
 }
 
 .form-control option {
-    background: var(--input-bg);
+    background: var(--card-bg);
     color: var(--text-color);
+    padding: 0.5rem;
+}
+
+/* Light mode option colors */
+.light-mode .form-control option {
+    background: white;
+    color: black;
+}
+
+/* Dark mode option colors */
+.dark-mode .form-control option {
+    background: #1a1a1a;
+    color: white;
 }
 
 /* Tabs */
