@@ -104,8 +104,13 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
 ├── billing/                       # Billing and invoicing
 │   └── billing-dashboard.html     (in progress)
 │
-└── customer-guest/                # Customer management dashboard
-    └── customer-dashboard.html    (in progress)
+├── customer-guest/                # Customer management dashboard
+│   └── customer-dashboard.html    (in progress)
+│
+└── room-facilities/               # Room facilities management
+    ├── room-facilities-dashboard.html
+    ├── room-facilities.css
+    └── room-facilities.js
 ```
 
 ## 👥 Demo Accounts
@@ -124,6 +129,7 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
 | bar@hotel.com | bar123 | Bartender Mike | Bar |
 | housekeeping@hotel.com | clean123 | Sarah Clean | Housekeeping |
 | billing@hotel.com | bill123 | Finance Ana | Billing |
+| roomfacilities@hotel.com | room123 | Room Manager | Room Facilities |
 
 ## 📖 User Guide
 
@@ -197,10 +203,14 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
      - Red: Occupied
      - Yellow: Cleaning
 
-6. **Room Facilities** (Manager)
-   - View all rooms (101-110)
-   - Update room status
-   - Monitor guest assignments
+6. **Room Facilities** (Manager, Room Facilities)
+   - View all 30 rooms (101-130) with real-time status
+   - Filter rooms by status (Available, Occupied, Cleaning), type, and room number
+   - View customer information for occupied rooms
+   - See complete guest details including booking ID, check-in/out dates, contact info
+   - Update room status (Available ↔ Cleaning)
+   - Interactive room cards with detailed modal view
+   - Statistics dashboard showing total, available, occupied, and cleaning rooms
 
 7. **Kitchen Orders** (Manager, Kitchen)
    - View food orders
@@ -244,7 +254,7 @@ All data is stored in the browser's localStorage:
 - `restaurantReservations` - All restaurant reservations
 - `orders` - Food and drinks orders
 - `housekeepingRequests` - Housekeeping service requests
-- `rooms` - Room status and assignments (10 rooms: 101-110)
+- `rooms` - Room status and assignments (30 rooms: 101-130)
 - `invoices` - Billing invoices
 
 ### Browser Compatibility

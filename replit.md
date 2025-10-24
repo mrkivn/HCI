@@ -4,6 +4,19 @@
 A complete hotel and restaurant management system demo built for HCI (Human-Computer Interaction) projects. The application features a modern gold and black theme with responsive design and department-specific staff dashboards.
 
 ## Recent Changes
+- **October 24, 2025**: Added Room Facilities department
+  - Created new Room Facilities staff department with dedicated dashboard
+  - Added staff account: roomfacilities@hotel.com / room123
+  - Features include:
+    - View all 30 rooms with real-time status (Available, Occupied, Cleaning)
+    - Filter rooms by status, type, and room number
+    - View customer information for occupied rooms from hotel bookings
+    - Interactive room cards showing guest details, check-in/out dates, and booking information
+    - Room status management (change between Available and Cleaning)
+    - Detailed room modal with complete guest and booking information
+    - Statistics dashboard showing total, available, occupied, and cleaning rooms
+  - Complete folder structure: room-facilities-dashboard.html, room-facilities.css, room-facilities.js
+
 - **October 19, 2025**: Login pages redesign and branding updates
   - **Redesigned login pages (index.html & staff-login.html):**
     - Added navigation bar at the top matching customer-home layout
@@ -83,8 +96,12 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
 │   └── front-office.js                     # Check-in/out logic
 ├── billing/
 │   └── billing-dashboard.html              # Staff billing dashboard
-└── customer-guest/
-    └── customer-guest-dashboard.html       # Checked-in guest portal
+├── customer-guest/
+│   └── customer-guest-dashboard.html       # Checked-in guest portal
+└── room-facilities/
+    ├── room-facilities-dashboard.html      # Staff room facilities dashboard
+    ├── room-facilities.css                 # Room facilities styles
+    └── room-facilities.js                  # Room management logic
 ```
 
 ### Technology Stack
@@ -117,6 +134,7 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
   - **Housekeeping**: Service requests, cleaning schedule
   - **Billing**: Invoices, payment processing
   - **Customer Guest**: View all registered customers and their activity (bookings, orders, reservations)
+  - **Room Facilities**: Room inventory management, view all rooms, customer information for occupied rooms, room status updates
 - Functional notification badges showing pending items
 - Responsive sidebar navigation
 - Mobile-friendly with hamburger menu
@@ -137,6 +155,7 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
 | Housekeeping | housekeeping@hotel.com | clean123 |
 | Billing | billing@hotel.com | bill123 |
 | Customer Guest | customerguest@hotel.com | guest123 |
+| Room Facilities | roomfacilities@hotel.com | room123 |
 
 ## Running the Application
 
