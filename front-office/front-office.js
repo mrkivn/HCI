@@ -1,190 +1,283 @@
-// Front Office Dashboard JavaScript
+/* Front Office JavaScript */
 
-// Check authentication
 const user = checkAuth('staff');
+let currentTab = 'arrivals';
 
-let currentTab = 'pending';
-
-// Load dashboard
-function loadDashboard() {
-    updateStats();
-    loadBookings();
+// Initialize rooms data if not exists
+function initializeRoomsData() {
+    const rooms = getLocalData('rooms');
+    if (rooms.length === 0) {
+        const initialRooms = [];
+        for (let i = 1; i <= 30; i++) {
+            const roomType = i <= 15 ? 'Standard' : i <= 25 ? 'Deluxe' : 'Suite';
+            initialRooms.push({
+                roomNumber: i,
+                type: roomType,
+                status: 'Available',
+                currentBookingId: null
+            });
+        }
+        setLocalData('rooms', initialRooms);
+    }
 }
 
-// Update stats
-function updateStats() {
-    const bookings = getLocalData('hotelBookings');
-    
-    const pendingCheckIns = bookings.filter(b => b.status === 'Confirmed').length;
-    const currentGuests = bookings.filter(b => b.status === 'Checked-in').length;
-    const today = getTodayDate();
-    const pendingCheckOuts = bookings.filter(b => 
-        b.status === 'Checked-in' && b.checkout === today
-    ).length;
-
-    document.getElementById('pendingCheckIns').textContent = pendingCheckIns;
-    document.getElementById('currentGuests').textContent = currentGuests;
-    document.getElementById('pendingCheckOuts').textContent = pendingCheckOuts;
-}
-
-// Switch tab
-function switchTab(evt, tab) {
+function switchTab(event, tab) {
     currentTab = tab;
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    loadBookings();
+}
+
+function loadDashboard() {
+    initializeRoomsData();
     
-    // Update active tab
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    evt.currentTarget.classList.add('active');
+    const bookings = getLocalData('hotelBookings');
+    const rooms = getLocalData('rooms');
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    // Calculate arrivals today
+    const arrivalsToday = bookings.filter(b => {
+        const checkin = new Date(b.checkinDate);
+        checkin.setHours(0,0,0,0);
+        return checkin.getTime() === today.getTime() && b.status !== 'Cancelled';
+    }).length;
+    
+    // Calculate departures today
+    const departuresToday = bookings.filter(b => {
+        const checkout = new Date(b.checkoutDate);
+        checkout.setHours(0,0,0,0);
+        return checkout.getTime() === today.getTime() && b.status === 'Checked-in';
+    }).length;
+    
+    // Calculate current guests
+    const currentGuests = bookings.filter(b => b.status === 'Checked-in').length;
+    
+    // Room statistics
+    const availableRooms = rooms.filter(r => r.status === 'Available').length;
+    const occupiedRooms = rooms.filter(r => r.status === 'Occupied').length;
+    const cleaningRooms = rooms.filter(r => r.status === 'Cleaning').length;
+    const maintenanceRooms = rooms.filter(r => r.status === 'Maintenance').length;
+    
+    const occupancyRate = ((occupiedRooms / rooms.length) * 100).toFixed(0);
+    
+    // Update stats
+    document.getElementById('arrivalsToday').textContent = arrivalsToday;
+    document.getElementById('departurestoday').textContent = departuresToday;
+    document.getElementById('currentGuests').textContent = currentGuests;
+    document.getElementById('occupancyRate').textContent = occupancyRate + '%';
+    
+    document.getElementById('availableRooms').textContent = availableRooms;
+    document.getElementById('occupiedRooms').textContent = occupiedRooms;
+    document.getElementById('cleaningRooms').textContent = cleaningRooms;
+    document.getElementById('maintenanceRooms').textContent = maintenanceRooms;
     
     loadBookings();
 }
 
-// Load bookings
 function loadBookings() {
+    const bookings = getLocalData('hotelBookings');
     const container = document.getElementById('bookingsList');
-    const bookings = getLocalData('hotelBookings');
+    const today = new Date();
+    today.setHours(0,0,0,0);
     
-    let filteredBookings = bookings;
+    let filtered = [];
     
-    if (currentTab === 'pending') {
-        filteredBookings = bookings.filter(b => b.status === 'Confirmed');
-    } else if (currentTab === 'checkedin') {
-        filteredBookings = bookings.filter(b => b.status === 'Checked-in');
+    switch(currentTab) {
+        case 'arrivals':
+            filtered = bookings.filter(b => {
+                const checkin = new Date(b.checkinDate);
+                checkin.setHours(0,0,0,0);
+                return checkin.getTime() === today.getTime() && b.status !== 'Cancelled';
+            });
+            break;
+        case 'departures':
+            filtered = bookings.filter(b => {
+                const checkout = new Date(b.checkoutDate);
+                checkout.setHours(0,0,0,0);
+                return checkout.getTime() === today.getTime() && b.status === 'Checked-in';
+            });
+            break;
+        case 'inhouse':
+            filtered = bookings.filter(b => b.status === 'Checked-in');
+            break;
+        case 'upcoming':
+            filtered = bookings.filter(b => {
+                const checkin = new Date(b.checkinDate);
+                checkin.setHours(0,0,0,0);
+                return checkin.getTime() > today.getTime() && b.status === 'Confirmed';
+            });
+            break;
     }
     
-    // Sort by check-in date
-    filteredBookings.sort((a, b) => new Date(a.checkin) - new Date(b.checkin));
-    
-    if (filteredBookings.length === 0) {
-        container.innerHTML = '<p class="text-muted text-center">No bookings found.</p>';
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 50px; color: var(--text-secondary);">
+                <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.3;"></i>
+                <p>No ${currentTab} bookings found</p>
+            </div>
+        `;
         return;
     }
     
-    container.innerHTML = '';
-    filteredBookings.forEach(booking => {
-        const item = createBookingItem(booking);
-        container.appendChild(item);
-    });
-}
-
-// Create booking item
-function createBookingItem(booking) {
-    const div = document.createElement('div');
-    div.className = 'booking-item';
-    
-    div.innerHTML = `
-        <div class="booking-item-header">
-            <div class="booking-id">${booking.id}</div>
-            <div>${getStatusBadge(booking.status)}</div>
-        </div>
-        <div class="booking-info">
-            <div class="info-item">
-                <span class="info-label">Guest Name</span>
-                <span class="info-value">${booking.customerName}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Email</span>
-                <span class="info-value">${booking.customerEmail}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Phone</span>
-                <span class="info-value">${booking.customerPhone}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Destination</span>
-                <span class="info-value">${booking.destination}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Check-in</span>
-                <span class="info-value">${formatDate(booking.checkin)}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Check-out</span>
-                <span class="info-value">${formatDate(booking.checkout)}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Room Type</span>
-                <span class="info-value">${booking.roomType}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Guests</span>
-                <span class="info-value">${booking.guests}</span>
-            </div>
-            ${booking.roomNumber ? `
-                <div class="info-item">
-                    <span class="info-label">Room Number</span>
-                    <span class="info-value">${booking.roomNumber}</span>
+    container.innerHTML = filtered.map(booking => `
+        <div class="booking-card">
+            <div class="booking-header">
+                <div>
+                    <h3>#${booking.id} - ${booking.customerName}</h3>
+                    <p class="text-muted">
+                        <i class="fas fa-calendar"></i> 
+                        ${new Date(booking.checkinDate).toLocaleDateString()} - ${new Date(booking.checkoutDate).toLocaleDateString()}
+                    </p>
                 </div>
-            ` : ''}
-        </div>
-        <div class="action-buttons">
-            ${booking.status === 'Confirmed' ? `
-                <div class="room-number-input">
-                    <input type="text" id="room-${booking.id}" placeholder="Room #" />
-                    <button class="btn btn-primary btn-sm" onclick="checkIn('${booking.id}')">
-                        <i class="fas fa-sign-in-alt"></i> Check In
-                    </button>
+                <div>
+                    ${getStatusBadge(booking.status)}
                 </div>
-            ` : ''}
-            ${booking.status === 'Checked-in' ? `
-                <button class="btn btn-success btn-sm" onclick="checkOut('${booking.id}')">
-                    <i class="fas fa-sign-out-alt"></i> Check Out
-                </button>
-            ` : ''}
+            </div>
+            <div class="booking-details">
+                <div class="detail-item">
+                    <i class="fas fa-bed"></i>
+                    <span>${booking.roomType} Room</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-users"></i>
+                    <span>${booking.guests} Guest${booking.guests > 1 ? 's' : ''}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-moon"></i>
+                    <span>${booking.nights} Night${booking.nights > 1 ? 's' : ''}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>${formatPrice(booking.totalPrice)}</span>
+                </div>
+                ${booking.roomNumber ? `
+                <div class="detail-item">
+                    <i class="fas fa-door-open"></i>
+                    <span>Room ${booking.roomNumber}</span>
+                </div>
+                ` : ''}
+            </div>
+            <div class="booking-actions">
+                ${getActionButtons(booking)}
+            </div>
         </div>
-    `;
-    
-    return div;
-}
-
-// Check in
-function checkIn(bookingId) {
-    const roomNumber = document.getElementById(`room-${bookingId}`).value.trim();
-    
-    if (!roomNumber) {
-        showNotification('Please enter a room number', 'error');
-        return;
-    }
-    
-    const bookings = getLocalData('hotelBookings');
-    const booking = bookings.find(b => b.id === bookingId);
-    
-    if (booking) {
-        booking.status = 'Checked-in';
-        booking.roomNumber = roomNumber;
-        setLocalData('hotelBookings', bookings);
-        
-        showNotification(`Guest checked in successfully to room ${roomNumber}`, 'success');
-        loadDashboard();
-    }
-}
-
-// Check out
-function checkOut(bookingId) {
-    if (!confirm('Are you sure you want to check out this guest?')) {
-        return;
-    }
-    
-    const bookings = getLocalData('hotelBookings');
-    const booking = bookings.find(b => b.id === bookingId);
-    
-    if (booking) {
-        booking.status = 'Completed';
-        setLocalData('hotelBookings', bookings);
-        
-        showNotification('Guest checked out successfully', 'success');
-        loadDashboard();
-    }
+    `).join('');
 }
 
 function getStatusBadge(status) {
     const badges = {
-        'Confirmed': '<span class="badge badge-warning">Pending Check-in</span>',
-        'Checked-in': '<span class="badge badge-success">Checked-in</span>',
-        'Completed': '<span class="badge badge-info">Completed</span>',
-        'Cancelled': '<span class="badge badge-danger">Cancelled</span>'
+        'Confirmed': '<span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span>',
+        'Checked-in': '<span class="badge badge-success"><i class="fas fa-check-circle"></i> In-House</span>',
+        'Checked-out': '<span class="badge badge-info"><i class="fas fa-sign-out-alt"></i> Checked-out</span>',
+        'Cancelled': '<span class="badge badge-danger"><i class="fas fa-times-circle"></i> Cancelled</span>'
     };
     return badges[status] || `<span class="badge">${status}</span>`;
 }
 
-// Initialize
+function getActionButtons(booking) {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const checkin = new Date(booking.checkinDate);
+    checkin.setHours(0,0,0,0);
+    
+    if (booking.status === 'Confirmed' && checkin.getTime() === today.getTime()) {
+        return `
+            <button class="btn btn-success" onclick="checkInGuest(${booking.id})">
+                <i class="fas fa-door-open"></i> Check-in
+            </button>
+        `;
+    }
+    
+    if (booking.status === 'Checked-in') {
+        return `
+            <button class="btn btn-primary" onclick="viewBooking(${booking.id})">
+                <i class="fas fa-eye"></i> View Details
+            </button>
+            <button class="btn btn-warning" onclick="checkOutGuest(${booking.id})">
+                <i class="fas fa-door-closed"></i> Check-out
+            </button>
+        `;
+    }
+    
+    return `
+        <button class="btn btn-outline" onclick="viewBooking(${booking.id})">
+            <i class="fas fa-eye"></i> View Details
+        </button>
+    `;
+}
+
+function checkInGuest(bookingId) {
+    const bookings = getLocalData('hotelBookings');
+    const rooms = getLocalData('rooms');
+    const booking = bookings.find(b => b.id === bookingId);
+    
+    if (!booking) return;
+    
+    // Find available room of the booked type
+    const availableRoom = rooms.find(r => 
+        r.type === booking.roomType && r.status === 'Available'
+    );
+    
+    if (!availableRoom) {
+        alert(`No ${booking.roomType} rooms available for check-in!`);
+        return;
+    }
+    
+    if (confirm(`Check-in ${booking.customerName} to Room ${availableRoom.roomNumber}?`)) {
+        booking.status = 'Checked-in';
+        booking.roomNumber = availableRoom.roomNumber;
+        booking.checkinTime = new Date().toISOString();
+        
+        availableRoom.status = 'Occupied';
+        availableRoom.currentBookingId = bookingId;
+        
+        setLocalData('hotelBookings', bookings);
+        setLocalData('rooms', rooms);
+        
+        showNotification(`Guest checked in to Room ${availableRoom.roomNumber}`, 'success');
+        loadDashboard();
+    }
+}
+
+function checkOutGuest(bookingId) {
+    const bookings = getLocalData('hotelBookings');
+    const rooms = getLocalData('rooms');
+    const booking = bookings.find(b => b.id === bookingId);
+    
+    if (!booking) return;
+    
+    if (confirm(`Check-out ${booking.customerName} from Room ${booking.roomNumber}?`)) {
+        const room = rooms.find(r => r.roomNumber === booking.roomNumber);
+        
+        booking.status = 'Checked-out';
+        booking.checkoutTime = new Date().toISOString();
+        
+        if (room) {
+            room.status = 'Cleaning';
+            room.currentBookingId = null;
+        }
+        
+        setLocalData('hotelBookings', bookings);
+        setLocalData('rooms', rooms);
+        
+        showNotification(`Guest checked out. Room ${booking.roomNumber} marked for cleaning`, 'success');
+        loadDashboard();
+    }
+}
+
+function viewBooking(bookingId) {
+    const bookings = getLocalData('hotelBookings');
+    const booking = bookings.find(b => b.id === bookingId);
+    
+    if (!booking) return;
+    
+    alert(`Booking Details:\n\nID: ${booking.id}\nCustomer: ${booking.customerName}\nEmail: ${booking.customerEmail}\nRoom: ${booking.roomType}\nGuests: ${booking.guests}\nCheck-in: ${new Date(booking.checkinDate).toLocaleDateString()}\nCheck-out: ${new Date(booking.checkoutDate).toLocaleDateString()}\nTotal: ${formatPrice(booking.totalPrice)}\nStatus: ${booking.status}`);
+}
+
+// Initialize dashboard
 loadDashboard();

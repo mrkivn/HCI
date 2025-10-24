@@ -10,18 +10,15 @@
 </head>
 <body class="light-mode">
     <div class="page-wrapper">
-        <!-- Navigation -->
         <nav class="navbar">
             <div class="navbar-container">
                 <a href="front-office-dashboard.html" class="navbar-brand">
                     <i class="fas fa-hotel"></i>
                     <span><span class="brand-name">GINHAWA</span> | Front Office</span>
                 </a>
-
                 <button class="hamburger" id="hamburger">
                     <i class="fas fa-bars"></i>
                 </button>
-
                 <ul class="navbar-nav" id="navMenu">
                     <li><a href="front-office-dashboard.html" class="nav-link active">
                         <i class="fas fa-home"></i> Dashboard
@@ -47,32 +44,83 @@
             </div>
         </nav>
 
-        <!-- Main Content -->
         <main class="main-content">
             <div class="container">
                 <h1 class="text-gold mb-2"><i class="fas fa-concierge-bell"></i> Front Office Dashboard</h1>
 
-                <!-- Stats -->
-                <div class="grid-3 mb-3">
+                <!-- Today's Overview -->
+                <div class="grid-4 mb-3">
                     <div class="stat-card">
-                        <h3 id="pendingCheckIns">0</h3>
-                        <p>Pending Check-ins</p>
+                        <h3 id="arrivalsToday">0</h3>
+                        <p>Arrivals Today</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="departurestoday">0</h3>
+                        <p>Departures Today</p>
                     </div>
                     <div class="stat-card">
                         <h3 id="currentGuests">0</h3>
-                        <p>Current Guests</p>
+                        <p>In-House Guests</p>
                     </div>
                     <div class="stat-card">
-                        <h3 id="pendingCheckOuts">0</h3>
-                        <p>Pending Check-outs</p>
+                        <h3 id="occupancyRate">0%</h3>
+                        <p>Occupancy Rate</p>
+                    </div>
+                </div>
+
+                <!-- Room Status Overview -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h2><i class="fas fa-door-open"></i> Room Status</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="grid-4">
+                            <div class="room-status-card">
+                                <div class="room-status-icon" style="background: #28a745;">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <h3 id="availableRooms">0</h3>
+                                <p>Available</p>
+                            </div>
+                            <div class="room-status-card">
+                                <div class="room-status-icon" style="background: #dc3545;">
+                                    <i class="fas fa-bed"></i>
+                                </div>
+                                <h3 id="occupiedRooms">0</h3>
+                                <p>Occupied</p>
+                            </div>
+                            <div class="room-status-card">
+                                <div class="room-status-icon" style="background: #ffc107;">
+                                    <i class="fas fa-broom"></i>
+                                </div>
+                                <h3 id="cleaningRooms">0</h3>
+                                <p>Cleaning</p>
+                            </div>
+                            <div class="room-status-card">
+                                <div class="room-status-icon" style="background: #6c757d;">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <h3 id="maintenanceRooms">0</h3>
+                                <p>Maintenance</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Tabs -->
                 <div class="tabs mb-2">
-                    <button class="tab active" onclick="switchTab(event, 'pending')">Pending Check-ins</button>
-                    <button class="tab" onclick="switchTab(event, 'checkedin')">Current Guests</button>
-                    <button class="tab" onclick="switchTab(event, 'all')">All Bookings</button>
+                    <button class="tab active" onclick="switchTab(event, 'arrivals')">
+                        <i class="fas fa-plane-arrival"></i> Today's Arrivals
+                    </button>
+                    <button class="tab" onclick="switchTab(event, 'departures')">
+                        <i class="fas fa-plane-departure"></i> Today's Departures
+                    </button>
+                    <button class="tab" onclick="switchTab(event, 'inhouse')">
+                        <i class="fas fa-users"></i> In-House Guests
+                    </button>
+                    <button class="tab" onclick="switchTab(event, 'upcoming')">
+                        <i class="fas fa-calendar-alt"></i> Upcoming
+                    </button>
                 </div>
 
                 <!-- Bookings List -->
@@ -84,7 +132,6 @@
             </div>
         </main>
 
-        <!-- Footer -->
         <footer class="footer">
             <p>&copy; 2025 GINHAWA Hotel & After Glow Restaurant. All rights reserved.</p>
         </footer>

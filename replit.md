@@ -4,6 +4,25 @@
 A complete hotel and restaurant management system demo built for HCI (Human-Computer Interaction) projects. The application features a modern gold and black theme with responsive design and department-specific staff dashboards.
 
 ## Recent Changes
+- **October 24, 2025**: Major dashboard improvements
+  - **Billing Dashboard**: Complete redesign focusing on payment confirmation workflow
+    - Removed revenue metrics (not billing staff's responsibility)
+    - Added payment verification system with Pending/Confirmed/Flagged statuses
+    - Staff can confirm or flag payments with notes
+    - Filter by payment method (Cash, Credit Card, GCash)
+    - Tab system for Pending Verification, All Transactions, and Flagged payments
+  - **Front Office Dashboard**: Redesigned for daily operations
+    - Focus on today's arrivals and departures
+    - Added room status overview (Available, Occupied, Cleaning, Maintenance)
+    - Real-time occupancy rate display
+    - 4 tabs: Today's Arrivals, Today's Departures, In-House Guests, Upcoming
+    - Automatic room assignment on check-in
+    - Room status updates automatically (Cleaning after checkout)
+    - Better visual design with booking cards and color-coded room status
+  - Applied blurred glass navigation effect across all pages
+  - Prevented horizontal scrolling and zoom issues on mobile
+  - Updated hero section background image
+
 - **October 24, 2025**: UI updates to hide staff login
   - Removed "Staff Login" link from main navigation on all pages
   - Moved "Staff Member? Login here" link to below demo account section
