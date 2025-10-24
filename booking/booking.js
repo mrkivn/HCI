@@ -24,19 +24,19 @@ const roomTypes = [
     {
         type: 'Standard',
         price: 2500,
-        image: '../attached_assets/stock_images/luxury_hotel_standar_6321c978.jpg',
+        image: 'standard.png',
         features: ['Queen bed', 'WiFi', 'Air Conditioning', 'Cable TV', 'Private bathroom']
     },
     {
         type: 'Deluxe',
         price: 4000,
-        image: '../attached_assets/stock_images/luxury_hotel_deluxe__f19515ec.jpg',
+        image: 'deluxe.png',
         features: ['King bed', 'WiFi', 'Premium amenities', 'Mini bar', 'City view', 'Work desk']
     },
     {
         type: 'Suite',
         price: 7000,
-        image: '../attached_assets/stock_images/luxury_hotel_preside_c5812580.jpg',
+        image: 'suite.png',
         features: ['Living room', 'King bed', 'Luxury amenities', 'Premium mini bar', 'Jacuzzi', 'Butler service']
     }
 ];
