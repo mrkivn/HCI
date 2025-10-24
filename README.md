@@ -198,7 +198,7 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
 5. **Front Office** (Manager, Front Office)
    - **Check-in**: Search booking, assign room, check-in guest
    - **Check-out**: Process check-out, room status changes to "Cleaning"
-   - **Room Grid**: View all 10 rooms with color-coded status
+   - **Room Grid**: View first 10 rooms (101-110) with color-coded status
      - Green: Available
      - Red: Occupied
      - Yellow: Cleaning

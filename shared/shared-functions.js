@@ -67,6 +67,59 @@ function initializeData() {
 // Call initialization on page load
 initializeData();
 
+// Upgrade existing data (idempotent migrations)
+function upgradeData() {
+    // Ensure Room Facilities staff account exists
+    const staff = getLocalData('staff');
+    if (!staff.find(s => s.email === 'roomfacilities@hotel.com')) {
+        staff.push({ 
+            email: 'roomfacilities@hotel.com', 
+            password: 'room123', 
+            department: 'Room Facilities' 
+        });
+        setLocalData('staff', staff);
+        console.log('Added Room Facilities staff account');
+    }
+    
+    // Ensure 30 rooms exist (upgrade from 10 to 30 if needed)
+    let rooms = getLocalData('rooms');
+    if (rooms.length < 30) {
+        const existingRoomNumbers = rooms.map(r => r.number);
+        const roomTypes = [
+            { type: 'Standard', price: 2500, count: 15 },
+            { type: 'Deluxe', price: 4000, count: 10 },
+            { type: 'Suite', price: 7000, count: 5 }
+        ];
+        
+        let roomNumber = 101;
+        const allRooms = [];
+        roomTypes.forEach(roomType => {
+            for (let i = 0; i < roomType.count; i++) {
+                allRooms.push({
+                    number: roomNumber++,
+                    type: roomType.type,
+                    price: roomType.price,
+                    status: 'Available',
+                    currentGuest: null
+                });
+            }
+        });
+        
+        // Add only new rooms that don't already exist
+        allRooms.forEach(newRoom => {
+            if (!existingRoomNumbers.includes(newRoom.number)) {
+                rooms.push(newRoom);
+            }
+        });
+        
+        setLocalData('rooms', rooms);
+        console.log('Upgraded rooms to ' + rooms.length + ' total (preserved existing room data)');
+    }
+}
+
+// Run upgrade on every page load
+upgradeData();
+
 // Generate unique IDs
 function generateId(prefix) {
     return prefix + '-' + Date.now();
