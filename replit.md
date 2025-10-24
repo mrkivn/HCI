@@ -4,6 +4,11 @@
 A complete hotel and restaurant management system demo built for HCI (Human-Computer Interaction) projects. The application features a modern gold and black theme with responsive design and department-specific staff dashboards.
 
 ## Recent Changes
+- **October 24, 2025**: UI updates to hide staff login
+  - Removed "Staff Login" link from main navigation on all pages
+  - Moved "Staff Member? Login here" link to below demo account section
+  - Staff portal is now more discreetly accessible
+
 - **October 24, 2025**: Added Room Facilities department
   - Created new Room Facilities staff department with dedicated dashboard
   - Added staff account: roomfacilities@hotel.com / room123
