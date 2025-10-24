@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GINHAWA Hotel & After Glow Restaurant - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="shared/shared-styles.css">
+    <style>
+        .hero-section {
+            background: var(--black-primary);
+            color: var(--white);
+            padding: 50px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero-section h1 {
+            color: var(--gold-primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .hero-section h1 i {
+            font-size: 3rem;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            color: var(--white);
+        }
+
+        .auth-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .auth-card {
+            background-color: var(--bg-card);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2);
+            margin-bottom: 40px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background-color: var(--bg-secondary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all var(--transition-speed);
+        }
+
+        .tab.active {
+            background-color: var(--gold-primary);
+            color: var(--black-primary);
+        }
+
+        .tab:hover:not(.active) {
+            background-color: var(--gold-secondary);
+            color: var(--black-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .staff-link {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .staff-link a {
+            color: var(--gold-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+
+        .staff-link a:hover {
+            color: var(--gold-primary);
+        }
+
+        .demo-section {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .demo-info {
+            background-color: var(--bg-card);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid var(--gold-primary);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-info h4 {
+            color: var(--gold-primary);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .demo-info p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 5px 0;
+        }
+
+        .demo-info p strong {
+            color: var(--text-primary);
+        }
+
+        .error-message {
+            background-color: #dc3545;
+            color: white;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .success-message {
+            background-color: #28a745;
+            color: white;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .auth-card {
+                padding: 30px 20px;
+            }
+
+            .demo-info {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="page-wrapper">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="index.html" class="navbar-brand">
+                    <i class="fas fa-hotel"></i>
+                    <span class="brand-name">GINHAWA</span>
+                </a>
+
+                <button class="hamburger" id="hamburger">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <ul class="navbar-nav" id="navMenu">
+                    <button class="close-menu" id="closeMenu">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <li><a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i> Home
+                    </a></li>
+                    <li><a href="login.html" class="nav-link active">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a></li>
+                    <li><a href="staff-login.html" class="nav-link">
+                        <i class="fas fa-user-tie"></i> Staff Login
+                    </a></li>
+                    <li>
+                        <button class="account-btn" onclick="toggleTheme()">
+                            <i class="fas fa-moon"></i>
+                            <span>Toggle Theme</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>
+                <i class="fas fa-hotel"></i>
+                <span class="brand-name">GINHAWA</span>
+            </h1>
+            <p>Experience Comfort and Relaxation</p>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchTab('login')">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                        <button class="tab" onclick="switchTab('register')">
+                            <i class="fas fa-user-plus"></i> Register
+                        </button>
+                    </div>
+
+                    <div id="errorMessage" class="error-message"></div>
+                    <div id="successMessage" class="success-message"></div>
+
+                    <!-- Login Tab -->
+                    <div id="loginTab" class="tab-content active">
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="loginEmail" class="form-label">
+                                    <i class="fas fa-envelope"></i> Email
+                                </label>
+                                <input 
+                                    type="email" 
+                                    id="loginEmail" 
+                                    class="form-input" 
+                                    placeholder="Enter your email" 
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="loginPassword" class="form-label">
+                                    <i class="fas fa-lock"></i> Password
+                                </label>
+                                <input 
+                                    type="password" 
+                                    id="loginPassword" 
+                                    class="form-input" 
+                                    placeholder="Enter your password" 
+                                    required
+                                >
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Register Tab -->
+                    <div id="registerTab" class="tab-content">
+                        <form id="registerForm">
+                            <div class="form-group">
+                                <label for="registerName" class="form-label">
+                                    <i class="fas fa-user"></i> Full Name
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="registerName" 
+                                    class="form-input" 
+                                    placeholder="Enter your full name" 
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="registerEmail" class="form-label">
+                                    <i class="fas fa-envelope"></i> Email
+                                </label>
+                                <input 
+                                    type="email" 
+                                    id="registerEmail" 
+                                    class="form-input" 
+                                    placeholder="Enter your email" 
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="registerPhone" class="form-label">
+                                    <i class="fas fa-phone"></i> Phone Number
+                                </label>
+                                <input 
+                                    type="tel" 
+                                    id="registerPhone" 
+                                    class="form-input" 
+                                    placeholder="Enter your phone number" 
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="registerPassword" class="form-label">
+                                    <i class="fas fa-lock"></i> Password
+                                </label>
+                                <input 
+                                    type="password" 
+                                    id="registerPassword" 
+                                    class="form-input" 
+                                    placeholder="Create a password" 
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmPassword" class="form-label">
+                                    <i class="fas fa-lock"></i> Confirm Password
+                                </label>
+                                <input 
+                                    type="password" 
+                                    id="confirmPassword" 
+                                    class="form-input" 
+                                    placeholder="Confirm your password" 
+                                    required
+                                >
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                                <i class="fas fa-user-plus"></i> Register
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="staff-link">
+                        <a href="staff-login.html">
+                            <i class="fas fa-user-tie"></i> Staff Member? Login here
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Account Info (Outside Card) -->
+            <div class="demo-section">
+                <div class="demo-info">
+                    <h4><i class="fas fa-info-circle"></i> Demo Account</h4>
+                    <p><strong>Email:</strong> customer@test.com</p>
+                    <p><strong>Password:</strong> password123</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 <span class="brand-name">GINHAWA</span> Hotel & After Glow Restaurant. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="shared/shared-functions.js"></script>
+    <script>
+        // Tab Switching
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            if (tabName === 'login') {
+                tabs[0].classList.add('active');
+                document.getElementById('loginTab').classList.add('active');
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('registerTab').classList.add('active');
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Login Form Handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            // Get customers from localStorage
+            const customers = getLocalData('customers');
+
+            // Find customer
+            const customer = customers.find(c => c.email === email && c.password === password);
+
+            if (customer) {
+                // Save to sessionStorage
+                const user = {
+                    email: customer.email,
+                    name: customer.name,
+                    phone: customer.phone,
+                    type: 'customer'
+                };
+                sessionStorage.setItem('user', JSON.stringify(user));
+
+                showNotification('Login successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'customer-home.html';
+                }, 1000);
+            } else {
+                showError('Invalid email or password. Please try again.');
+            }
+        });
+
+        // Register Form Handler
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const phone = document.getElementById('registerPhone').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validation
+            if (password !== confirmPassword) {
+                showError('Passwords do not match!');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('Password must be at least 6 characters long!');
+                return;
+            }
+
+            // Get existing customers
+            const customers = getLocalData('customers');
+
+            // Check if email already exists
+            if (customers.find(c => c.email === email)) {
+                showError('Email already registered! Please login instead.');
+                return;
+            }
+
+            // Add new customer
+            const newCustomer = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                phone: phone,
+                password: password,
+                createdAt: new Date().toISOString()
+            };
+
+            customers.push(newCustomer);
+            setLocalData('customers', customers);
+
+            showSuccess('Registration successful! Redirecting to login...');
+            
+            // Clear form
+            document.getElementById('registerForm').reset();
+            
+            // Switch to login tab
+            setTimeout(() => {
+                switchTab('login');
+                document.getElementById('loginEmail').value = email;
+            }, 2000);
+        });
+
+        // Check if already logged in
+        const user = getCurrentUser();
+        if (user && user.type === 'customer') {
+            window.location.href = 'customer-home.html';
+        }
+    </script>
+</body>
+</html>
