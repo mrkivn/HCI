@@ -99,7 +99,7 @@ h3 {
 
 /* Navigation Bar */
 .navbar {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     color: var(--white);
