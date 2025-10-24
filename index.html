@@ -146,8 +146,21 @@
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .room-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--gold-primary);
+            margin: 15px 0;
+        }
+
+        .room-price small {
+            font-size: 1rem;
+            color: var(--text-secondary);
         }
 
         .service-box {
@@ -315,23 +328,50 @@
         <!-- Services Section -->
         <section class="services-section" id="services">
             <div class="services-container">
-                <h2>Our Services</h2>
+                <h2>Our Room Types</h2>
                 <div class="services-grid">
                     <div class="service-box">
-                        <img src="attached_assets/stock_images/luxury_hotel_standar_6321c978.jpg" alt="Hotel Rooms" class="service-image">
+                        <img src="attached_assets/stock_images/luxury_hotel_standar_6321c978.jpg" alt="Standard Room" class="service-image">
                         <div class="service-content">
-                            <h3><i class="fas fa-bed"></i> Hotel Booking</h3>
-                            <p>Choose from our Standard, Deluxe, or Suite rooms at convenient locations across Quezon City. All rooms feature premium amenities, comfortable bedding, and exceptional service.</p>
+                            <h3><i class="fas fa-bed"></i> Standard Room</h3>
+                            <div class="room-price">₱2,500 <small>per night</small></div>
+                            <p>Comfortable and cozy rooms with queen bed, WiFi, air conditioning, cable TV, and private bathroom. Perfect for solo travelers and couples.</p>
                             <a href="login.html" class="btn btn-primary">
-                                <i class="fas fa-calendar-check"></i> Book a Room
+                                <i class="fas fa-calendar-check"></i> Book Now
                             </a>
                         </div>
                     </div>
                     <div class="service-box">
+                        <img src="attached_assets/stock_images/luxury_hotel_deluxe__f19515ec.jpg" alt="Deluxe Room" class="service-image">
+                        <div class="service-content">
+                            <h3><i class="fas fa-bed"></i> Deluxe Room</h3>
+                            <div class="room-price">₱4,000 <small>per night</small></div>
+                            <p>Spacious rooms with king bed, premium amenities, mini bar, city view, and work desk. Ideal for business travelers and families.</p>
+                            <a href="login.html" class="btn btn-primary">
+                                <i class="fas fa-calendar-check"></i> Book Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="service-box">
+                        <img src="attached_assets/stock_images/luxury_hotel_preside_c5812580.jpg" alt="Suite Room" class="service-image">
+                        <div class="service-content">
+                            <h3><i class="fas fa-bed"></i> Suite Room</h3>
+                            <div class="room-price">₱7,000 <small>per night</small></div>
+                            <p>Luxurious suite with living room, king bed, luxury amenities, premium mini bar, jacuzzi, and butler service. The ultimate comfort experience.</p>
+                            <a href="login.html" class="btn btn-primary">
+                                <i class="fas fa-calendar-check"></i> Book Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 style="margin-top: 40px;">Restaurant</h2>
+                <div class="services-grid">
+                    <div class="service-box">
                         <img src="attached_assets/stock_images/elegant_restaurant_d_c924a911.jpg" alt="Restaurant" class="service-image">
                         <div class="service-content">
-                            <h3><i class="fas fa-utensils"></i> Restaurant Reservations</h3>
-                            <p>Experience fine dining at After Glow Restaurant. Reserve your table for an unforgettable culinary journey with indoor and outdoor seating options available.</p>
+                            <h3><i class="fas fa-utensils"></i> After Glow Restaurant</h3>
+                            <p>Experience fine dining where every moment glows. Reserve your table for an unforgettable culinary journey with indoor and outdoor seating options available.</p>
                             <a href="login.html" class="btn btn-primary">
                                 <i class="fas fa-calendar-alt"></i> Make a Reservation
                             </a>
