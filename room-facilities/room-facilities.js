@@ -155,6 +155,11 @@ function createRoomCard(room) {
             <button class="btn btn-primary btn-sm" onclick="viewRoomDetails(${room.number})">
                 <i class="fas fa-eye"></i> View Details
             </button>
+            ${room.status !== 'Occupied' ? `
+                <button class="btn btn-success btn-sm" onclick="openAssignCustomerModal(${room.number})">
+                    <i class="fas fa-user-plus"></i> Assign Customer
+                </button>
+            ` : ''}
             <button class="btn btn-secondary btn-sm" onclick="changeRoomStatus(${room.number})">
                 <i class="fas fa-sync"></i> Change Status
             </button>
@@ -330,13 +335,276 @@ function updateRoomStatus(roomNumber, newStatus) {
     loadRooms();
 }
 
+// Assign Customer Modal Functions
+let selectedRoomForAssignment = null;
+
+function openAssignCustomerModal(roomNumber) {
+    const room = allRooms.find(r => r.number === roomNumber);
+    if (!room) return;
+    
+    if (room.status === 'Occupied') {
+        showNotification('This room is already occupied', 'error');
+        return;
+    }
+    
+    selectedRoomForAssignment = roomNumber;
+    
+    // Populate room info
+    document.getElementById('selectedRoom').value = `Room ${roomNumber} - ${room.type} (${formatPrice(room.price)}/night)`;
+    
+    // Load customers
+    loadCustomersDropdown();
+    
+    // Set default dates
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    document.getElementById('checkinDate').value = formatDateForInput(today);
+    document.getElementById('checkoutDate').value = formatDateForInput(tomorrow);
+    
+    // Reset form
+    document.getElementById('customerSelect').value = '';
+    document.getElementById('numberOfGuests').value = '1';
+    document.getElementById('destination').value = '';
+    document.getElementById('paymentMethod').value = 'Cash';
+    document.getElementById('selectedCustomerInfo').style.display = 'none';
+    document.getElementById('bookingSummary').style.display = 'none';
+    
+    // Show modal
+    document.getElementById('assignCustomerModal').classList.add('show');
+    
+    // Add event listeners
+    setupAssignmentEventListeners();
+}
+
+function closeAssignCustomerModal() {
+    document.getElementById('assignCustomerModal').classList.remove('show');
+    selectedRoomForAssignment = null;
+}
+
+function loadCustomersDropdown() {
+    const customers = getLocalData('customers');
+    const select = document.getElementById('customerSelect');
+    
+    // Clear existing options except the first one
+    select.innerHTML = '<option value="">-- Select a Customer --</option>';
+    
+    customers.forEach((customer, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${customer.name} (${customer.email})`;
+        select.appendChild(option);
+    });
+}
+
+function setupAssignmentEventListeners() {
+    const customerSelect = document.getElementById('customerSelect');
+    const checkinDate = document.getElementById('checkinDate');
+    const checkoutDate = document.getElementById('checkoutDate');
+    const numberOfGuests = document.getElementById('numberOfGuests');
+    
+    // Remove existing listeners by cloning elements
+    const newCustomerSelect = customerSelect.cloneNode(true);
+    customerSelect.parentNode.replaceChild(newCustomerSelect, customerSelect);
+    
+    newCustomerSelect.addEventListener('change', function() {
+        updateCustomerInfo();
+        calculateBookingSummary();
+    });
+    
+    [checkinDate, checkoutDate, numberOfGuests].forEach(el => {
+        el.addEventListener('change', calculateBookingSummary);
+        el.addEventListener('input', calculateBookingSummary);
+    });
+}
+
+function updateCustomerInfo() {
+    const customerIndex = document.getElementById('customerSelect').value;
+    const infoDiv = document.getElementById('selectedCustomerInfo');
+    const displayDiv = document.getElementById('customerInfoDisplay');
+    
+    if (customerIndex === '') {
+        infoDiv.style.display = 'none';
+        return;
+    }
+    
+    const customers = getLocalData('customers');
+    const customer = customers[customerIndex];
+    
+    displayDiv.innerHTML = `
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="label">Name</div>
+                <div class="value">${customer.name}</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">Email</div>
+                <div class="value">${customer.email}</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">Phone</div>
+                <div class="value">${customer.phone || 'N/A'}</div>
+            </div>
+        </div>
+    `;
+    
+    infoDiv.style.display = 'block';
+}
+
+function calculateBookingSummary() {
+    const customerIndex = document.getElementById('customerSelect').value;
+    const checkinDate = document.getElementById('checkinDate').value;
+    const checkoutDate = document.getElementById('checkoutDate').value;
+    const numberOfGuests = document.getElementById('numberOfGuests').value;
+    
+    const summaryDiv = document.getElementById('bookingSummary');
+    const displayDiv = document.getElementById('summaryDisplay');
+    
+    if (!customerIndex || !checkinDate || !checkoutDate) {
+        summaryDiv.style.display = 'none';
+        return;
+    }
+    
+    const room = allRooms.find(r => r.number === selectedRoomForAssignment);
+    if (!room) return;
+    
+    // Calculate nights
+    const checkin = new Date(checkinDate);
+    const checkout = new Date(checkoutDate);
+    const nights = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+    
+    if (nights <= 0) {
+        summaryDiv.style.display = 'none';
+        showNotification('Check-out date must be after check-in date', 'error');
+        return;
+    }
+    
+    const totalPrice = room.price * nights;
+    
+    displayDiv.innerHTML = `
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="label">Room Type</div>
+                <div class="value">${room.type}</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">Price per Night</div>
+                <div class="value">${formatPrice(room.price)}</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">Number of Nights</div>
+                <div class="value">${nights}</div>
+            </div>
+            <div class="detail-item">
+                <div class="label">Number of Guests</div>
+                <div class="value">${numberOfGuests}</div>
+            </div>
+            <div class="detail-item">
+                <div class="label"><strong>Total Price</strong></div>
+                <div class="value"><strong>${formatPrice(totalPrice)}</strong></div>
+            </div>
+        </div>
+    `;
+    
+    summaryDiv.style.display = 'block';
+}
+
+function confirmAssignment() {
+    const customerIndex = document.getElementById('customerSelect').value;
+    const checkinDate = document.getElementById('checkinDate').value;
+    const checkoutDate = document.getElementById('checkoutDate').value;
+    const numberOfGuests = document.getElementById('numberOfGuests').value;
+    const destination = document.getElementById('destination').value;
+    const paymentMethod = document.getElementById('paymentMethod').value;
+    
+    // Validation
+    if (!customerIndex) {
+        showNotification('Please select a customer', 'error');
+        return;
+    }
+    if (!checkinDate || !checkoutDate) {
+        showNotification('Please select check-in and check-out dates', 'error');
+        return;
+    }
+    if (!destination) {
+        showNotification('Please enter a destination', 'error');
+        return;
+    }
+    
+    const room = allRooms.find(r => r.number === selectedRoomForAssignment);
+    const customers = getLocalData('customers');
+    const customer = customers[customerIndex];
+    
+    // Calculate nights and total price
+    const checkin = new Date(checkinDate);
+    const checkout = new Date(checkoutDate);
+    const nights = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+    
+    if (nights <= 0) {
+        showNotification('Check-out date must be after check-in date', 'error');
+        return;
+    }
+    
+    const totalPrice = room.price * nights;
+    
+    // Create booking
+    const booking = {
+        id: generateId('BOOK'),
+        customerEmail: customer.email,
+        customerName: customer.name,
+        customerPhone: customer.phone || 'N/A',
+        roomType: room.type,
+        roomNumber: room.number,
+        checkin: checkinDate,
+        checkout: checkoutDate,
+        nights: nights,
+        guests: parseInt(numberOfGuests),
+        destination: destination,
+        totalPrice: totalPrice,
+        paymentMethod: paymentMethod,
+        status: 'Checked-in',
+        bookingDate: new Date().toISOString().split('T')[0],
+        checkinDate: new Date().toISOString()
+    };
+    
+    // Save booking
+    const bookings = getLocalData('hotelBookings');
+    bookings.push(booking);
+    setLocalData('hotelBookings', bookings);
+    
+    // Update room status to Occupied
+    updateRoomStatus(selectedRoomForAssignment, 'Occupied');
+    
+    showNotification(`Customer ${customer.name} successfully assigned to Room ${selectedRoomForAssignment}`, 'success');
+    
+    // Reload data
+    allBookings = bookings;
+    loadDashboard();
+    
+    closeAssignCustomerModal();
+}
+
+// Helper function to format date for input
+function formatDateForInput(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
 // Close modal when clicking outside
-window.onclick = function(event) {
-    const modal = document.getElementById('roomModal');
-    if (event.target === modal) {
+window.addEventListener('click', function(event) {
+    const roomModal = document.getElementById('roomModal');
+    const assignModal = document.getElementById('assignCustomerModal');
+    
+    if (event.target === roomModal) {
         closeRoomModal();
     }
-}
+    if (event.target === assignModal) {
+        closeAssignCustomerModal();
+    }
+});
 
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', () => {

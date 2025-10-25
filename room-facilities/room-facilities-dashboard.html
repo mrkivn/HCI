@@ -138,6 +138,81 @@
         </div>
     </div>
 
+    <!-- Assign Customer Modal -->
+    <div id="assignCustomerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-plus"></i> Assign Customer to Room</h2>
+                <button class="close-modal" onclick="closeAssignCustomerModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group mb-2">
+                    <label for="selectedRoom">Room Number</label>
+                    <input type="text" id="selectedRoom" class="form-control" readonly>
+                </div>
+                
+                <div class="form-group mb-2">
+                    <label for="customerSelect">Select Customer</label>
+                    <select id="customerSelect" class="form-control">
+                        <option value="">-- Select a Customer --</option>
+                    </select>
+                </div>
+
+                <div id="selectedCustomerInfo" class="card mb-2" style="display: none;">
+                    <div class="card-body">
+                        <h4><i class="fas fa-user-circle"></i> Customer Information</h4>
+                        <div id="customerInfoDisplay"></div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="checkinDate">Check-in Date</label>
+                    <input type="date" id="checkinDate" class="form-control" required>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="checkoutDate">Check-out Date</label>
+                    <input type="date" id="checkoutDate" class="form-control" required>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="numberOfGuests">Number of Guests</label>
+                    <input type="number" id="numberOfGuests" class="form-control" min="1" max="4" value="1" required>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="destination">Destination</label>
+                    <input type="text" id="destination" class="form-control" placeholder="e.g., Vacation, Business" required>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="paymentMethod">Payment Method</label>
+                    <select id="paymentMethod" class="form-control" required>
+                        <option value="Cash">Cash</option>
+                        <option value="Credit Card">Credit Card</option>
+                        <option value="GCash">GCash</option>
+                    </select>
+                </div>
+
+                <div id="bookingSummary" class="card mb-2" style="display: none;">
+                    <div class="card-body">
+                        <h4><i class="fas fa-file-invoice"></i> Booking Summary</h4>
+                        <div id="summaryDisplay"></div>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn btn-success" onclick="confirmAssignment()">
+                        <i class="fas fa-check"></i> Assign Customer
+                    </button>
+                    <button class="btn btn-secondary" onclick="closeAssignCustomerModal()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../shared/shared-functions.js"></script>
     <script src="room-facilities.js"></script>
 </body>

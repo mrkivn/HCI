@@ -350,6 +350,43 @@
     flex-wrap: wrap;
 }
 
+/* Assign Customer Modal Styles */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+#selectedCustomerInfo,
+#bookingSummary {
+    margin-top: 1rem;
+}
+
+#selectedCustomerInfo .card-body,
+#bookingSummary .card-body {
+    padding: 1rem;
+}
+
+#selectedCustomerInfo h4,
+#bookingSummary h4 {
+    color: var(--gold);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
 @media (max-width: 768px) {
     .grid-4 {
         grid-template-columns: repeat(2, 1fr);
