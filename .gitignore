@@ -4,3 +4,34 @@ node_modules/
 .env
 .cache
 .local
+
+# Environment variables
+.env.local
+.env.production
+.env.development
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# IMPORTANT: Firebase config with credentials
+# Uncomment the line below if you hardcode your Firebase credentials
+# firebase-config.js
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+Thumbs.db
+
+# Backup files
+*.bak
+shared/shared-functions-old.js
+
+# Vercel
+.vercel

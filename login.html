@@ -413,40 +413,52 @@
         }
 
         // Login Form Handler
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            showButtonLoading(submitBtn);
+            
+            try {
+                const email = document.getElementById('loginEmail').value.trim();
+                const password = document.getElementById('loginPassword').value;
 
-            // Get customers from localStorage
-            const customers = getLocalData('customers');
+                // Get customers from Firestore
+                const customers = await getLocalData('customers');
 
-            // Find customer
-            const customer = customers.find(c => c.email === email && c.password === password);
+                // Find customer
+                const customer = customers.find(c => c.email === email && c.password === password);
 
-            if (customer) {
-                // Save to sessionStorage
-                const user = {
-                    email: customer.email,
-                    name: customer.name,
-                    phone: customer.phone,
-                    type: 'customer'
-                };
-                sessionStorage.setItem('user', JSON.stringify(user));
+                if (customer) {
+                    // Save to sessionStorage
+                    const user = {
+                        email: customer.email,
+                        name: customer.name,
+                        phone: customer.phone,
+                        type: 'customer'
+                    };
+                    sessionStorage.setItem('user', JSON.stringify(user));
 
-                showNotification('Login successful! Redirecting...', 'success');
-                setTimeout(() => {
-                    window.location.href = 'customer-home.html';
-                }, 1000);
-            } else {
-                showError('Invalid email or password. Please try again.');
+                    showNotification('Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'customer-home.html';
+                    }, 1000);
+                } else {
+                    showError('Invalid email or password. Please try again.');
+                    hideButtonLoading(submitBtn);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('An error occurred. Please try again.');
+                hideButtonLoading(submitBtn);
             }
         });
 
         // Register Form Handler
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
             
             const name = document.getElementById('registerName').value.trim();
             const email = document.getElementById('registerEmail').value.trim();
@@ -465,38 +477,48 @@
                 return;
             }
 
-            // Get existing customers
-            const customers = getLocalData('customers');
+            showButtonLoading(submitBtn);
+            
+            try {
+                // Get existing customers
+                const customers = await getLocalData('customers');
 
-            // Check if email already exists
-            if (customers.find(c => c.email === email)) {
-                showError('Email already registered! Please login instead.');
-                return;
+                // Check if email already exists
+                if (customers.find(c => c.email === email)) {
+                    showError('Email already registered! Please login instead.');
+                    hideButtonLoading(submitBtn);
+                    return;
+                }
+
+                // Add new customer
+                const newCustomer = {
+                    id: Date.now(),
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    password: password,
+                    createdAt: new Date().toISOString()
+                };
+
+                customers.push(newCustomer);
+                await setLocalData('customers', customers);
+
+                showSuccess('Registration successful! Redirecting to login...');
+                hideButtonLoading(submitBtn);
+                
+                // Clear form
+                document.getElementById('registerForm').reset();
+                
+                // Switch to login tab
+                setTimeout(() => {
+                    switchTab('login');
+                    document.getElementById('loginEmail').value = email;
+                }, 2000);
+            } catch (error) {
+                console.error('Registration error:', error);
+                showError('An error occurred. Please try again.');
+                hideButtonLoading(submitBtn);
             }
-
-            // Add new customer
-            const newCustomer = {
-                id: Date.now(),
-                name: name,
-                email: email,
-                phone: phone,
-                password: password,
-                createdAt: new Date().toISOString()
-            };
-
-            customers.push(newCustomer);
-            setLocalData('customers', customers);
-
-            showSuccess('Registration successful! Redirecting to login...');
-            
-            // Clear form
-            document.getElementById('registerForm').reset();
-            
-            // Switch to login tab
-            setTimeout(() => {
-                switchTab('login');
-                document.getElementById('loginEmail').value = email;
-            }, 2000);
         });
 
         // Check if already logged in

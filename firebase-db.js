@@ -333,6 +333,9 @@ async function getFirestoreData(collectionName) {
 
 /**
  * Set data in Firestore (replaces setLocalData)
+ * WARNING: This replaces ALL documents in the collection with the provided array.
+ * Use this carefully - it deletes existing data and creates new documents.
+ * 
  * @param {string} collectionName - Collection name
  * @param {Array} data - Array of documents to set
  * @returns {Promise<boolean>} Success status
@@ -342,24 +345,73 @@ async function setFirestoreData(collectionName, data) {
     const db = window.firebaseConfig.getFirestore();
     
     try {
-        // This is a batch operation - delete all and re-add
-        // Get all existing docs
+        // IMPORTANT: This does a full replacement of the collection
+        // For large datasets, consider using updateDocument or addDocument instead
+        
+        // Firestore batch writes are limited to 500 operations
+        const BATCH_SIZE = 500;
+        
+        // Get all existing docs to delete
         const snapshot = await db.collection(collectionName).get();
-        const batch = db.batch();
         
-        // Delete existing
-        snapshot.forEach(doc => {
-            batch.delete(doc.ref);
-        });
+        // Delete existing documents in batches
+        const deleteBatches = [];
+        if (snapshot.size > 0) {
+            let batch = db.batch();
+            let operationCount = 0;
+            
+            snapshot.forEach(doc => {
+                batch.delete(doc.ref);
+                operationCount++;
+                
+                if (operationCount === BATCH_SIZE) {
+                    // Save batch promise and start new one
+                    deleteBatches.push(batch.commit());
+                    batch = db.batch();
+                    operationCount = 0;
+                }
+            });
+            
+            // Save remaining deletes
+            if (operationCount > 0) {
+                deleteBatches.push(batch.commit());
+            }
+            
+            // Wait for all delete batches to complete
+            await Promise.all(deleteBatches);
+        }
         
-        // Add new data
-        data.forEach(item => {
-            const docRef = db.collection(collectionName).doc();
-            batch.set(docRef, item);
-        });
+        // Add new data in batches
+        const addBatches = [];
+        if (data && data.length > 0) {
+            let batch = db.batch();
+            let operationCount = 0;
+            
+            data.forEach((item) => {
+                const docRef = db.collection(collectionName).doc();
+                // Remove the 'id' field if it exists, as Firestore generates its own IDs
+                const { id, ...docData } = item;
+                batch.set(docRef, docData);
+                operationCount++;
+                
+                if (operationCount === BATCH_SIZE) {
+                    // Save batch promise and start new one
+                    addBatches.push(batch.commit());
+                    batch = db.batch();
+                    operationCount = 0;
+                }
+            });
+            
+            // Save remaining adds
+            if (operationCount > 0) {
+                addBatches.push(batch.commit());
+            }
+            
+            // Wait for all add batches to complete
+            await Promise.all(addBatches);
+        }
         
-        await batch.commit();
-        console.log(`✅ Batch updated ${collectionName}`);
+        console.log(`✅ Batch updated ${collectionName} with ${data.length} documents`);
         return true;
     } catch (error) {
         console.error(`Error batch updating ${collectionName}:`, error);

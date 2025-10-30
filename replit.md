@@ -1,9 +1,31 @@
 # GINHAWA Hotel & After Glow Restaurant Management System
 
 ## Overview
-A complete hotel and restaurant management system demo built for HCI (Human-Computer Interaction) projects. The application features a modern gold and black theme with responsive design and department-specific staff dashboards.
+A complete hotel and restaurant management system built for HCI (Human-Computer Interaction) projects. The application features a modern gold and black theme with responsive design and department-specific staff dashboards.
+
+**NOW WITH FIREBASE FIRESTORE DATABASE!** The system has been migrated from localStorage to Firebase Firestore for permanent cloud storage, suitable for Vercel deployment.
 
 ## Recent Changes
+
+- **October 30, 2025**: Firebase Firestore Migration 🔥
+  - **Migrated from localStorage to Firebase Firestore** for permanent cloud database storage
+  - **Added Firebase SDK** (v9.x compat) via CDN to all 17 HTML files
+  - **Created firebase-config.js**: Firebase initialization with environment variables
+  - **Created firebase-db.js**: Firestore operation wrappers (getCollection, addDocument, updateDocument, deleteDocument, etc.)
+  - **Updated shared-functions.js**:
+    - Converted getLocalData/setLocalData to async Firestore operations
+    - Added loading helpers: showButtonLoading(), hideButtonLoading(), withLoading()
+    - Added error handling helpers: withErrorHandling(), showNotification()
+    - Maintained backward compatibility with aliases
+  - **Updated login.html**: Converted authentication to async/await with loading states
+  - **Created deployment files**:
+    - firestore.rules: Security rules for development (allow all read/write)
+    - vercel.json: Vercel configuration for static site deployment
+    - .env.example: Firebase environment variables template
+    - .gitignore: Updated with Firebase-related exclusions
+  - **Created FIREBASE_MIGRATION_GUIDE.md**: Complete guide for migrating remaining modules
+  - **Ready for Vercel deployment** with Firebase backend
+  - **Note**: Module JS files (booking, reservation, kitchen, etc.) need async/await conversion following the migration guide
 - **October 24, 2025**: Major dashboard improvements
   - **Billing Dashboard**: Complete redesign focusing on payment confirmation workflow
     - Removed revenue metrics (not billing staff's responsibility)

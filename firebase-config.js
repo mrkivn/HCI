@@ -30,15 +30,26 @@ let app = null;
 // Initialize Firebase
 async function initializeFirebase() {
     try {
-        // Firebase configuration - uses environment variables in production
+        // ==============================================
+        // TODO: REPLACE THESE WITH YOUR FIREBASE CONFIG
+        // ==============================================
+        // Get these values from Firebase Console:
+        // https://console.firebase.google.com/ > Project Settings > General > Your apps > Web app
         const firebaseConfig = {
-            apiKey: window.ENV?.VITE_FIREBASE_API_KEY || "YOUR_API_KEY_HERE",
-            authDomain: window.ENV?.VITE_FIREBASE_AUTH_DOMAIN || "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: window.ENV?.VITE_FIREBASE_PROJECT_ID || "YOUR_PROJECT_ID",
-            storageBucket: window.ENV?.VITE_FIREBASE_STORAGE_BUCKET || "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: window.ENV?.VITE_FIREBASE_MESSAGING_SENDER_ID || "YOUR_SENDER_ID",
-            appId: window.ENV?.VITE_FIREBASE_APP_ID || "YOUR_APP_ID"
+            apiKey: "YOUR_API_KEY_HERE",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
+        
+        // Check if config has been updated
+        if (firebaseConfig.apiKey === "YOUR_API_KEY_HERE") {
+            console.error('❌ Firebase config not set! Please edit firebase-config.js with your Firebase project credentials.');
+            console.error('Get your config from: https://console.firebase.google.com/ > Project Settings > General');
+            return false;
+        }
 
         // Check if Firebase is loaded
         if (typeof firebase === 'undefined') {
