@@ -1,133 +1,128 @@
 /* ============================================
    GINHAWA Hotel & After Glow Restaurant
-   Shared JavaScript Functions - Firebase Version
+   Shared JavaScript Functions
    ============================================ */
 
-// ==============================================
-// LOADING & ERROR HELPER UTILITIES
-// ==============================================
+// Initialize localStorage with demo data
+function initializeData() {
+    if (!localStorage.getItem('initialized')) {
+        // Demo Customer Account
+        const customers = [
+            {
+                email: 'customer@test.com',
+                password: 'password123',
+                name: 'Demo Customer',
+                phone: '+63 917 123 4567'
+            }
+        ];
+        localStorage.setItem('customers', JSON.stringify(customers));
 
-/**
- * Show loading spinner on a button
- * @param {HTMLElement} button - Button element
- * @param {string} originalText - Original button text (optional)
- */
-function showButtonLoading(button, originalText = null) {
-    if (!button) return;
-    button.disabled = true;
-    if (originalText) {
-        button.setAttribute('data-original-text', originalText);
-    }
-    const text = button.getAttribute('data-original-text') || button.textContent;
-    button.setAttribute('data-original-text', text);
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-}
+        // Demo Staff Accounts
+        const staff = [
+            { email: 'manager@hotel.com', password: 'admin123', department: 'Manager' },
+            { email: 'frontdesk@hotel.com', password: 'front123', department: 'Front Office' },
+            { email: 'kitchen@hotel.com', password: 'kitchen123', department: 'Kitchen' },
+            { email: 'bar@hotel.com', password: 'bar123', department: 'Bar' },
+            { email: 'housekeeping@hotel.com', password: 'clean123', department: 'Housekeeping' },
+            { email: 'billing@hotel.com', password: 'bill123', department: 'Billing' },
+            { email: 'customerguest@hotel.com', password: 'guest123', department: 'Customer Guest' },
+            { email: 'roomfacilities@hotel.com', password: 'room123', department: 'Room Facilities' }
+        ];
+        localStorage.setItem('staff', JSON.stringify(staff));
 
-/**
- * Hide loading spinner on a button
- * @param {HTMLElement} button - Button element
- */
-function hideButtonLoading(button) {
-    if (!button) return;
-    button.disabled = false;
-    const originalText = button.getAttribute('data-original-text');
-    if (originalText) {
-        button.textContent = originalText;
-    }
-}
+        // Initialize Rooms (30 rooms total)
+        const rooms = [];
+        const roomTypes = [
+            { type: 'Standard', price: 2500, count: 15 },
+            { type: 'Deluxe', price: 4000, count: 10 },
+            { type: 'Suite', price: 7000, count: 5 }
+        ];
 
-/**
- * Show loading overlay on container
- * @param {string} containerId - Container element ID
- */
-function showLoading(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    
-    const overlay = document.createElement('div');
-    overlay.className = 'loading-overlay';
-    overlay.innerHTML = '<div class="spinner"><i class="fas fa-spinner fa-spin fa-3x"></i><p>Loading...</p></div>';
-    overlay.style.cssText = `
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-    `;
-    container.style.position = 'relative';
-    container.appendChild(overlay);
-}
+        let roomNumber = 101;
+        roomTypes.forEach(roomType => {
+            for (let i = 0; i < roomType.count; i++) {
+                rooms.push({
+                    number: roomNumber++,
+                    type: roomType.type,
+                    price: roomType.price,
+                    status: 'Available', // Available, Occupied, Cleaning
+                    currentGuest: null
+                });
+            }
+        });
+        localStorage.setItem('rooms', JSON.stringify(rooms));
 
-/**
- * Hide loading overlay
- * @param {string} containerId - Container element ID
- */
-function hideLoading(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    const overlay = container.querySelector('.loading-overlay');
-    if (overlay) {
-        overlay.remove();
-    }
-}
+        // Initialize empty arrays for dynamic data
+        localStorage.setItem('hotelBookings', JSON.stringify([]));
+        localStorage.setItem('restaurantReservations', JSON.stringify([]));
+        localStorage.setItem('orders', JSON.stringify([]));
+        localStorage.setItem('housekeepingRequests', JSON.stringify([]));
+        localStorage.setItem('invoices', JSON.stringify([]));
 
-/**
- * Execute async operation with loading state
- * @param {Function} asyncFn - Async function to execute
- * @param {HTMLElement} button - Button element to show loading on
- * @returns {Promise} Result of async function
- */
-async function withLoading(asyncFn, button = null) {
-    if (button) showButtonLoading(button);
-    
-    try {
-        const result = await asyncFn();
-        return result;
-    } finally {
-        if (button) hideButtonLoading(button);
-    }
-}
-
-/**
- * Execute async operation with error handling
- * @param {Function} asyncFn - Async function to execute
- * @param {string} errorMessage - Error message to show on failure
- * @returns {Promise} Result of async function or null on error
- */
-async function withErrorHandling(asyncFn, errorMessage = 'An error occurred') {
-    try {
-        return await asyncFn();
-    } catch (error) {
-        console.error(errorMessage, error);
-        showNotification(errorMessage, 'error');
-        return null;
-    }
-}
-
-// Initialize Firestore with demo data on first load
-async function initializeData() {
-    try {
-        await window.firestoreDB.initializeFirestoreData();
+        localStorage.setItem('initialized', 'true');
         console.log('Data initialized successfully');
-    } catch (error) {
-        console.error('Failed to initialize Firestore:', error);
-        showNotification('Failed to connect to database. Please refresh the page.', 'error');
     }
 }
 
 // Call initialization on page load
-document.addEventListener('DOMContentLoaded', async () => {
-    await initializeData();
-});
+initializeData();
+
+// Upgrade existing data (idempotent migrations)
+function upgradeData() {
+    // Ensure Room Facilities staff account exists
+    const staff = getLocalData('staff');
+    if (!staff.find(s => s.email === 'roomfacilities@hotel.com')) {
+        staff.push({ 
+            email: 'roomfacilities@hotel.com', 
+            password: 'room123', 
+            department: 'Room Facilities' 
+        });
+        setLocalData('staff', staff);
+        console.log('Added Room Facilities staff account');
+    }
+    
+    // Ensure 30 rooms exist (upgrade from 10 to 30 if needed)
+    let rooms = getLocalData('rooms');
+    if (rooms.length < 30) {
+        const existingRoomNumbers = rooms.map(r => r.number);
+        const roomTypes = [
+            { type: 'Standard', price: 2500, count: 15 },
+            { type: 'Deluxe', price: 4000, count: 10 },
+            { type: 'Suite', price: 7000, count: 5 }
+        ];
+        
+        let roomNumber = 101;
+        const allRooms = [];
+        roomTypes.forEach(roomType => {
+            for (let i = 0; i < roomType.count; i++) {
+                allRooms.push({
+                    number: roomNumber++,
+                    type: roomType.type,
+                    price: roomType.price,
+                    status: 'Available',
+                    currentGuest: null
+                });
+            }
+        });
+        
+        // Add only new rooms that don't already exist
+        allRooms.forEach(newRoom => {
+            if (!existingRoomNumbers.includes(newRoom.number)) {
+                rooms.push(newRoom);
+            }
+        });
+        
+        setLocalData('rooms', rooms);
+        console.log('Upgraded rooms to ' + rooms.length + ' total (preserved existing room data)');
+    }
+}
+
+// Run upgrade on every page load
+upgradeData();
 
 // Generate unique IDs
 function generateId(prefix) {
-    return prefix + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    return prefix + '-' + Date.now();
 }
 
 // Format price in Philippine Peso
@@ -194,7 +189,7 @@ function getCurrentUser() {
     return JSON.parse(sessionStorage.getItem('user'));
 }
 
-// Dark mode toggle (kept in localStorage for user preference)
+// Dark mode toggle
 function toggleTheme() {
     const body = document.body;
     if (body.classList.contains('dark-mode')) {
@@ -208,10 +203,12 @@ function toggleTheme() {
     }
 }
 
-// Load theme preference (kept in localStorage for user preference)
+// Load theme preference
 function loadTheme() {
     const theme = localStorage.getItem('theme') || 'light';
+    // Remove any existing theme classes first
     document.body.classList.remove('light-mode', 'dark-mode');
+    // Then add the saved theme
     document.body.classList.add(theme + '-mode');
 }
 
@@ -231,12 +228,14 @@ function initMobileNav() {
             navMenu.classList.toggle('active');
         });
 
+        // Close button functionality
         if (closeMenu) {
             closeMenu.addEventListener('click', () => {
                 navMenu.classList.remove('active');
             });
         }
 
+        // Close menu when clicking outside
         document.addEventListener('click', (e) => {
             if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
                 navMenu.classList.remove('active');
@@ -256,6 +255,7 @@ function initAccountDropdown() {
             accountDropdown.classList.toggle('show');
         });
 
+        // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
             if (!accountBtn.contains(e.target) && !accountDropdown.contains(e.target)) {
                 accountDropdown.classList.remove('show');
@@ -270,89 +270,27 @@ document.addEventListener('DOMContentLoaded', () => {
     initAccountDropdown();
 });
 
-// ==============================================
-// FIRESTORE DATA ACCESS FUNCTIONS
-// (Replaces localStorage getLocalData/setLocalData)
-// ==============================================
-
-/**
- * Get data from Firestore (replaces getLocalData)
- * @param {string} collectionName - Collection name
- * @returns {Promise<Array>} Array of documents
- */
-async function getFirestoreData(collectionName) {
+// Get data from localStorage
+function getLocalData(key) {
     try {
-        return await window.firestoreDB.getFirestoreData(collectionName);
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : [];
     } catch (error) {
-        console.error(`Error reading ${collectionName} from Firestore:`, error);
+        console.error(`Error reading ${key} from localStorage:`, error);
         return [];
     }
 }
 
-/**
- * Save data to Firestore (replaces setLocalData)
- * @param {string} collectionName - Collection name  
- * @param {Array} data - Array of documents
- * @returns {Promise<boolean>} Success status
- */
-async function setFirestoreData(collectionName, data) {
+// Save data to localStorage
+function setLocalData(key, data) {
     try {
-        return await window.firestoreDB.setFirestoreData(collectionName, data);
+        localStorage.setItem(key, JSON.stringify(data));
+        return true;
     } catch (error) {
-        console.error(`Error writing ${collectionName} to Firestore:`, error);
+        console.error(`Error writing ${key} to localStorage:`, error);
         return false;
     }
 }
-
-/**
- * Add a single document to Firestore collection
- * @param {string} collectionName - Collection name
- * @param {Object} data - Document data
- * @returns {Promise<string|null>} Document ID or null
- */
-async function addFirestoreDocument(collectionName, data) {
-    try {
-        return await window.firestoreDB.addDocument(collectionName, data);
-    } catch (error) {
-        console.error(`Error adding document to ${collectionName}:`, error);
-        return null;
-    }
-}
-
-/**
- * Update a single document in Firestore
- * @param {string} collectionName - Collection name
- * @param {string} docId - Document ID
- * @param {Object} data - Updated data
- * @returns {Promise<boolean>} Success status
- */
-async function updateFirestoreDocument(collectionName, docId, data) {
-    try {
-        return await window.firestoreDB.updateDocument(collectionName, docId, data);
-    } catch (error) {
-        console.error(`Error updating document in ${collectionName}:`, error);
-        return false;
-    }
-}
-
-/**
- * Delete a document from Firestore
- * @param {string} collectionName - Collection name
- * @param {string} docId - Document ID
- * @returns {Promise<boolean>} Success status
- */
-async function deleteFirestoreDocument(collectionName, docId) {
-    try {
-        return await window.firestoreDB.deleteDocument(collectionName, docId);
-    } catch (error) {
-        console.error(`Error deleting document from ${collectionName}:`, error);
-        return false;
-    }
-}
-
-// Backward compatibility aliases (so existing code doesn't break)
-const getLocalData = getFirestoreData;
-const setLocalData = setFirestoreData;
 
 // Get today's date in YYYY-MM-DD format
 function getTodayDate() {
@@ -454,4 +392,4 @@ function calculateTotalRevenue(invoices, dateFilter = null) {
         .reduce((total, inv) => total + inv.total, 0);
 }
 
-console.log('Shared functions loaded successfully (Firebase version)');
+console.log('Shared functions loaded successfully');
