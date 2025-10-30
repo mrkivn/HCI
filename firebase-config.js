@@ -36,12 +36,13 @@ async function initializeFirebase() {
         // Get these values from Firebase Console:
         // https://console.firebase.google.com/ > Project Settings > General > Your apps > Web app
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY_HERE",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyBmAzA5RodILLB61P6teGamSWFP4G12itQ",
+            authDomain: "ginhawa-bf29a.firebaseapp.com",
+            projectId: "ginhawa-bf29a",
+            storageBucket: "ginhawa-bf29a.firebasestorage.app",
+            messagingSenderId: "849284832287",
+            appId: "1:849284832287:web:2bbb006d6cf3279ac8892a",
+            measurementId: "G-7RD49JE59T"
         };
         
         // Check if config has been updated
