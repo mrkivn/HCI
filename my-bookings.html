@@ -234,34 +234,42 @@
             loadBookings();
         }
 
-        function loadBookings() {
+        async function loadBookings() {
             console.log('Loading bookings for:', user.email);
-            const allHotelBookings = getLocalData('hotelBookings');
-            const allRestaurantReservations = getLocalData('restaurantReservations');
-            
-            console.log('All hotel bookings:', allHotelBookings);
-            console.log('All restaurant reservations:', allRestaurantReservations);
-            
-            const hotelBookings = allHotelBookings.filter(b => b.customerEmail === user.email);
-            const restaurantReservations = allRestaurantReservations.filter(r => r.customerEmail === user.email);
-            
-            console.log('Filtered hotel bookings:', hotelBookings);
-            console.log('Filtered restaurant reservations:', restaurantReservations);
+            try {
+                const allHotelBookings = await getLocalData('hotelBookings');
+                const allRestaurantReservations = await getLocalData('restaurantReservations');
+                
+                console.log('All hotel bookings:', allHotelBookings);
+                console.log('All restaurant reservations:', allRestaurantReservations);
+                
+                const hotelBookings = allHotelBookings.filter(b => b.customerEmail === user.email);
+                const restaurantReservations = allRestaurantReservations.filter(r => r.customerEmail === user.email);
+                
+                console.log('Filtered hotel bookings:', hotelBookings);
+                console.log('Filtered restaurant reservations:', restaurantReservations);
 
-            displayBookings(hotelBookings, restaurantReservations);
+                displayBookings(hotelBookings, restaurantReservations);
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+            }
         }
 
-        function filterBookings(type) {
+        async function filterBookings(type) {
             currentFilter = type;
 
             // Update active tab
             document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
             event.currentTarget.classList.add('active');
 
-            const hotelBookings = getLocalData('hotelBookings').filter(b => b.customerEmail === user.email);
-            const restaurantReservations = getLocalData('restaurantReservations').filter(r => r.customerEmail === user.email);
+            try {
+                const hotelBookings = (await getLocalData('hotelBookings')).filter(b => b.customerEmail === user.email);
+                const restaurantReservations = (await getLocalData('restaurantReservations')).filter(r => r.customerEmail === user.email);
 
-            displayBookings(hotelBookings, restaurantReservations);
+                displayBookings(hotelBookings, restaurantReservations);
+            } catch (error) {
+                console.error('Error filtering bookings:', error);
+            }
         }
 
         function displayBookings(hotelBookings, restaurantReservations) {
@@ -398,30 +406,35 @@
             return badges[status] || `<span class="badge">${status}</span>`;
         }
 
-        function cancelBooking(id, type) {
+        async function cancelBooking(id, type) {
             if (!confirm('Are you sure you want to cancel this booking?')) {
                 return;
             }
 
-            if (type === 'hotel') {
-                const bookings = getLocalData('hotelBookings');
-                const booking = bookings.find(b => b.id === id);
-                if (booking) {
-                    booking.status = 'Cancelled';
-                    setLocalData('hotelBookings', bookings);
-                    showNotification('Hotel booking cancelled successfully', 'success');
+            try {
+                if (type === 'hotel') {
+                    const bookings = await getLocalData('hotelBookings');
+                    const booking = bookings.find(b => b.id === id);
+                    if (booking) {
+                        booking.status = 'Cancelled';
+                        await setLocalData('hotelBookings', bookings);
+                        showNotification('Hotel booking cancelled successfully', 'success');
+                    }
+                } else {
+                    const reservations = await getLocalData('restaurantReservations');
+                    const reservation = reservations.find(r => r.id === id);
+                    if (reservation) {
+                        reservation.status = 'Cancelled';
+                        await setLocalData('restaurantReservations', reservations);
+                        showNotification('Restaurant reservation cancelled successfully', 'success');
+                    }
                 }
-            } else {
-                const reservations = getLocalData('restaurantReservations');
-                const reservation = reservations.find(r => r.id === id);
-                if (reservation) {
-                    reservation.status = 'Cancelled';
-                    setLocalData('restaurantReservations', reservations);
-                    showNotification('Restaurant reservation cancelled successfully', 'success');
-                }
-            }
 
-            loadBookings();
+                loadBookings();
+            } catch (error) {
+                console.error('Cancel error:', error);
+                showNotification('Failed to cancel booking', 'error');
+            }
         }
     </script>
 </body>

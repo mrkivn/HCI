@@ -91,8 +91,8 @@
             loadOrders();
         }
 
-        function updateStats() {
-            const orders = getLocalData('orders').filter(o => o.category === 'Drinks');
+        async function updateStats() {
+            const orders = (await getLocalData('orders')).filter(o => o.category === 'Drinks');
             document.getElementById('pendingOrders').textContent = orders.filter(o => o.status === 'Pending').length;
             document.getElementById('preparingOrders').textContent = orders.filter(o => o.status === 'Preparing').length;
             
@@ -109,9 +109,9 @@
             loadOrders();
         }
 
-        function loadOrders() {
+        async function loadOrders() {
             const container = document.getElementById('ordersList');
-            let orders = getLocalData('orders').filter(o => o.category === 'Drinks');
+            let orders = (await getLocalData('orders')).filter(o => o.category === 'Drinks');
             
             if (currentTab !== 'all') {
                 const statusMap = { 'pending': 'Pending', 'preparing': 'Preparing', 'ready': 'Ready' };
@@ -150,12 +150,12 @@
             `).join('');
         }
 
-        function updateStatus(orderId, newStatus) {
-            const orders = getLocalData('orders');
+        async function updateStatus(orderId, newStatus) {
+            const orders = await getLocalData('orders');
             const order = orders.find(o => o.id === orderId);
             if (order) {
                 order.status = newStatus;
-                setLocalData('orders', orders);
+                await setLocalData('orders', orders);
                 showNotification(`Order ${newStatus.toLowerCase()}`, 'success');
                 loadDashboard();
             }

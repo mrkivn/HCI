@@ -247,6 +247,46 @@ function selectPayment(method) {
     document.getElementById('confirmBtn').disabled = false;
 }
 
+// Get available room
+async function getAvailableRoom(roomType, checkin, checkout) {
+    const hotelBookings = await getLocalData('hotelBookings');
+    
+    // Room mapping: Standard (101-110), Deluxe (201-220), Suite (301-310)
+    const roomMap = {
+        'Standard': { start: 101, end: 110 },
+        'Deluxe': { start: 201, end: 220 },
+        'Suite': { start: 301, end: 310 }
+    };
+    
+    const range = roomMap[roomType];
+    if (!range) return null;
+    
+    // Get all occupied rooms for this date range
+    const occupiedRooms = new Set();
+    hotelBookings.forEach(booking => {
+        if (booking.roomNumber && booking.status !== 'Cancelled') {
+            // Check if dates overlap
+            const bookingStart = new Date(booking.checkin);
+            const bookingEnd = new Date(booking.checkout);
+            const newStart = new Date(checkin);
+            const newEnd = new Date(checkout);
+            
+            if (newStart < bookingEnd && newEnd > bookingStart) {
+                occupiedRooms.add(booking.roomNumber);
+            }
+        }
+    });
+    
+    // Find first available room
+    for (let roomNum = range.start; roomNum <= range.end; roomNum++) {
+        if (!occupiedRooms.has(roomNum)) {
+            return roomNum;
+        }
+    }
+    
+    return null; // No rooms available
+}
+
 // Confirm booking
 async function confirmBooking() {
     if (!bookingData.paymentMethod) {
@@ -258,6 +298,15 @@ async function confirmBooking() {
     showButtonLoading(confirmBtn);
 
     try {
+        // Assign available room
+        const roomNumber = await getAvailableRoom(bookingData.roomType, bookingData.checkin, bookingData.checkout);
+        
+        if (!roomNumber) {
+            showNotification('Sorry, no rooms available for selected dates. Please try different dates.', 'error');
+            hideButtonLoading(confirmBtn);
+            return;
+        }
+
         // Create booking object
         const booking = {
             id: generateId('GIN'),
@@ -276,7 +325,7 @@ async function confirmBooking() {
             paymentMethod: bookingData.paymentMethod,
             status: 'Confirmed',
             bookingDate: Date.now(),
-            roomNumber: null // Will be assigned by front office during check-in
+            roomNumber: roomNumber // Real room assignment
         };
 
         // Save to Firestore
@@ -288,7 +337,7 @@ async function confirmBooking() {
         loadConfirmation(booking);
         showStep(4);
 
-        showNotification('Booking confirmed successfully!', 'success');
+        showNotification(`Booking confirmed! You've been assigned Room ${roomNumber}.`, 'success');
     } catch (error) {
         console.error('Booking error:', error);
         showNotification('Failed to save booking. Please try again.', 'error');
@@ -303,6 +352,10 @@ function loadConfirmation(booking) {
 
     const confirmationContainer = document.getElementById('confirmationDetails');
     confirmationContainer.innerHTML = `
+        <div class="summary-item">
+            <span class="summary-label"><i class="fas fa-door-open"></i> Room Number:</span>
+            <span class="summary-value" style="font-size: 1.2em; font-weight: bold; color: var(--gold);">Room ${booking.roomNumber}</span>
+        </div>
         <div class="summary-item">
             <span class="summary-label"><i class="fas fa-map-marker-alt"></i> Destination:</span>
             <span class="summary-value">${booking.destination}</span>

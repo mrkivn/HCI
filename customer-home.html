@@ -276,27 +276,34 @@
             loadStats();
         }
 
-        function loadStats() {
+        async function loadStats() {
             const userEmail = user.email;
             
-            // Get bookings
-            const hotelBookings = getLocalData('hotelBookings').filter(b => b.customerEmail === userEmail);
-            const upcomingBookings = hotelBookings.filter(b => 
-                b.status === 'Confirmed' || b.status === 'Checked-in'
-            );
-            document.getElementById('upcomingBookings').textContent = upcomingBookings.length;
+            try {
+                // Get bookings
+                const hotelBookings = await getLocalData('hotelBookings');
+                const upcomingBookings = hotelBookings.filter(b => 
+                    b.customerEmail === userEmail && (b.status === 'Confirmed' || b.status === 'Checked-in')
+                );
+                document.getElementById('upcomingBookings').textContent = upcomingBookings.length;
 
-            // Get orders
-            const orders = getLocalData('orders').filter(o => o.customerEmail === userEmail);
-            const activeOrders = orders.filter(o => 
-                o.status === 'Pending' || o.status === 'Preparing' || o.status === 'Ready'
-            );
-            document.getElementById('activeOrders').textContent = activeOrders.length;
+                // Get orders
+                const orders = await getLocalData('orders');
+                const activeOrders = orders.filter(o => 
+                    o.customerEmail === userEmail && 
+                    (o.status === 'Pending' || o.status === 'Preparing' || o.status === 'Ready')
+                );
+                document.getElementById('activeOrders').textContent = activeOrders.length;
 
-            // Get restaurant reservations
-            const reservations = getLocalData('restaurantReservations').filter(r => r.customerEmail === userEmail);
-            const activeReservations = reservations.filter(r => r.status === 'Confirmed');
-            document.getElementById('restaurantReservations').textContent = activeReservations.length;
+                // Get restaurant reservations
+                const reservations = await getLocalData('restaurantReservations');
+                const activeReservations = reservations.filter(r => 
+                    r.customerEmail === userEmail && r.status === 'Confirmed'
+                );
+                document.getElementById('restaurantReservations').textContent = activeReservations.length;
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
         }
 
     </script>

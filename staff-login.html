@@ -324,40 +324,53 @@
         }
 
         // Login Form Handler
-        document.getElementById('staffLoginForm').addEventListener('submit', function(e) {
+        document.getElementById('staffLoginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
+            const submitBtn = e.target.querySelector('button[type="submit"]');
 
-            // Get staff from localStorage
-            const staff = getLocalData('staff');
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
 
-            // Find staff member
-            const staffMember = staff.find(s => s.email === email && s.password === password);
+                // Get staff from Firestore
+                const staff = await getLocalData('staff');
 
-            if (staffMember) {
-                // Save to sessionStorage
-                const user = {
-                    email: staffMember.email,
-                    department: staffMember.department,
-                    type: 'staff'
-                };
-                sessionStorage.setItem('user', JSON.stringify(user));
+                // Find staff member
+                const staffMember = staff.find(s => s.email === email && s.password === password);
 
-                showNotification(`Welcome ${staffMember.department} staff!`, 'success');
+                if (staffMember) {
+                    // Save to sessionStorage
+                    const user = {
+                        email: staffMember.email,
+                        department: staffMember.department,
+                        type: 'staff'
+                    };
+                    sessionStorage.setItem('user', JSON.stringify(user));
 
-                // Redirect to department dashboard
-                const dashboardRoute = departmentRoutes[staffMember.department];
-                if (dashboardRoute) {
-                    setTimeout(() => {
-                        window.location.href = dashboardRoute;
-                    }, 1000);
+                    showNotification(`Welcome ${staffMember.department} staff!`, 'success');
+
+                    // Redirect to department dashboard
+                    const dashboardRoute = departmentRoutes[staffMember.department];
+                    if (dashboardRoute) {
+                        setTimeout(() => {
+                            window.location.href = dashboardRoute;
+                        }, 1000);
+                    } else {
+                        showError('Dashboard not available for your department yet.');
+                    }
                 } else {
-                    showError('Dashboard not available for your department yet.');
+                    showError('Invalid email or password. Please try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
                 }
-            } else {
-                showError('Invalid email or password. Please try again.');
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('Login failed. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
             }
         });
 

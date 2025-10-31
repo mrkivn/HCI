@@ -4,20 +4,48 @@ const user = checkAuth('staff');
 let currentTab = 'arrivals';
 
 // Initialize rooms data if not exists
-function initializeRoomsData() {
-    const rooms = getLocalData('rooms');
+async function initializeRoomsData() {
+    const rooms = await getLocalData('rooms');
     if (rooms.length === 0) {
         const initialRooms = [];
-        for (let i = 1; i <= 30; i++) {
-            const roomType = i <= 15 ? 'Standard' : i <= 25 ? 'Deluxe' : 'Suite';
+        
+        // Standard rooms: 101-110
+        for (let i = 101; i <= 110; i++) {
             initialRooms.push({
                 roomNumber: i,
-                type: roomType,
+                number: i,
+                type: 'Standard',
+                price: 2500,
                 status: 'Available',
                 currentBookingId: null
             });
         }
-        setLocalData('rooms', initialRooms);
+        
+        // Deluxe rooms: 201-220
+        for (let i = 201; i <= 220; i++) {
+            initialRooms.push({
+                roomNumber: i,
+                number: i,
+                type: 'Deluxe',
+                price: 4000,
+                status: 'Available',
+                currentBookingId: null
+            });
+        }
+        
+        // Suite rooms: 301-310
+        for (let i = 301; i <= 310; i++) {
+            initialRooms.push({
+                roomNumber: i,
+                number: i,
+                type: 'Suite',
+                price: 7000,
+                status: 'Available',
+                currentBookingId: null
+            });
+        }
+        
+        await setLocalData('rooms', initialRooms);
     }
 }
 
@@ -29,11 +57,11 @@ function switchTab(event, tab) {
     loadBookings();
 }
 
-function loadDashboard() {
-    initializeRoomsData();
+async function loadDashboard() {
+    await initializeRoomsData();
     
-    const bookings = getLocalData('hotelBookings');
-    const rooms = getLocalData('rooms');
+    const bookings = await getLocalData('hotelBookings');
+    const rooms = await getLocalData('rooms');
     const today = new Date();
     today.setHours(0,0,0,0);
     
@@ -42,14 +70,14 @@ function loadDashboard() {
     
     // Calculate arrivals today
     const arrivalsToday = bookings.filter(b => {
-        const checkin = new Date(b.checkinDate);
+        const checkin = new Date(b.checkin);
         checkin.setHours(0,0,0,0);
         return checkin.getTime() === today.getTime() && b.status !== 'Cancelled';
     }).length;
     
     // Calculate departures today
     const departuresToday = bookings.filter(b => {
-        const checkout = new Date(b.checkoutDate);
+        const checkout = new Date(b.checkout);
         checkout.setHours(0,0,0,0);
         return checkout.getTime() === today.getTime() && b.status === 'Checked-in';
     }).length;
@@ -79,8 +107,8 @@ function loadDashboard() {
     loadBookings();
 }
 
-function loadBookings() {
-    const bookings = getLocalData('hotelBookings');
+async function loadBookings() {
+    const bookings = await getLocalData('hotelBookings');
     const container = document.getElementById('bookingsList');
     const today = new Date();
     today.setHours(0,0,0,0);
@@ -90,14 +118,14 @@ function loadBookings() {
     switch(currentTab) {
         case 'arrivals':
             filtered = bookings.filter(b => {
-                const checkin = new Date(b.checkinDate);
+                const checkin = new Date(b.checkin);
                 checkin.setHours(0,0,0,0);
                 return checkin.getTime() === today.getTime() && b.status !== 'Cancelled';
             });
             break;
         case 'departures':
             filtered = bookings.filter(b => {
-                const checkout = new Date(b.checkoutDate);
+                const checkout = new Date(b.checkout);
                 checkout.setHours(0,0,0,0);
                 return checkout.getTime() === today.getTime() && b.status === 'Checked-in';
             });
@@ -107,7 +135,7 @@ function loadBookings() {
             break;
         case 'upcoming':
             filtered = bookings.filter(b => {
-                const checkin = new Date(b.checkinDate);
+                const checkin = new Date(b.checkin);
                 checkin.setHours(0,0,0,0);
                 return checkin.getTime() > today.getTime() && b.status === 'Confirmed';
             });
@@ -131,7 +159,7 @@ function loadBookings() {
                     <h3>#${booking.id} - ${booking.customerName}</h3>
                     <p class="text-muted">
                         <i class="fas fa-calendar"></i> 
-                        ${new Date(booking.checkinDate).toLocaleDateString()} - ${new Date(booking.checkoutDate).toLocaleDateString()}
+                        ${new Date(booking.checkin).toLocaleDateString()} - ${new Date(booking.checkout).toLocaleDateString()}
                     </p>
                 </div>
                 <div>
@@ -182,7 +210,7 @@ function getStatusBadge(status) {
 function getActionButtons(booking) {
     const today = new Date();
     today.setHours(0,0,0,0);
-    const checkin = new Date(booking.checkinDate);
+    const checkin = new Date(booking.checkin);
     checkin.setHours(0,0,0,0);
     
     if (booking.status === 'Confirmed' && checkin.getTime() === today.getTime()) {
@@ -211,9 +239,9 @@ function getActionButtons(booking) {
     `;
 }
 
-function checkInGuest(bookingId) {
-    const bookings = getLocalData('hotelBookings');
-    const rooms = getLocalData('rooms');
+async function checkInGuest(bookingId) {
+    const bookings = await getLocalData('hotelBookings');
+    const rooms = await getLocalData('rooms');
     const booking = bookings.find(b => b.id === bookingId);
     
     if (!booking) return;
@@ -236,17 +264,17 @@ function checkInGuest(bookingId) {
         availableRoom.status = 'Occupied';
         availableRoom.currentBookingId = bookingId;
         
-        setLocalData('hotelBookings', bookings);
-        setLocalData('rooms', rooms);
+        await setLocalData('hotelBookings', bookings);
+        await setLocalData('rooms', rooms);
         
         showNotification(`Guest checked in to Room ${availableRoom.roomNumber}`, 'success');
         loadDashboard();
     }
 }
 
-function checkOutGuest(bookingId) {
-    const bookings = getLocalData('hotelBookings');
-    const rooms = getLocalData('rooms');
+async function checkOutGuest(bookingId) {
+    const bookings = await getLocalData('hotelBookings');
+    const rooms = await getLocalData('rooms');
     const booking = bookings.find(b => b.id === bookingId);
     
     if (!booking) return;
@@ -262,21 +290,21 @@ function checkOutGuest(bookingId) {
             room.currentBookingId = null;
         }
         
-        setLocalData('hotelBookings', bookings);
-        setLocalData('rooms', rooms);
+        await setLocalData('hotelBookings', bookings);
+        await setLocalData('rooms', rooms);
         
         showNotification(`Guest checked out. Room ${booking.roomNumber} marked for cleaning`, 'success');
         loadDashboard();
     }
 }
 
-function viewBooking(bookingId) {
-    const bookings = getLocalData('hotelBookings');
+async function viewBooking(bookingId) {
+    const bookings = await getLocalData('hotelBookings');
     const booking = bookings.find(b => b.id === bookingId);
     
     if (!booking) return;
     
-    alert(`Booking Details:\n\nID: ${booking.id}\nCustomer: ${booking.customerName}\nEmail: ${booking.customerEmail}\nRoom: ${booking.roomType}\nGuests: ${booking.guests}\nCheck-in: ${new Date(booking.checkinDate).toLocaleDateString()}\nCheck-out: ${new Date(booking.checkoutDate).toLocaleDateString()}\nTotal: ${formatPrice(booking.totalPrice)}\nStatus: ${booking.status}`);
+    alert(`Booking Details:\n\nID: ${booking.id}\nCustomer: ${booking.customerName}\nEmail: ${booking.customerEmail}\nRoom: ${booking.roomType}\nGuests: ${booking.guests}\nCheck-in: ${new Date(booking.checkin).toLocaleDateString()}\nCheck-out: ${new Date(booking.checkout).toLocaleDateString()}\nTotal: ${formatPrice(booking.totalPrice)}\nStatus: ${booking.status}`);
 }
 
 // Initialize dashboard

@@ -32,6 +32,25 @@ async function submitRequest(event) {
     showButtonLoading(submitBtn);
 
     try {
+        // Validate room number matches user's booking
+        const hotelBookings = await getLocalData('hotelBookings');
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        const activeBooking = hotelBookings.find(b => 
+            b.customerEmail === user.email &&
+            b.roomNumber === parseInt(roomNumber) &&
+            (b.status === 'Confirmed' || b.status === 'Checked-in') &&
+            new Date(b.checkin) <= today &&
+            new Date(b.checkout) > today
+        );
+
+        if (!activeBooking) {
+            showNotification('Invalid room number. You must have an active booking for this room.', 'error');
+            hideButtonLoading(submitBtn);
+            return;
+        }
+
         // Create request object
         const request = {
             id: generateId('HK'),

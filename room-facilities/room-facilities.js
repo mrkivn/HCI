@@ -8,16 +8,16 @@ let allRooms = [];
 let allBookings = [];
 
 // Load dashboard
-function loadDashboard() {
-    allRooms = getLocalData('rooms');
-    allBookings = getLocalData('hotelBookings');
+async function loadDashboard() {
+    allRooms = await getLocalData('rooms');
+    allBookings = await getLocalData('hotelBookings');
     updateStats();
     loadRooms();
 }
 
 // Update stats
-function updateStats() {
-    const rooms = getLocalData('rooms');
+async function updateStats() {
+    const rooms = await getLocalData('rooms');
     
     const total = rooms.length;
     const available = rooms.filter(r => r.status === 'Available').length;
@@ -319,14 +319,14 @@ function changeRoomStatus(roomNumber) {
 }
 
 // Update room status
-function updateRoomStatus(roomNumber, newStatus) {
-    const rooms = getLocalData('rooms');
+async function updateRoomStatus(roomNumber, newStatus) {
+    const rooms = await getLocalData('rooms');
     const roomIndex = rooms.findIndex(r => r.number === roomNumber);
     
     if (roomIndex === -1) return;
     
     rooms[roomIndex].status = newStatus;
-    setLocalData('rooms', rooms);
+    await setLocalData('rooms', rooms);
     
     showNotification(`Room ${roomNumber} status updated to ${newStatus}`, 'success');
     
@@ -383,8 +383,8 @@ function closeAssignCustomerModal() {
     selectedRoomForAssignment = null;
 }
 
-function loadCustomersDropdown() {
-    const customers = getLocalData('customers');
+async function loadCustomersDropdown() {
+    const customers = await getLocalData('customers');
     const select = document.getElementById('customerSelect');
     
     // Clear existing options except the first one
@@ -419,7 +419,7 @@ function setupAssignmentEventListeners() {
     });
 }
 
-function updateCustomerInfo() {
+async function updateCustomerInfo() {
     const customerIndex = document.getElementById('customerSelect').value;
     const infoDiv = document.getElementById('selectedCustomerInfo');
     const displayDiv = document.getElementById('customerInfoDisplay');
@@ -429,7 +429,7 @@ function updateCustomerInfo() {
         return;
     }
     
-    const customers = getLocalData('customers');
+    const customers = await getLocalData('customers');
     const customer = customers[customerIndex];
     
     displayDiv.innerHTML = `
@@ -510,7 +510,7 @@ function calculateBookingSummary() {
     summaryDiv.style.display = 'block';
 }
 
-function confirmAssignment() {
+async function confirmAssignment() {
     const customerIndex = document.getElementById('customerSelect').value;
     const checkinDate = document.getElementById('checkinDate').value;
     const checkoutDate = document.getElementById('checkoutDate').value;
@@ -533,7 +533,7 @@ function confirmAssignment() {
     }
     
     const room = allRooms.find(r => r.number === selectedRoomForAssignment);
-    const customers = getLocalData('customers');
+    const customers = await getLocalData('customers');
     const customer = customers[customerIndex];
     
     // Calculate nights and total price
@@ -569,9 +569,9 @@ function confirmAssignment() {
     };
     
     // Save booking
-    const bookings = getLocalData('hotelBookings');
+    const bookings = await getLocalData('hotelBookings');
     bookings.push(booking);
-    setLocalData('hotelBookings', bookings);
+    await setLocalData('hotelBookings', bookings);
     
     // Update room status to Occupied
     updateRoomStatus(selectedRoomForAssignment, 'Occupied');

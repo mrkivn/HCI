@@ -91,8 +91,8 @@
             loadRequests();
         }
 
-        function updateStats() {
-            const requests = getLocalData('housekeepingRequests');
+        async function updateStats() {
+            const requests = await getLocalData('housekeepingRequests');
             document.getElementById('pendingRequests').textContent = requests.filter(r => r.status === 'Pending').length;
             document.getElementById('inProgressRequests').textContent = requests.filter(r => r.status === 'In Progress').length;
             
@@ -109,9 +109,9 @@
             loadRequests();
         }
 
-        function loadRequests() {
+        async function loadRequests() {
             const container = document.getElementById('requestsList');
-            let requests = getLocalData('housekeepingRequests');
+            let requests = await getLocalData('housekeepingRequests');
             
             if (currentTab !== 'all') {
                 const statusMap = { 'pending': 'Pending', 'inprogress': 'In Progress', 'completed': 'Completed' };
@@ -148,15 +148,15 @@
             `).join('');
         }
 
-        function updateStatus(requestId, newStatus) {
-            const requests = getLocalData('housekeepingRequests');
+        async function updateStatus(requestId, newStatus) {
+            const requests = await getLocalData('housekeepingRequests');
             const request = requests.find(r => r.id === requestId);
             if (request) {
                 request.status = newStatus;
                 if (newStatus === 'Completed') {
                     request.completedAt = Date.now();
                 }
-                setLocalData('housekeepingRequests', requests);
+                await setLocalData('housekeepingRequests', requests);
                 showNotification(`Request ${newStatus.toLowerCase()}`, 'success');
                 loadDashboard();
             }

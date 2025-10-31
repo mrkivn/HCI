@@ -335,8 +335,8 @@
         let refreshInterval;
 
         // Load and display orders
-        function loadOrders() {
-            const allOrders = getLocalData('orders');
+        async function loadOrders() {
+            const allOrders = await getLocalData('orders');
             const orders = allOrders.filter(o => o.category === 'Food');
             const container = document.getElementById('ordersContainer');
 
@@ -456,8 +456,8 @@
         }
 
         // Update order status
-        function updateOrderStatus(orderId, newStatus) {
-            const orders = getLocalData('orders');
+        async function updateOrderStatus(orderId, newStatus) {
+            const orders = await getLocalData('orders');
             const orderIndex = orders.findIndex(o => o.id === orderId);
 
             if (orderIndex !== -1) {
@@ -465,7 +465,7 @@
                 if (newStatus === 'Delivered') {
                     orders[orderIndex].deliveredAt = Date.now();
                 }
-                setLocalData('orders', orders);
+                await setLocalData('orders', orders);
                 showNotification(`Order ${orderId} status updated to ${newStatus}`, 'success');
                 loadOrders();
             }

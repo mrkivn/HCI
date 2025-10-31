@@ -121,8 +121,8 @@
             loadDashboard();
         }
 
-        function loadDashboard() {
-            const bookings = getLocalData('hotelBookings');
+        async function loadDashboard() {
+            const bookings = await getLocalData('hotelBookings');
             const filter = document.getElementById('paymentFilter').value;
             
             // Calculate stats
@@ -216,9 +216,9 @@
             `;
         }
 
-        function confirmPayment(bookingId) {
+        async function confirmPayment(bookingId) {
             const note = prompt('Add a note (optional):');
-            const bookings = getLocalData('hotelBookings');
+            const bookings = await getLocalData('hotelBookings');
             const booking = bookings.find(b => b.id === bookingId);
             
             if (booking) {
@@ -227,17 +227,17 @@
                 booking.paymentNote = note || '';
                 booking.paymentConfirmedBy = 'Billing Staff';
                 
-                setLocalData('hotelBookings', bookings);
+                await setLocalData('hotelBookings', bookings);
                 showNotification('Payment confirmed successfully!', 'success');
                 loadDashboard();
             }
         }
 
-        function flagPayment(bookingId) {
+        async function flagPayment(bookingId) {
             const reason = prompt('Enter reason for flagging this payment:');
             if (!reason) return;
             
-            const bookings = getLocalData('hotelBookings');
+            const bookings = await getLocalData('hotelBookings');
             const booking = bookings.find(b => b.id === bookingId);
             
             if (booking) {
@@ -246,7 +246,7 @@
                 booking.paymentNote = reason;
                 booking.paymentFlaggedBy = 'Billing Staff';
                 
-                setLocalData('hotelBookings', bookings);
+                await setLocalData('hotelBookings', bookings);
                 showNotification('Payment flagged for review', 'warning');
                 loadDashboard();
             }

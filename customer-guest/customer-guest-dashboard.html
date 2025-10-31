@@ -301,11 +301,11 @@
         let orders = [];
         let reservations = [];
 
-        function loadData() {
-            customers = getLocalData('customers');
-            bookings = getLocalData('hotelBookings');
-            orders = getLocalData('orders');
-            reservations = getLocalData('restaurantReservations');
+        async function loadData() {
+            customers = await getLocalData('customers');
+            bookings = await getLocalData('hotelBookings');
+            orders = await getLocalData('orders');
+            reservations = await getLocalData('restaurantReservations');
 
             updateStats();
             displayCustomers();
