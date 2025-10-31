@@ -63,7 +63,7 @@ function selectSeating(seatingType) {
 }
 
 // Submit reservation
-function submitReservation(event) {
+async function submitReservation(event) {
     event.preventDefault();
 
     const date = document.getElementById('reservationDate').value;
@@ -92,31 +92,41 @@ function submitReservation(event) {
         return;
     }
 
-    // Create reservation object
-    const reservation = {
-        id: generateId('AG'),
-        type: 'restaurant',
-        date: date,
-        time: time,
-        seating: selectedSeating,
-        guests: guests,
-        specialRequests: specialRequests,
-        customerEmail: user.email,
-        customerName: user.name,
-        customerPhone: user.phone,
-        status: 'Confirmed',
-        reservationDate: Date.now()
-    };
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    showButtonLoading(submitBtn);
 
-    // Save to localStorage
-    const restaurantReservations = getLocalData('restaurantReservations');
-    restaurantReservations.push(reservation);
-    setLocalData('restaurantReservations', restaurantReservations);
+    try {
+        // Create reservation object
+        const reservation = {
+            id: generateId('AG'),
+            type: 'restaurant',
+            date: date,
+            time: time,
+            seating: selectedSeating,
+            guests: guests,
+            specialRequests: specialRequests,
+            customerEmail: user.email,
+            customerName: user.name,
+            customerPhone: user.phone,
+            status: 'Confirmed',
+            reservationDate: Date.now()
+        };
 
-    // Show confirmation
-    showConfirmation(reservation);
-    
-    showNotification('Reservation confirmed successfully!', 'success');
+        // Save to Firestore
+        const restaurantReservations = await getLocalData('restaurantReservations');
+        restaurantReservations.push(reservation);
+        await setLocalData('restaurantReservations', restaurantReservations);
+
+        // Show confirmation
+        showConfirmation(reservation);
+        
+        showNotification('Reservation confirmed successfully!', 'success');
+    } catch (error) {
+        console.error('Reservation error:', error);
+        showNotification('Failed to save reservation. Please try again.', 'error');
+    } finally {
+        hideButtonLoading(submitBtn);
+    }
 }
 
 // Show confirmation

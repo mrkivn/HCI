@@ -248,43 +248,53 @@ function selectPayment(method) {
 }
 
 // Confirm booking
-function confirmBooking() {
+async function confirmBooking() {
     if (!bookingData.paymentMethod) {
         showNotification('Please select a payment method', 'error');
         return;
     }
 
-    // Create booking object
-    const booking = {
-        id: generateId('GIN'),
-        type: 'hotel',
-        destination: bookingData.destination,
-        checkin: bookingData.checkin,
-        checkout: bookingData.checkout,
-        nights: bookingData.nights,
-        guests: bookingData.guests,
-        roomType: bookingData.roomType,
-        roomPrice: bookingData.roomPrice,
-        totalPrice: bookingData.totalPrice,
-        customerEmail: user.email,
-        customerName: user.name,
-        customerPhone: user.phone,
-        paymentMethod: bookingData.paymentMethod,
-        status: 'Confirmed',
-        bookingDate: Date.now(),
-        roomNumber: null // Will be assigned by front office during check-in
-    };
+    const confirmBtn = document.getElementById('confirmBtn');
+    showButtonLoading(confirmBtn);
 
-    // Save to localStorage
-    const hotelBookings = getLocalData('hotelBookings');
-    hotelBookings.push(booking);
-    setLocalData('hotelBookings', hotelBookings);
+    try {
+        // Create booking object
+        const booking = {
+            id: generateId('GIN'),
+            type: 'hotel',
+            destination: bookingData.destination,
+            checkin: bookingData.checkin,
+            checkout: bookingData.checkout,
+            nights: bookingData.nights,
+            guests: bookingData.guests,
+            roomType: bookingData.roomType,
+            roomPrice: bookingData.roomPrice,
+            totalPrice: bookingData.totalPrice,
+            customerEmail: user.email,
+            customerName: user.name,
+            customerPhone: user.phone,
+            paymentMethod: bookingData.paymentMethod,
+            status: 'Confirmed',
+            bookingDate: Date.now(),
+            roomNumber: null // Will be assigned by front office during check-in
+        };
 
-    // Show confirmation
-    loadConfirmation(booking);
-    showStep(4);
+        // Save to Firestore
+        const hotelBookings = await getLocalData('hotelBookings');
+        hotelBookings.push(booking);
+        await setLocalData('hotelBookings', hotelBookings);
 
-    showNotification('Booking confirmed successfully!', 'success');
+        // Show confirmation
+        loadConfirmation(booking);
+        showStep(4);
+
+        showNotification('Booking confirmed successfully!', 'success');
+    } catch (error) {
+        console.error('Booking error:', error);
+        showNotification('Failed to save booking. Please try again.', 'error');
+    } finally {
+        hideButtonLoading(confirmBtn);
+    }
 }
 
 // Load confirmation

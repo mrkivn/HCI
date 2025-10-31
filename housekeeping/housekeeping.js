@@ -7,7 +7,7 @@ if (user) {
 }
 
 // Submit request
-function submitRequest(event) {
+async function submitRequest(event) {
     event.preventDefault();
 
     const roomNumber = document.getElementById('roomNumber').value.trim();
@@ -28,29 +28,39 @@ function submitRequest(event) {
         return;
     }
 
-    // Create request object
-    const request = {
-        id: generateId('HK'),
-        roomNumber: roomNumber,
-        requestType: requestTypes,
-        notes: notes,
-        customerEmail: user.email,
-        customerName: user.name,
-        status: 'Pending',
-        timestamp: Date.now(),
-        assignedTo: null,
-        completedAt: null
-    };
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    showButtonLoading(submitBtn);
 
-    // Save to localStorage
-    const housekeepingRequests = getLocalData('housekeepingRequests');
-    housekeepingRequests.push(request);
-    setLocalData('housekeepingRequests', housekeepingRequests);
+    try {
+        // Create request object
+        const request = {
+            id: generateId('HK'),
+            roomNumber: roomNumber,
+            requestType: requestTypes,
+            notes: notes,
+            customerEmail: user.email,
+            customerName: user.name,
+            status: 'Pending',
+            timestamp: Date.now(),
+            assignedTo: null,
+            completedAt: null
+        };
 
-    // Show confirmation
-    showConfirmation(request);
+        // Save to Firestore
+        const housekeepingRequests = await getLocalData('housekeepingRequests');
+        housekeepingRequests.push(request);
+        await setLocalData('housekeepingRequests', housekeepingRequests);
 
-    showNotification('Request submitted successfully!', 'success');
+        // Show confirmation
+        showConfirmation(request);
+
+        showNotification('Request submitted successfully!', 'success');
+    } catch (error) {
+        console.error('Housekeeping request error:', error);
+        showNotification('Failed to submit request. Please try again.', 'error');
+    } finally {
+        hideButtonLoading(submitBtn);
+    }
 }
 
 // Show confirmation

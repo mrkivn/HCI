@@ -152,7 +152,7 @@ function removeFromCart(index) {
 }
 
 // Place order
-function placeOrder() {
+async function placeOrder() {
     const tableOrRoom = document.getElementById('tableOrRoom').value.trim();
 
     if (!tableOrRoom) {
@@ -165,41 +165,51 @@ function placeOrder() {
         return;
     }
 
-    // Calculate total
-    const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const placeOrderBtn = document.querySelector('.place-order-btn');
+    showButtonLoading(placeOrderBtn);
 
-    // Create order
-    const order = {
-        id: generateId('ORD'),
-        category: 'Drinks',
-        items: cart.map(item => ({
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity
-        })),
-        tableOrRoomNumber: tableOrRoom,
-        customerEmail: user.email,
-        customerName: user.name,
-        totalPrice: totalPrice,
-        status: 'Pending',
-        timestamp: Date.now()
-    };
+    try {
+        // Calculate total
+        const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-    // Save to localStorage
-    const orders = getLocalData('orders');
-    orders.push(order);
-    setLocalData('orders', orders);
+        // Create order
+        const order = {
+            id: generateId('ORD'),
+            category: 'Drinks',
+            items: cart.map(item => ({
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity
+            })),
+            tableOrRoomNumber: tableOrRoom,
+            customerEmail: user.email,
+            customerName: user.name,
+            totalPrice: totalPrice,
+            status: 'Pending',
+            timestamp: Date.now()
+        };
 
-    // Show confirmation modal
-    document.getElementById('orderId').textContent = order.id;
-    document.getElementById('orderModal').classList.add('show');
+        // Save to Firestore
+        const orders = await getLocalData('orders');
+        orders.push(order);
+        await setLocalData('orders', orders);
 
-    // Clear cart
-    cart = [];
-    document.getElementById('tableOrRoom').value = '';
-    updateCart();
+        // Show confirmation modal
+        document.getElementById('orderId').textContent = order.id;
+        document.getElementById('orderModal').classList.add('show');
 
-    showNotification('Order placed successfully!', 'success');
+        // Clear cart
+        cart = [];
+        document.getElementById('tableOrRoom').value = '';
+        updateCart();
+
+        showNotification('Order placed successfully!', 'success');
+    } catch (error) {
+        console.error('Order error:', error);
+        showNotification('Failed to place order. Please try again.', 'error');
+    } finally {
+        hideButtonLoading(placeOrderBtn);
+    }
 }
 
 // Close modal
