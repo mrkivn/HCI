@@ -1,6 +1,6 @@
 # GINHAWA Hotel & After Glow Restaurant Management System
 
-A complete hotel and restaurant management system demo built for HCI (Human-Computer Interaction) projects. This is a fully client-side application that runs on GitHub Pages with localStorage for data persistence.
+A complete hotel and restaurant management system demo built for HCI (Human-Computer Interaction) projects. This is a fully client-side application that uses Firebase Firestore for cloud-based data persistence.
 
 ## 🌟 Features
 
@@ -54,8 +54,8 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
    - Staff Portal: `http://localhost:5000/staff-login.html`
 
 4. **The application will automatically initialize**
-   - Default data is loaded into localStorage on first visit
-   - You can reset data by clearing browser localStorage
+   - Default data is loaded into Firebase Firestore on first visit
+   - Data persists across devices and sessions
 
 ### Files Structure
 
@@ -68,7 +68,10 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
 │
 ├── shared/                         # Shared resources
 │   ├── shared-styles.css          # Common styles and design system
-│   └── shared-functions.js        # Utility functions and localStorage init
+│   └── shared-functions.js        # Utility functions and Firebase helpers
+│
+├── firebase-config.js              # Firebase configuration
+├── firebase-db.js                  # Firestore database operations
 │
 ├── booking/                        # Hotel booking module
 │   ├── booking.html
@@ -242,12 +245,13 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
 ### Technology Stack
 - **Frontend**: Pure Vanilla HTML5, CSS3, JavaScript (ES6+) - No frameworks or libraries
 - **Icons**: Font Awesome 6.4.0
-- **Storage**: localStorage API (all data), sessionStorage (authentication)
+- **Database**: Firebase Firestore (cloud-based NoSQL database)
+- **Storage**: sessionStorage (authentication session), localStorage (theme preference only)
 - **Server**: Python HTTP server for local development
 - **Architecture**: Modular structure simulating group project collaboration
 
 ### Data Persistence
-All data is stored in the browser's localStorage:
+All data is stored in Firebase Firestore cloud database:
 - `customers` - Customer accounts
 - `staff` - Staff accounts
 - `hotelBookings` - All hotel bookings
@@ -257,13 +261,20 @@ All data is stored in the browser's localStorage:
 - `rooms` - Room status and assignments (30 rooms: 101-130)
 - `invoices` - Billing invoices
 
+**Benefits of Firebase Firestore:**
+- ✅ Data persists across devices and browsers
+- ✅ Real-time synchronization
+- ✅ Cloud-based (no local storage limits)
+- ✅ Offline support with automatic sync
+- ✅ Scalable and production-ready
+
 ### Browser Compatibility
 - Chrome 90+
 - Firefox 88+
 - Safari 14+
 - Edge 90+
 
-**Note**: localStorage is domain-specific, so data on your local machine won't transfer to different domains.
+**Note**: Requires internet connection for initial data load. Works offline with cached data and syncs when online.
 
 ### Modular Architecture
 This project uses a modular structure where each feature has its own folder:
@@ -291,22 +302,28 @@ This project uses a modular structure where each feature has its own folder:
 ## 🔒 Security Note
 
 This is a **DEMO/PROTOTYPE** system for educational purposes:
-- Passwords are stored in plain text in localStorage
+- Passwords are stored in plain text in Firestore
 - No server-side validation
 - No encryption
+- Firestore security rules are set to test mode (allow all access)
 - Not suitable for production use
 - Do not use real personal data
+
+**See [SECURITY_WARNING.md](SECURITY_WARNING.md) for important security information.**
 
 ## 🐛 Troubleshooting
 
 ### Data Not Persisting
-- Check if localStorage is enabled in your browser
-- Ensure you're not in Private/Incognito mode
-- Check browser console for errors
+- Check internet connection (required for Firestore)
+- Verify Firebase configuration in `firebase-config.js`
+- Check browser console for Firebase errors
+- Ensure Firestore is enabled in Firebase Console
 
 ### Can't Login
 - Verify email and password match demo accounts
-- Clear localStorage and refresh to reset: `localStorage.clear()`
+- Check Firebase Console to see if demo data was initialized
+- Check browser console for async/await errors
+- Try refreshing the page to re-initialize data
 - Check department matches staff account
 
 ### Booking Not Showing
@@ -325,8 +342,9 @@ This is a **DEMO/PROTOTYPE** system for educational purposes:
 For questions or issues:
 1. Check this README thoroughly
 2. Verify demo credentials
-3. Clear localStorage and try again
+3. Check Firebase Console for data issues
 4. Check browser console for errors
+5. See [FIREBASE_MIGRATION_GUIDE.md](FIREBASE_MIGRATION_GUIDE.md) for technical details
 
 ## 📄 License
 
