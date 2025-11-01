@@ -110,17 +110,11 @@
                 <!-- Tabs -->
                 <div class="tabs mb-2" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button class="tab active" onclick="switchTab(event, 'arrivals')">
-                            <i class="fas fa-plane-arrival"></i> Today's Arrivals
-                        </button>
-                        <button class="tab" onclick="switchTab(event, 'departures')">
-                            <i class="fas fa-plane-departure"></i> Today's Departures
+                        <button class="tab active" onclick="switchTab(event, 'upcoming')">
+                            <i class="fas fa-calendar-alt"></i> All Bookings
                         </button>
                         <button class="tab" onclick="switchTab(event, 'inhouse')">
                             <i class="fas fa-users"></i> In-House Guests
-                        </button>
-                        <button class="tab" onclick="switchTab(event, 'upcoming')">
-                            <i class="fas fa-calendar-alt"></i> Upcoming
                         </button>
                     </div>
                     <button class="reload-btn" onclick="refreshDashboard()" id="reloadBtn">

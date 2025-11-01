@@ -1,5 +1,5 @@
 const user = checkAuth('staff');
-let currentTab = 'arrivals';
+let currentTab = 'upcoming';
 
 async function initializeRoomsData() {
     const rooms = await getLocalData('rooms');
@@ -76,7 +76,7 @@ async function loadDashboard() {
     const arrivalsToday = bookings.filter(b => {
         const checkin = new Date(b.checkin);
         checkin.setHours(0,0,0,0);
-        return checkin.getTime() === today.getTime() && b.status !== 'Cancelled';
+        return checkin.getTime() === today.getTime() && (b.status === 'Confirmed' || b.status === 'Pending');
     }).length;
     
     const departuresToday = bookings.filter(b => {
@@ -150,29 +150,17 @@ async function loadBookings() {
     let filtered = [];
     
     switch(currentTab) {
-        case 'arrivals':
-            filtered = bookings.filter(b => {
-                const checkin = new Date(b.checkin);
-                checkin.setHours(0,0,0,0);
-                return checkin.getTime() === today.getTime() && b.status !== 'Cancelled';
-            });
-            break;
-        case 'departures':
-            filtered = bookings.filter(b => {
-                const checkout = new Date(b.checkout);
-                checkout.setHours(0,0,0,0);
-                return checkout.getTime() === today.getTime() && b.status === 'Checked-in';
-            });
-            break;
         case 'inhouse':
+            // Show all currently checked-in guests
             filtered = bookings.filter(b => b.status === 'Checked-in');
             break;
         case 'upcoming':
-            filtered = bookings.filter(b => {
-                const checkin = new Date(b.checkin);
-                checkin.setHours(0,0,0,0);
-                return checkin.getTime() > today.getTime() && b.status === 'Confirmed';
-            });
+            // Show all confirmed bookings (not yet checked in) - this includes all bookings customers made
+            filtered = bookings.filter(b => b.status === 'Confirmed' || b.status === 'Pending');
+            break;
+        default:
+            // Default to upcoming
+            filtered = bookings.filter(b => b.status === 'Confirmed' || b.status === 'Pending');
             break;
     }
     
