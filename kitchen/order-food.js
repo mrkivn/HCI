@@ -150,12 +150,66 @@ function removeFromCart(index) {
     showNotification('Item removed from cart', 'success');
 }
 
+// Load user's rooms for dropdown
+async function loadUserRooms() {
+    const selectElement = document.getElementById('tableOrRoom');
+    if (!selectElement) return;
+    
+    // Clear existing options except the first one
+    selectElement.innerHTML = '<option value="">Select table or room...</option>';
+    
+    try {
+        // Get user's bookings
+        const bookings = await getLocalData('hotelBookings');
+        const userBookings = bookings.filter(b => 
+            b.customerEmail === user.email && 
+            b.roomNumber && 
+            (b.status === 'Checked-in' || b.status === 'Confirmed')
+        );
+        
+        // Get unique room numbers from user's bookings
+        const userRooms = [...new Set(userBookings.map(b => b.roomNumber))];
+        
+        // Add room options
+        userRooms.forEach(roomNumber => {
+            const booking = userBookings.find(b => b.roomNumber === roomNumber);
+            const roomType = booking?.roomType || '';
+            const option = document.createElement('option');
+            option.value = `Room ${roomNumber}`;
+            option.textContent = `Room ${roomNumber} ${roomType ? `(${roomType})` : ''}`;
+            selectElement.appendChild(option);
+        });
+        
+        // Add table option
+        const tableOption = document.createElement('option');
+        tableOption.value = 'Table';
+        tableOption.textContent = 'Table (Restaurant)';
+        selectElement.appendChild(tableOption);
+        
+        // If no rooms found, show message
+        if (userRooms.length === 0) {
+            const noRoomOption = document.createElement('option');
+            noRoomOption.value = '';
+            noRoomOption.textContent = 'No rooms available - Use Table option';
+            noRoomOption.disabled = true;
+            selectElement.appendChild(noRoomOption);
+        }
+    } catch (error) {
+        console.error('Error loading user rooms:', error);
+        // Add table option as fallback
+        const tableOption = document.createElement('option');
+        tableOption.value = 'Table';
+        tableOption.textContent = 'Table (Restaurant)';
+        selectElement.appendChild(tableOption);
+    }
+}
+
 // Place order
 async function placeOrder() {
     const tableOrRoom = document.getElementById('tableOrRoom').value.trim();
 
     if (!tableOrRoom) {
-        showNotification('Please enter table or room number', 'error');
+        showNotification('Please select table or room number', 'error');
         return;
     }
 
@@ -164,7 +218,7 @@ async function placeOrder() {
         return;
     }
 
-    const placeOrderBtn = document.querySelector('.place-order-btn');
+    const placeOrderBtn = document.querySelector('.btn-primary.btn-block');
     showButtonLoading(placeOrderBtn);
 
     try {
@@ -201,6 +255,9 @@ async function placeOrder() {
         cart = [];
         document.getElementById('tableOrRoom').value = '';
         updateCart();
+        
+        // Reload rooms in case booking status changed
+        loadUserRooms();
 
         showNotification('Order placed successfully!', 'success');
     } catch (error) {
@@ -218,3 +275,4 @@ function closeModal() {
 
 // Initialize
 loadMenu();
+loadUserRooms();
