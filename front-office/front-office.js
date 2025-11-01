@@ -213,9 +213,13 @@ function getActionButtons(booking) {
     const checkin = new Date(booking.checkin);
     checkin.setHours(0,0,0,0);
     
+    // Escape booking.id for safe use in onclick handlers
+    // Use single quotes in onclick attribute, and escape single quotes in booking.id
+    const bookingId = String(booking.id).replace(/'/g, "\\'");
+    
     if (booking.status === 'Confirmed' && checkin.getTime() === today.getTime()) {
         return `
-            <button class="btn btn-success" onclick="checkInGuest(${booking.id})">
+            <button class="btn btn-success" onclick="checkInGuest('${bookingId}')">
                 <i class="fas fa-door-open"></i> Check-in
             </button>
         `;
@@ -223,17 +227,17 @@ function getActionButtons(booking) {
     
     if (booking.status === 'Checked-in') {
         return `
-            <button class="btn btn-primary" onclick="viewBooking(${booking.id})">
+            <button class="btn btn-primary" onclick="viewBooking('${bookingId}')">
                 <i class="fas fa-eye"></i> View Details
             </button>
-            <button class="btn btn-warning" onclick="checkOutGuest(${booking.id})">
+            <button class="btn btn-warning" onclick="checkOutGuest('${bookingId}')">
                 <i class="fas fa-door-closed"></i> Check-out
             </button>
         `;
     }
     
     return `
-        <button class="btn btn-outline" onclick="viewBooking(${booking.id})">
+        <button class="btn btn-outline" onclick="viewBooking('${bookingId}')">
             <i class="fas fa-eye"></i> View Details
         </button>
     `;
