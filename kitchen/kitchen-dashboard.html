@@ -333,9 +333,14 @@
 
         let currentFilter = 'All';
         let refreshInterval;
+        let reloadIndicator = null;
 
         // Load and display orders
-        async function loadOrders() {
+        async function loadOrders(silent = false) {
+            if (!silent) {
+                addReloadAnimation(document.getElementById('ordersContainer'));
+            }
+            
             const allOrders = await getLocalData('orders');
             const orders = allOrders.filter(o => o.category === 'Food');
             const container = document.getElementById('ordersContainer');
@@ -493,8 +498,20 @@
         // Initial load
         loadOrders();
 
+        // Setup reload indicator
+        const dashboardHeader = document.querySelector('.dashboard-header');
+        if (dashboardHeader && !reloadIndicator) {
+            reloadIndicator = showReloadIndicator(dashboardHeader, 'Auto-refreshing every 5 seconds');
+        }
+
         // Auto-refresh every 5 seconds
-        refreshInterval = setInterval(loadOrders, 5000);
+        refreshInterval = setInterval(() => {
+            updateReloadIndicator(reloadIndicator, 'Refreshing...', true);
+            loadOrders(true); // Silent reload for auto-refresh
+            setTimeout(() => {
+                updateReloadIndicator(reloadIndicator, 'Auto-refreshing every 5 seconds', false);
+            }, 500);
+        }, 5000);
 
         // Cleanup on page unload
         window.addEventListener('beforeunload', () => {

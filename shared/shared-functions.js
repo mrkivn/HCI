@@ -6,39 +6,52 @@ function showButtonLoading(button, originalText = null) {
     }
     const text = button.getAttribute('data-original-text') || button.textContent;
     button.setAttribute('data-original-text', text);
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+    button.classList.add('reloading');
+    
+    // Store original HTML if it exists
+    const originalHTML = button.innerHTML;
+    if (!button.getAttribute('data-original-html')) {
+        button.setAttribute('data-original-html', originalHTML);
+    }
+    
+    button.innerHTML = '<i class="fas fa-spinner"></i> Loading...';
 }
 
 function hideButtonLoading(button) {
     if (!button) return;
     button.disabled = false;
+    button.classList.remove('reloading');
+    
+    const originalHTML = button.getAttribute('data-original-html');
     const originalText = button.getAttribute('data-original-text');
-    if (originalText) {
+    
+    if (originalHTML) {
+        button.innerHTML = originalHTML;
+    } else if (originalText) {
         button.textContent = originalText;
     }
 }
 
-function showLoading(containerId) {
+function showLoading(containerId, message = 'Loading...') {
     const container = document.getElementById(containerId);
     if (!container) return;
     
+    // Remove existing overlay if any
+    const existingOverlay = container.querySelector('.loading-overlay');
+    if (existingOverlay) {
+        existingOverlay.remove();
+    }
+    
     const overlay = document.createElement('div');
     overlay.className = 'loading-overlay';
-    overlay.innerHTML = '<div class="spinner"><i class="fas fa-spinner fa-spin fa-3x"></i><p>Loading...</p></div>';
-    overlay.style.cssText = `
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-    `;
+    overlay.innerHTML = `<div class="spinner"><i class="fas fa-spinner fa-3x"></i><p>${message}</p></div>`;
     container.style.position = 'relative';
     container.appendChild(overlay);
+    
+    // Trigger animation
+    setTimeout(() => {
+        overlay.style.animation = 'fadeIn 0.3s ease';
+    }, 10);
 }
 
 function hideLoading(containerId) {
@@ -46,7 +59,10 @@ function hideLoading(containerId) {
     if (!container) return;
     const overlay = container.querySelector('.loading-overlay');
     if (overlay) {
-        overlay.remove();
+        overlay.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+            overlay.remove();
+        }, 300);
     }
 }
 
@@ -350,4 +366,198 @@ function calculateTotalRevenue(invoices, dateFilter = null) {
         .filter(inv => inv.paymentStatus === 'Paid')
         .filter(inv => !dateFilter || isToday(new Date(inv.timestamp).toISOString().split('T')[0]))
         .reduce((total, inv) => total + inv.total, 0);
+}
+
+/* ============================================
+   Reload Animation Functions
+   ============================================ */
+
+/**
+ * Show reload button with animation
+ */
+function showReloadButton(container, onClick) {
+    const existingBtn = container.querySelector('.reload-btn');
+    if (existingBtn) return existingBtn;
+    
+    const btn = document.createElement('button');
+    btn.className = 'reload-btn';
+    btn.innerHTML = '<i class="fas fa-sync-alt"></i> Reload';
+    btn.onclick = onClick;
+    container.appendChild(btn);
+    return btn;
+}
+
+/**
+ * Animate reload button
+ */
+function animateReloadButton(button) {
+    if (!button) return;
+    button.classList.add('reloading');
+    const icon = button.querySelector('i');
+    if (icon) {
+        icon.style.animation = 'spin 1s linear infinite';
+    }
+}
+
+/**
+ * Stop reload button animation
+ */
+function stopReloadButtonAnimation(button) {
+    if (!button) return;
+    button.classList.remove('reloading');
+    const icon = button.querySelector('i');
+    if (icon) {
+        icon.style.animation = '';
+    }
+}
+
+/**
+ * Add smooth reload animation to content
+ */
+function addReloadAnimation(container) {
+    if (!container) return;
+    container.classList.add('smooth-update', 'updating');
+    
+    setTimeout(() => {
+        container.classList.remove('updating');
+        container.classList.add('reload-content');
+    }, 100);
+}
+
+/**
+ * Show reload indicator
+ */
+function showReloadIndicator(container, message = 'Auto-refreshing...') {
+    const existing = container.querySelector('.reload-indicator');
+    if (existing) return existing;
+    
+    const indicator = document.createElement('div');
+    indicator.className = 'reload-indicator';
+    indicator.innerHTML = `<i class="fas fa-sync-alt"></i> <span>${message}</span>`;
+    container.appendChild(indicator);
+    return indicator;
+}
+
+/**
+ * Update reload indicator
+ */
+function updateReloadIndicator(indicator, message, isActive = false) {
+    if (!indicator) return;
+    const span = indicator.querySelector('span');
+    if (span) {
+        span.textContent = message;
+    }
+    if (isActive) {
+        indicator.classList.add('active');
+    } else {
+        indicator.classList.remove('active');
+    }
+}
+
+/**
+ * Hide reload indicator
+ */
+function hideReloadIndicator(container) {
+    const indicator = container.querySelector('.reload-indicator');
+    if (indicator) {
+        indicator.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => indicator.remove(), 300);
+    }
+}
+
+/**
+ * Wrapper function for reload operations with animation
+ */
+async function withReloadAnimation(asyncFn, options = {}) {
+    const {
+        containerId = null,
+        button = null,
+        showIndicator = false,
+        indicatorMessage = 'Loading...',
+        smoothUpdate = true
+    } = options;
+    
+    // Show loading states
+    if (containerId) {
+        showLoading(containerId, indicatorMessage);
+    }
+    
+    if (button) {
+        animateReloadButton(button);
+    }
+    
+    if (showIndicator && containerId) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            showReloadIndicator(container.parentElement, indicatorMessage);
+        }
+    }
+    
+    try {
+        const result = await asyncFn();
+        
+        // Apply smooth update animation to container
+        if (containerId && smoothUpdate) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                addReloadAnimation(container);
+            }
+        }
+        
+        return result;
+    } finally {
+        // Hide loading states
+        if (containerId) {
+            setTimeout(() => hideLoading(containerId), 300);
+        }
+        
+        if (button) {
+            stopReloadButtonAnimation(button);
+        }
+        
+        if (showIndicator && containerId) {
+            setTimeout(() => {
+                const container = document.getElementById(containerId);
+                if (container) {
+                    hideReloadIndicator(container.parentElement);
+                }
+            }, 500);
+        }
+    }
+}
+
+/**
+ * Create skeleton loading placeholders
+ */
+function showSkeletonLoading(containerId, count = 3) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    for (let i = 0; i < count; i++) {
+        const skeleton = document.createElement('div');
+        skeleton.className = 'skeleton-card';
+        skeleton.innerHTML = `
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text" style="width: 80%;"></div>
+            <div class="skeleton skeleton-text" style="width: 60%;"></div>
+        `;
+        container.appendChild(skeleton);
+    }
+}
+
+/**
+ * Remove skeleton loading
+ */
+function hideSkeletonLoading(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    const skeletons = container.querySelectorAll('.skeleton-card');
+    skeletons.forEach(skeleton => {
+        skeleton.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => skeleton.remove(), 300);
+    });
 }

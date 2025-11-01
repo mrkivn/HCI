@@ -55,6 +55,8 @@ function switchTab(event, tab) {
 }
 
 async function loadDashboard() {
+    addReloadAnimation(document.getElementById('bookingsList'));
+    
     await initializeRoomsData();
     
     const bookings = await getLocalData('hotelBookings');
@@ -97,6 +99,16 @@ async function loadDashboard() {
     document.getElementById('maintenanceRooms').textContent = maintenanceRooms;
     
     loadBookings();
+}
+
+async function refreshDashboard() {
+    const reloadBtn = document.getElementById('reloadBtn');
+    await withReloadAnimation(async () => {
+        await loadDashboard();
+    }, {
+        button: reloadBtn,
+        smoothUpdate: true
+    });
 }
 
 async function loadBookings() {
