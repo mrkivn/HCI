@@ -1,6 +1,3 @@
-/* Booking Module JavaScript */
-
-// Check authentication
 const user = checkAuth('customer');
 if (user) {
     document.getElementById('userName').textContent = user.name.split(' ')[0];
@@ -424,5 +421,4 @@ function viewMyBookings() {
     window.location.href = '/my-bookings.html';
 }
 
-// Initialize
 initializeDates();

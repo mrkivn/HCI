@@ -1,12 +1,8 @@
-/* Drinks Ordering JavaScript */
-
-// Check authentication
 const user = checkAuth('customer');
 if (user) {
     document.getElementById('userName').textContent = user.name.split(' ')[0];
 }
 
-// Drinks menu items
 const drinksMenu = [
     { name: 'Tropical Yakult Splash', price: 120, icon: 'fa-glass-water', description: 'Refreshing tropical blend' },
     { name: 'Energy Bear Spark', price: 130, icon: 'fa-mug-hot', description: 'Energizing fruity drink' },
@@ -18,10 +14,8 @@ const drinksMenu = [
     { name: 'Margarita', price: 180, icon: 'fa-martini-glass-citrus', description: 'Premium margarita' }
 ];
 
-// Shopping cart
 let cart = [];
 
-// Load menu items
 function loadMenu() {
     const menuGrid = document.getElementById('menuGrid');
     menuGrid.innerHTML = '';
@@ -59,7 +53,6 @@ function loadMenu() {
     });
 }
 
-// Increase quantity
 function increaseQty(index) {
     const qtyElement = document.getElementById(`qty-${index}`);
     let qty = parseInt(qtyElement.textContent);
@@ -68,7 +61,6 @@ function increaseQty(index) {
     }
 }
 
-// Decrease quantity
 function decreaseQty(index) {
     const qtyElement = document.getElementById(`qty-${index}`);
     let qty = parseInt(qtyElement.textContent);
@@ -77,12 +69,10 @@ function decreaseQty(index) {
     }
 }
 
-// Add to cart
 function addToCart(index) {
     const item = drinksMenu[index];
     const qty = parseInt(document.getElementById(`qty-${index}`).textContent);
 
-    // Check if item already in cart
     const existingItem = cart.find(cartItem => cartItem.name === item.name);
     
     if (existingItem) {
@@ -95,16 +85,12 @@ function addToCart(index) {
         });
     }
 
-    // Reset quantity
     document.getElementById(`qty-${index}`).textContent = '1';
-
-    // Update cart display
     updateCart();
 
     showNotification(`${item.name} added to cart!`, 'success');
 }
 
-// Update cart display
 function updateCart() {
     const cartItemsContainer = document.getElementById('cartItems');
     const cartSummary = document.getElementById('cartSummary');
@@ -144,23 +130,19 @@ function updateCart() {
     document.getElementById('total').textContent = formatPrice(subtotal);
 }
 
-// Remove from cart
 function removeFromCart(index) {
     cart.splice(index, 1);
     updateCart();
     showNotification('Item removed from cart', 'success');
 }
 
-// Load user's rooms for dropdown
 async function loadUserRooms() {
     const selectElement = document.getElementById('tableOrRoom');
     if (!selectElement) return;
     
-    // Clear existing options except the first one
     selectElement.innerHTML = '<option value="">Select table or room...</option>';
     
     try {
-        // Get user's bookings
         const bookings = await getLocalData('hotelBookings');
         const userBookings = bookings.filter(b => 
             b.customerEmail === user.email && 
@@ -168,10 +150,8 @@ async function loadUserRooms() {
             (b.status === 'Checked-in' || b.status === 'Confirmed')
         );
         
-        // Get unique room numbers from user's bookings
         const userRooms = [...new Set(userBookings.map(b => b.roomNumber))];
         
-        // Add room options
         userRooms.forEach(roomNumber => {
             const booking = userBookings.find(b => b.roomNumber === roomNumber);
             const roomType = booking?.roomType || '';
@@ -181,13 +161,11 @@ async function loadUserRooms() {
             selectElement.appendChild(option);
         });
         
-        // Add table option
         const tableOption = document.createElement('option');
         tableOption.value = 'Table';
         tableOption.textContent = 'Table (Restaurant)';
         selectElement.appendChild(tableOption);
         
-        // If no rooms found, show message
         if (userRooms.length === 0) {
             const noRoomOption = document.createElement('option');
             noRoomOption.value = '';
@@ -197,7 +175,6 @@ async function loadUserRooms() {
         }
     } catch (error) {
         console.error('Error loading user rooms:', error);
-        // Add table option as fallback
         const tableOption = document.createElement('option');
         tableOption.value = 'Table';
         tableOption.textContent = 'Table (Restaurant)';
@@ -205,7 +182,6 @@ async function loadUserRooms() {
     }
 }
 
-// Place order
 async function placeOrder() {
     const tableOrRoom = document.getElementById('tableOrRoom').value.trim();
 
@@ -223,10 +199,8 @@ async function placeOrder() {
     showButtonLoading(placeOrderBtn);
 
     try {
-        // Calculate total
         const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-        // Create order
         const order = {
             id: generateId('ORD'),
             category: 'Drinks',
@@ -243,21 +217,16 @@ async function placeOrder() {
             timestamp: Date.now()
         };
 
-        // Save to Firestore
         const orders = await getLocalData('orders');
         orders.push(order);
         await setLocalData('orders', orders);
 
-        // Show confirmation modal
         document.getElementById('orderId').textContent = order.id;
         document.getElementById('orderModal').classList.add('show');
 
-        // Clear cart
         cart = [];
         document.getElementById('tableOrRoom').value = '';
         updateCart();
-        
-        // Reload rooms in case booking status changed
         loadUserRooms();
 
         showNotification('Order placed successfully!', 'success');
@@ -269,11 +238,9 @@ async function placeOrder() {
     }
 }
 
-// Close modal
 function closeModal() {
     document.getElementById('orderModal').classList.remove('show');
 }
 
-// Initialize
 loadMenu();
 loadUserRooms();

@@ -1,9 +1,6 @@
-/* Front Office JavaScript */
-
 const user = checkAuth('staff');
 let currentTab = 'arrivals';
 
-// Initialize rooms data if not exists
 async function initializeRoomsData() {
     const rooms = await getLocalData('rooms');
     if (rooms.length === 0) {
@@ -68,24 +65,20 @@ async function loadDashboard() {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
     
-    // Calculate arrivals today
     const arrivalsToday = bookings.filter(b => {
         const checkin = new Date(b.checkin);
         checkin.setHours(0,0,0,0);
         return checkin.getTime() === today.getTime() && b.status !== 'Cancelled';
     }).length;
     
-    // Calculate departures today
     const departuresToday = bookings.filter(b => {
         const checkout = new Date(b.checkout);
         checkout.setHours(0,0,0,0);
         return checkout.getTime() === today.getTime() && b.status === 'Checked-in';
     }).length;
     
-    // Calculate current guests
     const currentGuests = bookings.filter(b => b.status === 'Checked-in').length;
     
-    // Room statistics
     const availableRooms = rooms.filter(r => r.status === 'Available').length;
     const occupiedRooms = rooms.filter(r => r.status === 'Occupied').length;
     const cleaningRooms = rooms.filter(r => r.status === 'Cleaning').length;
@@ -93,7 +86,6 @@ async function loadDashboard() {
     
     const occupancyRate = ((occupiedRooms / rooms.length) * 100).toFixed(0);
     
-    // Update stats
     document.getElementById('arrivalsToday').textContent = arrivalsToday;
     document.getElementById('departurestoday').textContent = departuresToday;
     document.getElementById('currentGuests').textContent = currentGuests;
@@ -213,8 +205,6 @@ function getActionButtons(booking) {
     const checkin = new Date(booking.checkin);
     checkin.setHours(0,0,0,0);
     
-    // Escape booking.id for safe use in onclick handlers
-    // Use single quotes in onclick attribute, and escape single quotes in booking.id
     const bookingId = String(booking.id).replace(/'/g, "\\'");
     
     if (booking.status === 'Confirmed' && checkin.getTime() === today.getTime()) {
@@ -250,7 +240,6 @@ async function checkInGuest(bookingId) {
     
     if (!booking) return;
     
-    // Find available room of the booked type
     const availableRoom = rooms.find(r => 
         r.type === booking.roomType && r.status === 'Available'
     );
@@ -311,5 +300,4 @@ async function viewBooking(bookingId) {
     alert(`Booking Details:\n\nID: ${booking.id}\nCustomer: ${booking.customerName}\nEmail: ${booking.customerEmail}\nRoom: ${booking.roomType}\nGuests: ${booking.guests}\nCheck-in: ${new Date(booking.checkin).toLocaleDateString()}\nCheck-out: ${new Date(booking.checkout).toLocaleDateString()}\nTotal: ${formatPrice(booking.totalPrice)}\nStatus: ${booking.status}`);
 }
 
-// Initialize dashboard
 loadDashboard();

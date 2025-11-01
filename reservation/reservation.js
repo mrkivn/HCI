@@ -1,6 +1,3 @@
-/* Reservation Module JavaScript */
-
-// Check authentication
 const user = checkAuth('customer');
 if (user) {
     document.getElementById('userName').textContent = user.name.split(' ')[0];
@@ -11,10 +8,8 @@ if (user) {
     document.getElementById('customerPhone').textContent = user.phone;
 }
 
-// Selected seating
 let selectedSeating = '';
 
-// Initialize
 function initializeReservation() {
     // Set minimum date to today
     const today = getTodayDate();
@@ -207,5 +202,4 @@ function makeAnotherReservation() {
     window.scrollTo(0, 0);
 }
 
-// Initialize on load
 initializeReservation();

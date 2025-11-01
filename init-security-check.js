@@ -1,33 +1,18 @@
-/* ============================================
-   Security Check & Warning System
-   ============================================
-   
-   This script runs on every page load to check if the
-   application is running in insecure mode and displays
-   prominent warnings to users.
-   
-   ============================================ */
-
-// Run security check on page load
 document.addEventListener('DOMContentLoaded', function() {
     checkSecurityStatus();
 });
 
 async function checkSecurityStatus() {
-    // Wait for Firebase to initialize
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     const warnings = [];
     const db = window.firebaseConfig?.db;
     
-    // Check if Firebase is configured
     if (!db) {
-        console.warn('⚠️ Firebase not configured');
         return;
     }
     
     try {
-        // Check if using demo/test accounts with known passwords
         const customers = await getLocalData('customers');
         const hasDemoAccount = customers.some(c => 
             c.email === 'customer@test.com' && c.password === 'password123'
@@ -37,16 +22,14 @@ async function checkSecurityStatus() {
             warnings.push('DEMO ACCOUNTS DETECTED');
         }
         
-        // Check if passwords appear to be in plaintext
         const hasPlaintextPasswords = customers.some(c => 
-            c.password && c.password.length < 30 // Hashed passwords are much longer
+            c.password && c.password.length < 30
         );
         
         if (hasPlaintextPasswords) {
             warnings.push('PLAINTEXT PASSWORDS DETECTED');
         }
         
-        // Display warning banner if in insecure mode
         if (warnings.length > 0) {
             showSecurityWarning(warnings);
         }
@@ -56,7 +39,6 @@ async function checkSecurityStatus() {
 }
 
 function showSecurityWarning(warnings) {
-    // Don't show warning on demo pages or if already shown
     if (document.getElementById('security-warning-banner')) {
         return;
     }
@@ -100,7 +82,6 @@ function showSecurityWarning(warnings) {
         </div>
     `;
     
-    // Add pulsing animation
     const style = document.createElement('style');
     style.textContent = `
         @keyframes pulse {
@@ -111,9 +92,5 @@ function showSecurityWarning(warnings) {
     document.head.appendChild(style);
     
     document.body.insertBefore(warningBanner, document.body.firstChild);
-    
-    // Shift page content down to avoid covering it
     document.body.style.paddingTop = '80px';
 }
-
-console.log('🔒 Security check initialized');

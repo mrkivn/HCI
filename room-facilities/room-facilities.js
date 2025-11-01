@@ -1,6 +1,3 @@
-// Room Facilities Dashboard JavaScript
-
-// Check authentication
 const user = checkAuth('staff');
 
 let currentTab = 'all';
@@ -606,7 +603,6 @@ window.addEventListener('click', function(event) {
     }
 });
 
-// Initialize dashboard
 document.addEventListener('DOMContentLoaded', () => {
     loadDashboard();
 });

@@ -1,17 +1,3 @@
-/* ============================================
-   GINHAWA Hotel & After Glow Restaurant
-   Shared JavaScript Functions - Firebase Version
-   ============================================ */
-
-// ==============================================
-// LOADING & ERROR HELPER UTILITIES
-// ==============================================
-
-/**
- * Show loading spinner on a button
- * @param {HTMLElement} button - Button element
- * @param {string} originalText - Original button text (optional)
- */
 function showButtonLoading(button, originalText = null) {
     if (!button) return;
     button.disabled = true;
@@ -23,10 +9,6 @@ function showButtonLoading(button, originalText = null) {
     button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
 }
 
-/**
- * Hide loading spinner on a button
- * @param {HTMLElement} button - Button element
- */
 function hideButtonLoading(button) {
     if (!button) return;
     button.disabled = false;
@@ -36,10 +18,6 @@ function hideButtonLoading(button) {
     }
 }
 
-/**
- * Show loading overlay on container
- * @param {string} containerId - Container element ID
- */
 function showLoading(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -63,10 +41,6 @@ function showLoading(containerId) {
     container.appendChild(overlay);
 }
 
-/**
- * Hide loading overlay
- * @param {string} containerId - Container element ID
- */
 function hideLoading(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -76,12 +50,6 @@ function hideLoading(containerId) {
     }
 }
 
-/**
- * Execute async operation with loading state
- * @param {Function} asyncFn - Async function to execute
- * @param {HTMLElement} button - Button element to show loading on
- * @returns {Promise} Result of async function
- */
 async function withLoading(asyncFn, button = null) {
     if (button) showButtonLoading(button);
     
@@ -93,12 +61,6 @@ async function withLoading(asyncFn, button = null) {
     }
 }
 
-/**
- * Execute async operation with error handling
- * @param {Function} asyncFn - Async function to execute
- * @param {string} errorMessage - Error message to show on failure
- * @returns {Promise} Result of async function or null on error
- */
 async function withErrorHandling(asyncFn, errorMessage = 'An error occurred') {
     try {
         return await asyncFn();
@@ -109,33 +71,27 @@ async function withErrorHandling(asyncFn, errorMessage = 'An error occurred') {
     }
 }
 
-// Initialize Firestore with demo data on first load
 async function initializeData() {
     try {
         await window.firestoreDB.initializeFirestoreData();
-        console.log('Data initialized successfully');
     } catch (error) {
         console.error('Failed to initialize Firestore:', error);
         showNotification('Failed to connect to database. Please refresh the page.', 'error');
     }
 }
 
-// Call initialization on page load
 document.addEventListener('DOMContentLoaded', async () => {
     await initializeData();
 });
 
-// Generate unique IDs
 function generateId(prefix) {
     return prefix + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
 }
 
-// Format price in Philippine Peso
 function formatPrice(amount) {
     return '₱' + amount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-// Calculate number of nights between two dates
 function calculateNights(checkin, checkout) {
     const start = new Date(checkin);
     const end = new Date(checkout);
@@ -144,20 +100,17 @@ function calculateNights(checkin, checkout) {
     return diffDays > 0 ? diffDays : 0;
 }
 
-// Format date to readable string
 function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return date.toLocaleDateString('en-PH', options);
 }
 
-// Format time to readable string
 function formatTime(timeString) {
     if (!timeString) return '';
     return timeString;
 }
 
-// Time ago function
 function timeAgo(timestamp) {
     const now = Date.now();
     const diff = now - timestamp;
@@ -173,7 +126,6 @@ function timeAgo(timestamp) {
     return days + ' day' + (days > 1 ? 's' : '') + ' ago';
 }
 
-// Check if user is logged in
 function checkAuth(userType = 'customer') {
     const user = JSON.parse(sessionStorage.getItem('user'));
     if (!user || user.type !== userType) {
@@ -183,18 +135,15 @@ function checkAuth(userType = 'customer') {
     return user;
 }
 
-// Logout function
 function logout() {
     sessionStorage.removeItem('user');
     window.location.href = '/login.html';
 }
 
-// Get current user info
 function getCurrentUser() {
     return JSON.parse(sessionStorage.getItem('user'));
 }
 
-// Dark mode toggle (kept in localStorage for user preference)
 function toggleTheme() {
     const body = document.body;
     if (body.classList.contains('dark-mode')) {
@@ -208,19 +157,16 @@ function toggleTheme() {
     }
 }
 
-// Load theme preference (kept in localStorage for user preference)
 function loadTheme() {
     const theme = localStorage.getItem('theme') || 'light';
     document.body.classList.remove('light-mode', 'dark-mode');
     document.body.classList.add(theme + '-mode');
 }
 
-// Initialize theme on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadTheme();
 });
 
-// Toggle mobile navigation
 function initMobileNav() {
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('navMenu');
@@ -245,7 +191,6 @@ function initMobileNav() {
     }
 }
 
-// Account dropdown toggle
 function initAccountDropdown() {
     const accountBtn = document.getElementById('accountBtn');
     const accountDropdown = document.getElementById('accountDropdown');
@@ -264,22 +209,11 @@ function initAccountDropdown() {
     }
 }
 
-// Initialize common event listeners
 document.addEventListener('DOMContentLoaded', () => {
     initMobileNav();
     initAccountDropdown();
 });
 
-// ==============================================
-// FIRESTORE DATA ACCESS FUNCTIONS
-// (Replaces localStorage getLocalData/setLocalData)
-// ==============================================
-
-/**
- * Get data from Firestore (replaces getLocalData)
- * @param {string} collectionName - Collection name
- * @returns {Promise<Array>} Array of documents
- */
 async function getFirestoreData(collectionName) {
     try {
         return await window.firestoreDB.getFirestoreData(collectionName);
@@ -289,12 +223,6 @@ async function getFirestoreData(collectionName) {
     }
 }
 
-/**
- * Save data to Firestore (replaces setLocalData)
- * @param {string} collectionName - Collection name  
- * @param {Array} data - Array of documents
- * @returns {Promise<boolean>} Success status
- */
 async function setFirestoreData(collectionName, data) {
     try {
         return await window.firestoreDB.setFirestoreData(collectionName, data);
@@ -304,12 +232,6 @@ async function setFirestoreData(collectionName, data) {
     }
 }
 
-/**
- * Add a single document to Firestore collection
- * @param {string} collectionName - Collection name
- * @param {Object} data - Document data
- * @returns {Promise<string|null>} Document ID or null
- */
 async function addFirestoreDocument(collectionName, data) {
     try {
         return await window.firestoreDB.addDocument(collectionName, data);
@@ -319,13 +241,6 @@ async function addFirestoreDocument(collectionName, data) {
     }
 }
 
-/**
- * Update a single document in Firestore
- * @param {string} collectionName - Collection name
- * @param {string} docId - Document ID
- * @param {Object} data - Updated data
- * @returns {Promise<boolean>} Success status
- */
 async function updateFirestoreDocument(collectionName, docId, data) {
     try {
         return await window.firestoreDB.updateDocument(collectionName, docId, data);
@@ -335,12 +250,6 @@ async function updateFirestoreDocument(collectionName, docId, data) {
     }
 }
 
-/**
- * Delete a document from Firestore
- * @param {string} collectionName - Collection name
- * @param {string} docId - Document ID
- * @returns {Promise<boolean>} Success status
- */
 async function deleteFirestoreDocument(collectionName, docId) {
     try {
         return await window.firestoreDB.deleteDocument(collectionName, docId);
@@ -350,34 +259,28 @@ async function deleteFirestoreDocument(collectionName, docId) {
     }
 }
 
-// Backward compatibility aliases (so existing code doesn't break)
 const getLocalData = getFirestoreData;
 const setLocalData = setFirestoreData;
 
-// Get today's date in YYYY-MM-DD format
 function getTodayDate() {
     const today = new Date();
     return today.toISOString().split('T')[0];
 }
 
-// Check if date is today
 function isToday(dateString) {
     return dateString === getTodayDate();
 }
 
-// Validate email format
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }
 
-// Validate phone number (Philippine format)
 function isValidPhone(phone) {
     const phoneRegex = /^\+63\s?\d{3}\s?\d{3}\s?\d{4}$/;
     return phoneRegex.test(phone);
 }
 
-// Show notification/alert
 function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
@@ -404,7 +307,6 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-// Add CSS animations for notifications
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideIn {
@@ -431,27 +333,21 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Filter array by date
 function filterByDate(array, dateField, targetDate) {
     return array.filter(item => item[dateField] === targetDate);
 }
 
-// Count items by status
 function countByStatus(array, status) {
     return array.filter(item => item.status === status).length;
 }
 
-// Sort array by timestamp (newest first)
 function sortByTimestamp(array, field = 'timestamp') {
     return array.sort((a, b) => b[field] - a[field]);
 }
 
-// Calculate total revenue
 function calculateTotalRevenue(invoices, dateFilter = null) {
     return invoices
         .filter(inv => inv.paymentStatus === 'Paid')
         .filter(inv => !dateFilter || isToday(new Date(inv.timestamp).toISOString().split('T')[0]))
         .reduce((total, inv) => total + inv.total, 0);
 }
-
-console.log('Shared functions loaded successfully (Firebase version)');
