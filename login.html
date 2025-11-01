@@ -118,6 +118,18 @@
             border-radius: 10px;
             border-left: 4px solid var(--gold-primary);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .demo-info:hover {
+            border-left-color: var(--gold-secondary);
+            transform: translateX(5px);
+            background-color: var(--bg-secondary);
+        }
+
+        .demo-info:active {
+            transform: translateX(3px);
         }
 
         .demo-info h4 {
@@ -346,8 +358,8 @@
 
             <!-- Demo Account Info (Outside Card) -->
             <div class="demo-section">
-                <div class="demo-info">
-                    <h4><i class="fas fa-info-circle"></i> Demo Account</h4>
+                <div class="demo-info" data-email="customer@test.com" data-password="password123">
+                    <h4><i class="fas fa-info-circle"></i> Demo Account (Click to Auto-Fill)</h4>
                     <p><strong>Email:</strong> customer@test.com</p>
                     <p><strong>Password:</strong> password123</p>
                 </div>
@@ -520,6 +532,37 @@
                 hideButtonLoading(submitBtn);
             }
         });
+
+        // Auto-fill form when demo account is clicked
+        const demoInfo = document.querySelector('.demo-info');
+        if (demoInfo) {
+            demoInfo.addEventListener('click', function() {
+                const email = this.getAttribute('data-email');
+                const password = this.getAttribute('data-password');
+                
+                if (email && password) {
+                    // Make sure we're on the login tab
+                    switchTab('login');
+                    
+                    // Fill in the login form
+                    document.getElementById('loginEmail').value = email;
+                    document.getElementById('loginPassword').value = password;
+                    
+                    // Visual feedback
+                    this.style.borderLeftColor = 'var(--gold-primary)';
+                    this.style.backgroundColor = 'var(--bg-card)';
+                    setTimeout(() => {
+                        this.style.borderLeftColor = '';
+                        this.style.backgroundColor = '';
+                    }, 500);
+                    
+                    // Focus on submit button
+                    setTimeout(() => {
+                        document.querySelector('#loginTab button[type="submit"]').focus();
+                    }, 100);
+                }
+            });
+        }
 
         // Check if already logged in
         const user = getCurrentUser();
