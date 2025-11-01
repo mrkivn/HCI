@@ -808,11 +808,24 @@ h3 {
 
 /* Reload Content Animation */
 .reload-content {
-    animation: fadeIn 0.5s ease;
+    animation: slideInDown 0.5s ease;
 }
 
 .reload-content-fade {
     animation: fadeOut 0.3s ease, fadeIn 0.5s ease 0.3s;
+}
+
+/* Make reload animations more visible */
+.smooth-update.updating {
+    opacity: 0.6;
+    transform: scale(0.98);
+    filter: blur(1px);
+}
+
+.smooth-update.reload-content {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
 }
 
 /* Skeleton Loading Animation */
@@ -959,10 +972,5 @@ h3 {
 
 /* Smooth Content Update */
 .smooth-update {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.smooth-update.updating {
-    opacity: 0.5;
-    transform: scale(0.98);
+    transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
 }

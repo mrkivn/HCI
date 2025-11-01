@@ -421,6 +421,10 @@ function addReloadAnimation(container) {
     setTimeout(() => {
         container.classList.remove('updating');
         container.classList.add('reload-content');
+        // Remove animation class after animation completes
+        setTimeout(() => {
+            container.classList.remove('reload-content');
+        }, 500);
     }, 100);
 }
 

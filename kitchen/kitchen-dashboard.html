@@ -337,13 +337,15 @@
 
         // Load and display orders
         async function loadOrders(silent = false) {
-            if (!silent) {
-                addReloadAnimation(document.getElementById('ordersContainer'));
+            const container = document.getElementById('ordersContainer');
+            if (!silent && container) {
+                container.classList.add('smooth-update', 'updating');
+                // Add a brief delay to make animation visible
+                await new Promise(resolve => setTimeout(resolve, 150));
             }
             
             const allOrders = await getLocalData('orders');
             const orders = allOrders.filter(o => o.category === 'Food');
-            const container = document.getElementById('ordersContainer');
 
             // Filter orders
             let filteredOrders = orders;
@@ -366,6 +368,12 @@
                         <p>Orders will appear here when customers place food orders.</p>
                     </div>
                 `;
+                if (!silent && container) {
+                    setTimeout(() => {
+                        container.classList.remove('updating');
+                        container.classList.add('reload-content');
+                    }, 50);
+                }
                 return;
             }
 
@@ -437,6 +445,18 @@
                     </div>
                 </div>
             `).join('');
+            
+            // Apply reload animation after content is loaded
+            if (!silent && container) {
+                setTimeout(() => {
+                    container.classList.remove('updating');
+                    container.classList.add('reload-content');
+                    // Clean up animation class after it completes
+                    setTimeout(() => {
+                        container.classList.remove('reload-content');
+                    }, 500);
+                }, 50);
+            }
         }
 
         // Update statistics

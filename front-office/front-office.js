@@ -55,7 +55,11 @@ function switchTab(event, tab) {
 }
 
 async function loadDashboard() {
-    addReloadAnimation(document.getElementById('bookingsList'));
+    const bookingsList = document.getElementById('bookingsList');
+    if (bookingsList) {
+        bookingsList.classList.add('smooth-update', 'updating');
+        await new Promise(resolve => setTimeout(resolve, 150));
+    }
     
     await initializeRoomsData();
     
@@ -156,6 +160,12 @@ async function loadBookings() {
         return;
     }
     
+    // Add fade animation
+    if (container) {
+        container.style.opacity = '0';
+        container.style.transform = 'translateY(10px)';
+    }
+    
     container.innerHTML = filtered.map(booking => `
         <div class="booking-card">
             <div class="booking-header">
@@ -199,6 +209,15 @@ async function loadBookings() {
             </div>
         </div>
     `).join('');
+    
+    // Animate in the bookings
+    if (container) {
+        setTimeout(() => {
+            container.style.opacity = '1';
+            container.style.transform = 'translateY(0)';
+            container.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        }, 10);
+    }
 }
 
 function getStatusBadge(status) {
