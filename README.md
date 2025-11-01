@@ -2,7 +2,7 @@
 
 A complete hotel and restaurant management system demo built for HCI (Human-Computer Interaction) projects. This is a fully client-side application that uses Firebase Firestore for cloud-based data persistence.
 
-## 🌟 Features
+## Features
 
 ### Customer Portal (`index.html`)
 - **User Authentication**: Login and registration system with validation
@@ -24,7 +24,7 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
 - **Billing**: Invoice generation (INV- prefix) and payment processing
 - **Housekeeping**: Task assignment and status tracking for housekeeping requests
 
-## 🎨 Branding
+## Branding
 
 - **Hotel Name**: GINHAWA
 - **Hotel Tagline**: Experience Comfort and Relaxation
@@ -34,7 +34,7 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
 - **Reservation ID Prefix**: AG- (e.g., AG-1697823456790)
 - **Invoice ID Prefix**: INV- (e.g., INV-1697823456791)
 
-## 🚀 Local Development Setup
+## Local Development Setup
 
 ### Running the Project
 
@@ -116,7 +116,7 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
     └── room-facilities.js
 ```
 
-## 👥 Demo Accounts
+## Demo Accounts
 
 ### Customer Portal
 | Email | Password | Name |
@@ -134,7 +134,7 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
 | billing@hotel.com | bill123 | Finance Ana | Billing |
 | roomfacilities@hotel.com | room123 | Room Manager | Room Facilities |
 
-## 📖 User Guide
+## User Guide
 
 ### For Customers
 
@@ -240,7 +240,7 @@ A complete hotel and restaurant management system demo built for HCI (Human-Comp
     - Update status: Pending → In Progress → Completed
     - Notification badge shows pending requests
 
-## 🔧 Technical Details
+## Technical Details
 
 ### Technology Stack
 - **Frontend**: Pure Vanilla HTML5, CSS3, JavaScript (ES6+) - No frameworks or libraries
@@ -283,7 +283,7 @@ This project uses a modular structure where each feature has its own folder:
 - **Shared Resources**: Common styles and utilities are centralized in the `shared/` folder
 - **Easy Navigation**: Clear folder structure makes it easy to find and modify specific features
 
-## 🎯 Use Cases
+## Use Cases
 
 ### Academic Projects
 - Human-Computer Interaction (HCI) demonstrations
@@ -299,7 +299,7 @@ This project uses a modular structure where each feature has its own folder:
 - CRUD operations
 - Responsive web design
 
-## 🔒 Security Note
+## Security Note
 
 This is a **DEMO/PROTOTYPE** system for educational purposes:
 - Passwords are stored in plain text in Firestore
@@ -311,7 +311,7 @@ This is a **DEMO/PROTOTYPE** system for educational purposes:
 
 **See [SECURITY_WARNING.md](SECURITY_WARNING.md) for important security information.**
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Data Not Persisting
 - Check internet connection (required for Firestore)
@@ -337,7 +337,7 @@ This is a **DEMO/PROTOTYPE** system for educational purposes:
 - Ensure files are in the root directory
 - Verify file names are exactly `index.html` and `staff.html`
 
-## 🤝 Support
+## Support
 
 For questions or issues:
 1. Check this README thoroughly
@@ -346,7 +346,7 @@ For questions or issues:
 4. Check browser console for errors
 5. See [FIREBASE_MIGRATION_GUIDE.md](FIREBASE_MIGRATION_GUIDE.md) for technical details
 
-## 📄 License
+## License
 
 This project is created for educational purposes. Feel free to use and modify for your academic projects.
 
@@ -354,4 +354,4 @@ This project is created for educational purposes. Feel free to use and modify fo
 
 **© 2025 GINHAWA Hotel & After Glow Restaurant. All rights reserved.**
 
-*Built with ❤️ for HCI Projects*
+*Built for HCI Projects*
