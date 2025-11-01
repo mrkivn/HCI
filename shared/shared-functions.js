@@ -412,7 +412,7 @@ function stopReloadButtonAnimation(button) {
 }
 
 /**
- * Add smooth reload animation to content
+ * Add smooth reload animation to content - DRAMATIC VERSION
  */
 function addReloadAnimation(container) {
     if (!container) return;
@@ -424,7 +424,7 @@ function addReloadAnimation(container) {
         // Remove animation class after animation completes
         setTimeout(() => {
             container.classList.remove('reload-content');
-        }, 500);
+        }, 800);
     }, 100);
 }
 

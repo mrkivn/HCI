@@ -56,9 +56,11 @@ function switchTab(event, tab) {
 
 async function loadDashboard() {
     const bookingsList = document.getElementById('bookingsList');
+    // Make updating state VERY visible
     if (bookingsList) {
         bookingsList.classList.add('smooth-update', 'updating');
-        await new Promise(resolve => setTimeout(resolve, 150));
+        // Longer delay to see the animation
+        await new Promise(resolve => setTimeout(resolve, 300));
     }
     
     await initializeRoomsData();
@@ -107,12 +109,36 @@ async function loadDashboard() {
 
 async function refreshDashboard() {
     const reloadBtn = document.getElementById('reloadBtn');
-    await withReloadAnimation(async () => {
+    const bookingsList = document.getElementById('bookingsList');
+    
+    // Make it VERY obvious - show loading overlay
+    if (bookingsList) {
+        showLoading('bookingsList', 'Reloading data...');
+    }
+    
+    // Animate button
+    if (reloadBtn) {
+        reloadBtn.classList.add('reloading');
+    }
+    
+    try {
         await loadDashboard();
-    }, {
-        button: reloadBtn,
-        smoothUpdate: true
-    });
+        
+        // Add dramatic reload animation
+        if (bookingsList) {
+            bookingsList.classList.add('smooth-update', 'reload-content');
+            setTimeout(() => {
+                bookingsList.classList.remove('reload-content');
+            }, 800);
+        }
+    } finally {
+        if (bookingsList) {
+            setTimeout(() => hideLoading('bookingsList'), 400);
+        }
+        if (reloadBtn) {
+            setTimeout(() => reloadBtn.classList.remove('reloading'), 500);
+        }
+    }
 }
 
 async function loadBookings() {

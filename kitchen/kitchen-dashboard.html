@@ -339,9 +339,10 @@
         async function loadOrders(silent = false) {
             const container = document.getElementById('ordersContainer');
             if (!silent && container) {
+                // Make it VERY visible
                 container.classList.add('smooth-update', 'updating');
-                // Add a brief delay to make animation visible
-                await new Promise(resolve => setTimeout(resolve, 150));
+                // Longer delay to see the animation
+                await new Promise(resolve => setTimeout(resolve, 400));
             }
             
             const allOrders = await getLocalData('orders');
@@ -446,16 +447,16 @@
                 </div>
             `).join('');
             
-            // Apply reload animation after content is loaded
+            // Apply DRAMATIC reload animation after content is loaded
             if (!silent && container) {
                 setTimeout(() => {
                     container.classList.remove('updating');
-                    container.classList.add('reload-content');
+                    container.classList.add('smooth-update', 'reload-content');
                     // Clean up animation class after it completes
                     setTimeout(() => {
                         container.classList.remove('reload-content');
-                    }, 500);
-                }, 50);
+                    }, 800);
+                }, 100);
             }
         }
 

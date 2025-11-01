@@ -672,39 +672,59 @@ h3 {
    Reload Animation Effects
    ============================================ */
 
-/* Reload Button */
+/* Reload Button - SUPER VISIBLE */
 .reload-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 20px;
+    padding: 12px 24px;
     background-color: var(--gold-primary);
     color: var(--black-primary);
-    border: none;
-    border-radius: 5px;
+    border: 2px solid var(--gold-primary);
+    border-radius: 8px;
     cursor: pointer;
-    font-weight: 500;
-    transition: all var(--transition-speed);
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
 }
 
 .reload-btn:hover {
     background-color: var(--gold-secondary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 25px rgba(255, 165, 0, 0.5);
+    border-color: var(--gold-secondary);
 }
 
 .reload-btn:active {
-    transform: translateY(0);
+    transform: translateY(-1px) scale(1.02);
 }
 
 .reload-btn i {
-    transition: transform var(--transition-speed);
+    transition: transform 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.reload-btn.reloading {
+    background-color: var(--gold-secondary);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    animation: reloadPulse 1.5s ease-in-out infinite;
 }
 
 .reload-btn.reloading i {
-    animation: spin 1s linear infinite;
+    animation: spin 0.8s linear infinite;
+    color: var(--black-primary);
+}
+
+@keyframes reloadPulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 215, 0, 1);
+    }
 }
 
 @keyframes spin {
@@ -716,40 +736,50 @@ h3 {
     }
 }
 
-/* Enhanced Loading Overlay */
+/* Enhanced Loading Overlay - VERY VISIBLE */
 .loading-overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    display: flex;
+    background: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex !important;
     align-items: center;
     justify-content: center;
     z-index: 1000;
     animation: fadeIn 0.3s ease;
+    border: 3px solid var(--gold-primary);
+    box-shadow: inset 0 0 50px rgba(255, 215, 0, 0.3);
 }
 
 .loading-overlay .spinner {
     text-align: center;
     color: var(--gold-primary);
+    background: rgba(0, 0, 0, 0.9);
+    padding: 30px 40px;
+    border-radius: 15px;
+    border: 2px solid var(--gold-primary);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
 }
 
 .loading-overlay .spinner i {
-    animation: spin 1s linear infinite;
-    margin-bottom: 15px;
-    font-size: 3rem;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 20px;
+    font-size: 4rem;
+    color: var(--gold-primary);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
 }
 
 .loading-overlay .spinner p {
-    color: var(--white);
-    font-size: 1.1rem;
-    font-weight: 500;
-    margin-top: 10px;
-    animation: pulse 2s ease-in-out infinite;
+    color: var(--gold-primary);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 15px;
+    animation: pulse 1.5s ease-in-out infinite;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
 /* Pulse Animation */
@@ -806,26 +836,57 @@ h3 {
     }
 }
 
-/* Reload Content Animation */
+/* Reload Content Animation - DRAMATIC */
 .reload-content {
-    animation: slideInDown 0.5s ease;
+    animation: dramaticSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes dramaticSlideIn {
+    0% {
+        transform: translateY(-50px) scale(0.9);
+        opacity: 0;
+    }
+    50% {
+        transform: translateY(5px) scale(1.02);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
 }
 
 .reload-content-fade {
     animation: fadeOut 0.3s ease, fadeIn 0.5s ease 0.3s;
 }
 
-/* Make reload animations more visible */
+/* Make reload animations DRAMATICALLY more visible */
 .smooth-update.updating {
-    opacity: 0.6;
-    transform: scale(0.98);
-    filter: blur(1px);
+    opacity: 0.4 !important;
+    transform: scale(0.95) translateY(20px) !important;
+    filter: blur(3px) !important;
+    background-color: rgba(255, 215, 0, 0.1) !important;
+    transition: all 0.4s ease !important;
 }
 
 .smooth-update.reload-content {
-    opacity: 1;
-    transform: scale(1);
-    filter: blur(0);
+    opacity: 1 !important;
+    transform: scale(1) translateY(0) !important;
+    filter: blur(0) !important;
+    background-color: transparent !important;
+    animation: slideInDown 0.6s ease, pulseGlow 0.6s ease !important;
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 20px 5px rgba(255, 215, 0, 0.6);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    }
 }
 
 /* Skeleton Loading Animation */
@@ -868,27 +929,57 @@ h3 {
     border: 1px solid var(--border-color);
 }
 
-/* Reload Indicator */
+/* Reload Indicator - HIGHLY VISIBLE */
 .reload-indicator {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 15px;
-    background-color: var(--bg-secondary);
-    border-radius: 20px;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    animation: pulse 2s ease-in-out infinite;
+    gap: 10px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2));
+    border: 2px solid var(--gold-primary);
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gold-primary);
+    animation: indicatorPulse 2s ease-in-out infinite;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
 }
 
 .reload-indicator i {
-    animation: spin 1.5s linear infinite;
+    animation: spin 1s linear infinite;
     color: var(--gold-primary);
+    font-size: 1.2rem;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
 }
 
 .reload-indicator.active {
-    background-color: rgba(255, 215, 0, 0.2);
-    color: var(--gold-primary);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.4), rgba(255, 165, 0, 0.4));
+    color: var(--black-primary);
+    border-color: var(--gold-secondary);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+    animation: activeIndicatorPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes indicatorPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6);
+    }
+}
+
+@keyframes activeIndicatorPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 35px rgba(255, 215, 0, 1);
+    }
 }
 
 /* Content Refresh Animation */
