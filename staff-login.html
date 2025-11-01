@@ -99,11 +99,17 @@
             margin-bottom: 12px;
             border: 1px solid var(--border-color);
             transition: all var(--transition-speed);
+            cursor: pointer;
         }
 
         .account-item:hover {
             border-color: var(--gold-primary);
             transform: translateX(5px);
+            background-color: var(--bg-card);
+        }
+
+        .account-item:active {
+            transform: translateX(3px);
         }
 
         .account-item:last-child {
@@ -248,36 +254,36 @@
             <!-- Demo Accounts (Outside Card) -->
             <div class="demo-section">
                 <div class="demo-accounts">
-                    <h4><i class="fas fa-info-circle"></i> Demo Staff Accounts</h4>
-                    <div class="account-item">
+                    <h4><i class="fas fa-info-circle"></i> Demo Staff Accounts (Click to Auto-Fill)</h4>
+                    <div class="account-item" data-email="manager@hotel.com" data-password="admin123">
                         <div class="account-dept"><i class="fas fa-user-shield"></i> Manager</div>
                         <div class="account-creds"><strong>Email:</strong> manager@hotel.com | <strong>Password:</strong> admin123</div>
                     </div>
-                    <div class="account-item">
+                    <div class="account-item" data-email="frontdesk@hotel.com" data-password="front123">
                         <div class="account-dept"><i class="fas fa-concierge-bell"></i> Front Office</div>
                         <div class="account-creds"><strong>Email:</strong> frontdesk@hotel.com | <strong>Password:</strong> front123</div>
                     </div>
-                    <div class="account-item">
+                    <div class="account-item" data-email="kitchen@hotel.com" data-password="kitchen123">
                         <div class="account-dept"><i class="fas fa-utensils"></i> Kitchen</div>
                         <div class="account-creds"><strong>Email:</strong> kitchen@hotel.com | <strong>Password:</strong> kitchen123</div>
                     </div>
-                    <div class="account-item">
+                    <div class="account-item" data-email="bar@hotel.com" data-password="bar123">
                         <div class="account-dept"><i class="fas fa-cocktail"></i> Bar</div>
                         <div class="account-creds"><strong>Email:</strong> bar@hotel.com | <strong>Password:</strong> bar123</div>
                     </div>
-                    <div class="account-item">
+                    <div class="account-item" data-email="housekeeping@hotel.com" data-password="clean123">
                         <div class="account-dept"><i class="fas fa-broom"></i> Housekeeping</div>
                         <div class="account-creds"><strong>Email:</strong> housekeeping@hotel.com | <strong>Password:</strong> clean123</div>
                     </div>
-                    <div class="account-item">
+                    <div class="account-item" data-email="billing@hotel.com" data-password="bill123">
                         <div class="account-dept"><i class="fas fa-file-invoice-dollar"></i> Billing</div>
                         <div class="account-creds"><strong>Email:</strong> billing@hotel.com | <strong>Password:</strong> bill123</div>
                     </div>
-                    <div class="account-item">
+                    <div class="account-item" data-email="customerguest@hotel.com" data-password="guest123">
                         <div class="account-dept"><i class="fas fa-users"></i> Customer Guest</div>
                         <div class="account-creds"><strong>Email:</strong> customerguest@hotel.com | <strong>Password:</strong> guest123</div>
                     </div>
-                    <div class="account-item">
+                    <div class="account-item" data-email="roomfacilities@hotel.com" data-password="room123">
                         <div class="account-dept"><i class="fas fa-door-open"></i> Room Facilities</div>
                         <div class="account-creds"><strong>Email:</strong> roomfacilities@hotel.com | <strong>Password:</strong> room123</div>
                     </div>
@@ -372,6 +378,30 @@
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
             }
+        });
+
+        // Auto-fill form when demo account is clicked
+        document.querySelectorAll('.account-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const email = this.getAttribute('data-email');
+                const password = this.getAttribute('data-password');
+                
+                if (email && password) {
+                    document.getElementById('email').value = email;
+                    document.getElementById('password').value = password;
+                    
+                    // Visual feedback
+                    this.style.borderColor = 'var(--gold-primary)';
+                    this.style.backgroundColor = 'var(--bg-card)';
+                    setTimeout(() => {
+                        this.style.borderColor = '';
+                        this.style.backgroundColor = '';
+                    }, 500);
+                    
+                    // Optional: Focus on submit button
+                    document.querySelector('button[type="submit"]').focus();
+                }
+            });
         });
 
         // Check if already logged in
