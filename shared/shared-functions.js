@@ -228,6 +228,8 @@ function initAccountDropdown() {
 document.addEventListener('DOMContentLoaded', () => {
     initMobileNav();
     initAccountDropdown();
+    initRevealAnimations();
+    applyPageLoadAnimations();
 });
 
 async function getFirestoreData(collectionName) {
@@ -563,5 +565,54 @@ function hideSkeletonLoading(containerId) {
     skeletons.forEach(skeleton => {
         skeleton.style.animation = 'fadeOut 0.3s ease';
         setTimeout(() => skeleton.remove(), 300);
+    });
+}
+
+/* ============================================
+   Reveal on Scroll & Page Load Animation Logic
+   ============================================ */
+
+function initRevealAnimations() {
+    const elements = Array.from(document.querySelectorAll('[data-reveal], .reveal'));
+    if (elements.length === 0) return;
+
+    // Default variant if none specified
+    elements.forEach(el => {
+        if (!el.classList.contains('reveal')) el.classList.add('reveal');
+        // Allow data-reveal="up|down|left|right|fade"
+        const variant = el.getAttribute('data-reveal');
+        if (variant && !el.classList.contains(`reveal-${variant}`)) {
+            el.classList.add(`reveal-${variant}`);
+        }
+    });
+
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('reveal-visible');
+                // Unobserve once revealed for performance
+                obs.unobserve(entry.target);
+            }
+        });
+    }, {
+        root: null,
+        threshold: 0.12
+    });
+
+    elements.forEach(el => observer.observe(el));
+}
+
+function applyPageLoadAnimations() {
+    // Add a subtle fade to common elements on initial load
+    const selectors = [
+        'h1, h2, h3, .navbar, .card, .stat-card, .service-box, .btn',
+        '.table, .modal-content'
+    ];
+    const targets = document.querySelectorAll(selectors.join(', '));
+    targets.forEach((el, idx) => {
+        // stagger slightly for first 12 elements
+        const delay = Math.min(idx * 40, 240);
+        el.style.animationDelay = delay + 'ms';
+        el.classList.add('fade-in-on-load');
     });
 }

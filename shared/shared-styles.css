@@ -1262,3 +1262,62 @@ p {
 .smooth-update {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
+/* ============================================
+   Reveal on Viewport & Page Load Animations
+   ============================================ */
+
+/* Base reveal state */
+.reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s var(--transition-smooth), transform 0.6s var(--transition-smooth);
+    will-change: opacity, transform;
+}
+
+/* Visible state */
+.reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Variants */
+.reveal-fade { transform: none; }
+.reveal-up   { transform: translateY(24px); }
+.reveal-down { transform: translateY(-24px); }
+.reveal-left { transform: translateX(24px); }
+.reveal-right{ transform: translateX(-24px); }
+
+.reveal-up.reveal-visible,
+.reveal-down.reveal-visible,
+.reveal-left.reveal-visible,
+.reveal-right.reveal-visible { transform: translate(0,0); }
+
+/* Stagger utility via data attribute */
+[data-reveal-delay="50"]  { transition-delay: 50ms; }
+[data-reveal-delay="100"] { transition-delay: 100ms; }
+[data-reveal-delay="150"] { transition-delay: 150ms; }
+[data-reveal-delay="200"] { transition-delay: 200ms; }
+[data-reveal-delay="300"] { transition-delay: 300ms; }
+
+/* Page load fade for key elements */
+.fade-in-on-load {
+    opacity: 0;
+    animation: fadeInOnLoad 700ms var(--transition-smooth) forwards;
+}
+
+@keyframes fadeInOnLoad {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .reveal,
+    .fade-in-on-load {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
