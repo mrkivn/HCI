@@ -22,6 +22,12 @@
             position: relative;
             z-index: 1;
         }
+        .hero-effect {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .hero-content { position: relative; z-index: 1; }
 
         .hero-banner h1 {
             font-size: 3.5rem;
@@ -261,6 +267,10 @@
 
         <!-- Hero Banner -->
         <section class="hero-banner">
+            <div class="hero-effect">
+                <div id="threadsHome" class="threads-container" style="width:100%; height:100%;"></div>
+            </div>
+            <div class="hero-content">
             <h1><span class="brand-name">GINHAWA</span></h1>
             <p>Experience Comfort and Relaxation</p>
             <div class="hero-cta">
@@ -270,6 +280,7 @@
                 <a href="#services" class="cta-btn cta-btn-secondary">
                     <i class="fas fa-info-circle"></i> Learn More
                 </a>
+            </div>
             </div>
         </section>
 
@@ -358,6 +369,10 @@
     <script src="firebase-db.js"></script>
     
     <script src="shared/shared-functions.js"></script>
+    <!-- OGL + Threads effect for hero -->
+    <script src="https://unpkg.com/ogl@0.0.105/dist/ogl.min.js"></script>
+    <link rel="stylesheet" href="shared/threads.css">
+    <script src="shared/threads.js"></script>
     <script>
         // Smooth scroll for "Learn More" button
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -376,6 +391,12 @@
         const user = getCurrentUser();
         if (user && user.type === 'customer') {
             window.location.href = 'customer-home.html';
+        }
+
+        // Initialize Threads hero effect
+        const heroEl = document.getElementById('threadsHome');
+        if (heroEl && window.ThreadsEffect) {
+            window.ThreadsEffect.init(heroEl, { color:[0.83,0.76,0.35], amplitude:1, distance:0.0, enableMouseInteraction:true });
         }
     </script>
 </body>
