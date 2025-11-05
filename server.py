@@ -30,5 +30,5 @@ with socketserver.TCPServer(("0.0.0.0", PORT), Handler) as httpd:
     httpd.allow_reuse_address = True
     print(f"Server running at http://0.0.0.0:{PORT}/")
     print(f"Customer Portal: http://0.0.0.0:{PORT}/index.html")
-    print(f"Staff Portal: http://0.0.0.0:{PORT}/staff-login.html")
+    
     httpd.serve_forever()

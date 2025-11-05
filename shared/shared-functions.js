@@ -145,7 +145,7 @@ function timeAgo(timestamp) {
 function checkAuth(userType = 'customer') {
     const user = JSON.parse(sessionStorage.getItem('user'));
     if (!user || user.type !== userType) {
-        window.location.href = userType === 'customer' ? '/login.html' : '/staff-login.html';
+        window.location.href = '/login.html';
         return null;
     }
     return user;
